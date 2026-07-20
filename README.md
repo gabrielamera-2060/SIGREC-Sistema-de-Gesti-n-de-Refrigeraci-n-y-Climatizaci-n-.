@@ -1,0 +1,1 @@
+# SIGREC (Sistema de Gestión de Refrigeración y Climatización)

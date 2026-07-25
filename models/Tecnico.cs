@@ -16,7 +16,19 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         public int Id { get => id; set => id = value; }
         public string Nombre { get => nombre; set => nombre = value; }
         public string Apellido { get => apellido; set => nombre = value; }
-        public string Telefono { get => telefono; set => telefono = value;}
+        public string Telefono 
+        { 
+            get => telefono;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new Exception("el teleono es obligatorio");
+                }
+                telefono = value;
+            }
+        }
+
         public string Especialidad { get => especialidad; set => especialidad = value; }
 
         public Tecnico (int id, string nombre, string apellido, string telefono, string especialidad)
@@ -29,7 +41,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         }
        
 
-        public void MostrarTecnico()
+        public void Imprimir()
         {
             Console.WriteLine("Tecnico" + Nombre);
             Console.WriteLine("Apellido: " + Apellido);
@@ -37,5 +49,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Console.WriteLine("Especialidad:" + Especialidad);
 
         }
+
     }
 }

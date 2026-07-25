@@ -16,8 +16,31 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         public int Id { get => id; set => id = value; }
         public string TipoMantenimiento { get => tipoMantenimiento; set => tipoMantenimiento = value; }
-        public string Descripcion { get => descripcion; set => descripcion = value; }
-        public decimal Costo { get => costo; set => costo = value; }
+        public string Descripcion
+        {
+            get => descripcion;
+            set 
+            { 
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("La descripcion es obligatoria");
+                }
+                descripcion = value; 
+            }
+
+        }
+        public decimal Costo
+        {
+            get => costo;
+            set
+            {
+                if( value < 0)
+                {
+                    throw new Exception("El costo no puede ser negativo");
+                }
+                costo = value;
+            } 
+        }
         public string Estado { get => estado; set => estado = value; }
         public int DuracionHoras { get => duracionHoras; set => duracionHoras = value; }
         public string Observaciones { get => observaciones; set => observaciones = value; }
@@ -31,8 +54,17 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.Costo = costo;
             this.DuracionHoras = duracionHoras;
             this.Descripcion = descripcion;
-        } 
-        
-    
+        }
+
+        public void Imprimir()
+        {
+            Console.WriteLine("Id: " + Id);
+            Console.WriteLine("Tipo: "+ TipoMantenimiento);
+            Console.WriteLine("Descripcion: " + Descripcion);
+            Console.WriteLine("Costo: $ " + costo);
+            Console.WriteLine("Duracion: " + DuracionHoras + "horas");
+            Console.WriteLine("Estado " + Estado);
+            Console.WriteLine("Observaciones " + Observaciones);
+        }
     }
 }

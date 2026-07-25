@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
+using System.Timers;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
@@ -12,9 +14,29 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string telefono;
         private string direccion;
 
-        public string Cedula { get => cedula; set => cedula = value; }
+        public string Cedula
+        { get => cedula;
+            set
+            {
+                if (value.Length != 10)
+                {
+                    throw new Exception("La cédula debe tener 10 dígitos");
+                }
+                cedula = value;
+            }
+        }
         public string Nombre { get => nombre; set => nombre = value; }
-        public string Telefono { get => telefono; set => telefono = value; }
+        public string Telefono 
+        { get => telefono; 
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new Exception("el teleono es obligatorio");
+                }
+                telefono = value;
+            } 
+        }
         public string Direccion { get => direccion; set => direccion = value; }
         public int Id { get => id; set => id = value; }
 

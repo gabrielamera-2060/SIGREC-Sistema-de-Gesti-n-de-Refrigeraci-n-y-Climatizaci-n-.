@@ -22,6 +22,15 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         public abstract void RealizarMantenimiento();
 
+        public Equipo(int id, string codigo, string marca, string modelo, int capacidadBTU, string estado)
+        {
+            Id = id;
+            Codigo = codigo;
+            Marca = marca;
+            Modelo = modelo;
+            CapacidadBTU = capacidadBTU;
+            Estado = estado;
+        }
 
         public void MostrarEquipo()
         {

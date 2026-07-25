@@ -18,6 +18,15 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         public string Apellido { get => apellido; set => nombre = value; }
         public string Telefono { get => telefono; set => telefono = value;}
         public string Especialidad { get => especialidad; set => especialidad = value; }
+
+        public Tecnico (int id, string nombre, string apellido, string telefono, string especialidad)
+        {
+            this.Id = id;
+            this.Nombre = nombre;
+            this.Apellido = apellido;
+            this.Telefono = telefono;
+            this.Especialidad = especialidad;
+        }
        
 
         public void MostrarTecnico()

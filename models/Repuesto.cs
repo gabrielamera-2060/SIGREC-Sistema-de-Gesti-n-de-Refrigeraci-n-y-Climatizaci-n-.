@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
@@ -9,17 +10,30 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private int id;
         private string nombre;
         private string marca;
-        private string tipo;
+        private string tipoRepuesto;
         private int cantidad;
         private decimal precio;
 
-        public int Id 
-        { get => id; set => id = value; }
+        public int Id { get => id; set => id = value; }
         public string Nombre { get => nombre; set => nombre = value; }
         public string Marca { get => marca; set => marca = value; }
-        public string Tipo { get => tipo; set => tipo = value; }
+        public string TipoRepuesto { get => tipoRepuesto; set => tipoRepuesto = value; }
         public int Cantidad { get => cantidad; set => cantidad = value; }
         public decimal Precio { get => precio; set => precio = value; }
+
+
+        public Repuesto (int id, string nombre,string marca,string tipoRepuesto, int cantidad, decimal precio)
+        {
+            this.Id = id;
+            this.Nombre = nombre;
+            this.Marca = marca;
+            this.tipoRepuesto = tipoRepuesto;
+            this.Cantidad = cantidad;
+            this.Precio = precio;
+
+        }
+
+
     }
        
 }

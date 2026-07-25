@@ -6,12 +6,19 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 {
     public abstract class Equipo
     {
-        public string Codigo { get; set; }
-        public string Marca { get; set; }
-        public string Modelo { get; set; }
-        public int CapacidadBTU { get; set; }
-        public string Estado { get; set; }
+        private int id;
+        private string codigo;
+        private string marca;
+        private string modelo;
+        private int capacidadBTU;
+        private string estado;
 
+        public string Codigo { get => codigo; set => codigo = value; }
+        public string Marca { get => marca; set => marca = value; }
+        public string Modelo { get => modelo; set => modelo = value; }
+        public int CapacidadBTU { get => capacidadBTU; set => capacidadBTU = value; }
+        public string Estado { get => estado; set => estado = value; }
+        public int Id { get => id; set => id = value; }
 
         public abstract void RealizarMantenimiento();
 

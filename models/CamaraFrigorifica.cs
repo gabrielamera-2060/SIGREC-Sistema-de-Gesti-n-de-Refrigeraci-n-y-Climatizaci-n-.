@@ -6,5 +6,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 {
     public class CamaraFrigorifica
     {
+      
     }
 }

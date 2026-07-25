@@ -17,3 +17,5 @@ se edito clase tecnico
 
 25-07-2026
 se modificaron las clases incluyendo Database
+se agregaron los contructores a las clases
+cliente, tecnico, repuestos, maantenimiento, equipo.

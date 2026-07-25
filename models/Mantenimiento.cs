@@ -7,7 +7,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
     public class Mantenimiento
     {
         private int id;
-        private string tipo;
+        private string tipoMantenimiento;
         private string descripcion;
         private decimal costo;
         private string estado;
@@ -15,12 +15,24 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string observaciones;
 
         public int Id { get => id; set => id = value; }
-        public string Tipo { get => tipo; set => tipo = value; }
+        public string TipoMantenimiento { get => tipoMantenimiento; set => tipoMantenimiento = value; }
         public string Descripcion { get => descripcion; set => descripcion = value; }
         public decimal Costo { get => costo; set => costo = value; }
         public string Estado { get => estado; set => estado = value; }
         public int DuracionHoras { get => duracionHoras; set => duracionHoras = value; }
         public string Observaciones { get => observaciones; set => observaciones = value; }
+
+        public Mantenimiento (int id, string tipoMantenimiento,string descripcion, decimal costo, string estado, int duracionHoras, string observaciones)
+        {
+            this.Id = id;
+            this.TipoMantenimiento = tipoMantenimiento;
+            this.Descripcion = descripcion;
+            this.Estado = estado;
+            this.Costo = costo;
+            this.DuracionHoras = duracionHoras;
+            this.Descripcion = descripcion;
+        } 
+        
     
     }
 }

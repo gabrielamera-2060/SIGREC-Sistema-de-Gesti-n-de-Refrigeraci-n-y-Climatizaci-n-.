@@ -7,6 +7,10 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
     public class AireAcondicionado : Equipo
     {
 
+
+
+
+
         public override void RealizarMantenimiento()
         {
             Console.WriteLine("Mantenimiento de aire acondicionado:");

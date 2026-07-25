@@ -14,3 +14,6 @@ se creo carpeta generales con las clases
 database y Json
 
 se edito clase tecnico
+
+25-07-2026
+se modificaron las clases incluyendo Database

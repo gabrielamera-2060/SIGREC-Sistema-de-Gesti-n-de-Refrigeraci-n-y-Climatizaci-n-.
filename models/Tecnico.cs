@@ -16,17 +16,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         public int Id { get => id; set => id = value; }
         public string Nombre { get => nombre; set => nombre = value; }
         public string Apellido { get => apellido; set => nombre = value; }
-        public string Telefono 
-        { get => telefono; 
-          set
-            {
-                if (value.Length != 10)
-                {
-                    throw new Exception("El número de teléfono debe tener 10 dígitos.");
-                }
-                telefono = value;
-            }
-        }
+        public string Telefono { get => telefono; set => telefono = value;}
         public string Especialidad { get => especialidad; set => especialidad = value; }
        
 

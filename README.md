@@ -19,4 +19,7 @@ se edito clase tecnico
 se modificaron las clases incluyendo Database
 se agregaron los contructores a las clases
 cliente, tecnico, repuestos, maantenimiento, equipo.
-se agregaron validaciones de las clases y se aprego el public void Imprimir
+se agregaron validaciones de las clases y se aprego el public void Imprimir 
+
+28-07-2026
+se edito clase de ArchivoJson

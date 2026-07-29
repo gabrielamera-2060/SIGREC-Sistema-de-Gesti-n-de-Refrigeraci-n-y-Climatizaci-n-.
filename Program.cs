@@ -1,7 +1,7 @@
 ﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
 using System;
-amespace SIGREC_Refrigeracion
+namespace SIGREC_Refrigeracion
 {
     class Program
     {

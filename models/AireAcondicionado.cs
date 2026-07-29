@@ -1,58 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace TorneoPOO_CEspinoza.Models
+namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
-    public class Equipo
+    public class AireAcondicionado : Equipo
     {
-        // Atributos
-        private string nombre;
-        private string ciudad;
-        private string color;
-        private string estadio;
-        private string apodo;
-        private string entrenador;
-        private List<string> jugadores;
+        // Atributo
+        private string tipoFiltro;
 
-        // Constructor
-        public Equipo(string nombre, string ciudad, string color, string estadio, string apodo, string entrenador)
+        // Constructor vacío
+        public AireAcondicionado() : base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
         {
-            this.nombre = nombre;
-            this.ciudad = ciudad;
-            this.color = color;
-            this.estadio = estadio;
-            this.apodo = apodo;
-            this.entrenador = entrenador;
-            this.jugadores = new List<string>(); // importante inicializar la lista
+            this.tipoFiltro = "Estandar";
         }
 
-        // Métodos Get y Set - por si los necesitas
-        public string GetNombre() { return nombre; }
-        public void SetNombre(string nombre) { this.nombre = nombre; }
-
-        public string GetCiudad() { return ciudad; }
-        public void SetCiudad(string ciudad) { this.ciudad = ciudad; }
-
-        public string GetColor() { return color; }
-        public void SetColor(string color) { this.color = color; }
-
-        public string GetEstadio() { return estadio; }
-        public void SetEstadio(string estadio) { this.estadio = estadio; }
-
-        public string GetApodo() { return apodo; }
-        public void SetApodo(string apodo) { this.apodo = apodo; }
-
-        public string GetEntrenador() { return entrenador; }
-        public void SetEntrenador(string entrenador) { this.entrenador = entrenador; }
-
-        // Métodos para la lista de jugadores
-        public void AgregarJugador(string jugador)
+        // Constructor con parámetros
+        public AireAcondicionado(string codigo, string marca, string modelo,
+            int capacidadBTU, string estado, string tipoFiltro)
+            : base(codigo, marca, modelo, capacidadBTU, estado)
         {
-            jugadores.Add(jugador);
+            this.tipoFiltro = tipoFiltro;
         }
 
-        public List<string> GetJugadores()
+        // Propiedad
+        public string TipoFiltro
         {
-            return jugadores;
+            get { return tipoFiltro; }
+            set { tipoFiltro = value; }
+        }
+
+        public override void RealizarMantenimiento()
+        {
+            Console.WriteLine("Limpieza de filtros.");
+            Console.WriteLine("Revisión del nivel de refrigerante.");
+        }
+
+        internal void MostrarEquipo()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -44,9 +44,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         public string Estado { get => estado; set => estado = value; }
         public int DuracionHoras { get => duracionHoras; set => duracionHoras = value; }
         public string Observaciones { get => observaciones; set => observaciones = value; }
-        public string? Tipo { get; internal set; }
-        public int Codigo { get; internal set; }
-        public DateTime Fecha { get; internal set; }
 
         public Mantenimiento (int id, string tipoMantenimiento,string descripcion, decimal costo, string estado, int duracionHoras, string observaciones)
         {
@@ -59,10 +56,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.Descripcion = descripcion;
         }
 
-        public Mantenimiento()
-        {
-        }
-
         public void Imprimir()
         {
             Console.WriteLine("Id: " + Id);
@@ -72,11 +65,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Console.WriteLine("Duracion: " + DuracionHoras + "horas");
             Console.WriteLine("Estado " + Estado);
             Console.WriteLine("Observaciones " + Observaciones);
-        }
-
-        internal void MostrarMantenimiento()
-        {
-            throw new NotImplementedException();
         }
     }
 }

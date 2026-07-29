@@ -4,32 +4,41 @@ using System.Text;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
-    public class CamaraFrigorifica : Equipo
+    public class AireAcondicionado : Equipo
     {
-        private double temperaturaMinima;
+        // Atributo
+        private string tipoFiltro;
 
-        public CamaraFrigorifica(): base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
+        // Constructor vacío
+        public AireAcondicionado() : base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
         {
-            this.temperaturaMinima = 0;
+            this.tipoFiltro = "Estandar";
         }
 
-        public CamaraFrigorifica(string codigo, string marca, string modelo,
-            int capacidadBTU, string estado, double temperaturaMinima)
+        // Constructor con parámetros
+        public AireAcondicionado(string codigo, string marca, string modelo,
+            int capacidadBTU, string estado, string tipoFiltro)
             : base(codigo, marca, modelo, capacidadBTU, estado)
         {
-            this.temperaturaMinima = temperaturaMinima;
+            this.tipoFiltro = tipoFiltro;
         }
 
-        public double TemperaturaMinima
+        // Propiedad
+        public string TipoFiltro
         {
-            get { return temperaturaMinima; }
-            set { temperaturaMinima = value; }
+            get { return tipoFiltro; }
+            set { tipoFiltro = value; }
         }
 
         public override void RealizarMantenimiento()
         {
-            Console.WriteLine("Calibración del sistema.");
-            Console.WriteLine("Revisión de sensores de temperatura.");
+            Console.WriteLine("Limpieza de filtros.");
+            Console.WriteLine("Revisión del nivel de refrigerante.");
+        }
+
+        internal void MostrarEquipo()
+        {
+            throw new NotImplementedException();
         }
     }
 }

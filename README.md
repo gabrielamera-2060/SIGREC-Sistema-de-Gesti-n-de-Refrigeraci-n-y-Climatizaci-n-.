@@ -26,9 +26,9 @@ se edito clase de ArchivoJson
 se edito database
 prueba nueva rama espinoza..ok
 se edito Json y database
-Se reagistraron las clases aire acondiconado
+Se reagistraron las clases aire acondiconad
 refrigerador camara frigorifica
 y se registro el programs.
-Se edito la clase aire acondicionado y refrigerador, programas y se agregaron validaciones a las clases
-ok programa..
-YA ME VOY A DORMIR..ESPINOZA
+
+29-07-2026
+prueba de commit

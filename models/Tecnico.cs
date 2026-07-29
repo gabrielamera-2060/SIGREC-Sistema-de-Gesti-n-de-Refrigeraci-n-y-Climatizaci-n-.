@@ -1,40 +1,54 @@
-﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace SIGREC_Sistema_de_Gestion_de_Refrigeracion_y_Climatizacion__models
+namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
     public class Tecnico
     {
-        public string Nombre { get; set; } = "";
-        public string Apellido { get; set; } = "";
-        public string Telefono { get; set; } = "";
-        public string Especialidad { get; set; } = "";
+        private int id;
+        private string nombre;
+        private string apellido;
+        private string telefono;
+        private string especialidad;
 
-        public List<Equipo> EquiposAsignados { get; set; } = new List<Equipo>(); // Para guardar equipos
-        public int Codigo { get; internal set; }
+        public int Id { get => id; set => id = value; }
+        public string Nombre { get => nombre; set => nombre = value; }
+        public string Apellido { get => apellido; set => nombre = value; }
+        public string Telefono 
+        { 
+            get => telefono;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new Exception("el teleono es obligatorio");
+                }
+                telefono = value;
+            }
+        }
 
-        public Tecnico() { }
+        public string Especialidad { get => especialidad; set => especialidad = value; }
+
+        public Tecnico (int id, string nombre, string apellido, string telefono, string especialidad)
+        {
+            this.Id = id;
+            this.Nombre = nombre;
+            this.Apellido = apellido;
+            this.Telefono = telefono;
+            this.Especialidad = especialidad;
+        }
+       
 
         public void Imprimir()
         {
-            Console.WriteLine("Tecnico: " + Nombre + " " + Apellido);
-            Console.WriteLine("Telefono: " + Telefono);
-            Console.WriteLine("Especialidad: " + Especialidad);
-            Console.WriteLine($"Equipos Asignados: {EquiposAsignados.Count}");
+            Console.WriteLine("Tecnico" + Nombre);
+            Console.WriteLine("Apellido: " + Apellido);
+            Console.WriteLine("Telefono " + Telefono);
+            Console.WriteLine("Especialidad:" + Especialidad);
+
         }
 
-        internal void AsignarTrabajo(Equipo equipo) // Ya sin el throw
-        {
-            EquiposAsignados.Add(equipo);
-            Console.WriteLine("=================================");
-            Console.WriteLine($"TRABAJO ASIGNADO");
-            Console.WriteLine($"Tecnico: {Nombre} {Apellido}");
-            Console.WriteLine($"Equipo: {equipo.Marca} {equipo.Modelo}");
-            Console.WriteLine("=================================");
-        }
-
-        internal void AsignarTrabajo()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

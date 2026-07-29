@@ -32,7 +32,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("el telefono es obligatorio");
+                    throw new Exception("el teleono es obligatorio");
                 }
                 telefono = value;
             } 
@@ -47,10 +47,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.Telefono = telefono;
             this.Direccion = direccion;
             this.Id = id;
-        }
-
-        public Cliente()
-        {
         }
 
         public void MostrarCliente()

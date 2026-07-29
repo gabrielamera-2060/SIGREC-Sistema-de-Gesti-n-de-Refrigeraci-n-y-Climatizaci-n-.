@@ -10,7 +10,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string tipoFiltro;
 
         // Constructor vacío
-        public AireAcondicionado(): base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
+        public AireAcondicionado() : base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
         {
             this.tipoFiltro = "Estandar";
         }

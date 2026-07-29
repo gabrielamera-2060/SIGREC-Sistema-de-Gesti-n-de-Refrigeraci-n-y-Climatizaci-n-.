@@ -159,7 +159,7 @@ namespace SIGREC_Refrigeracion
 
 
                         Console.Write("Costo: ");
-                        mantenimiento.Costo = double.Parse(Console.ReadLine());
+                        mantenimiento.Costo = (decimal)double.Parse(Console.ReadLine());
 
 
                         mantenimiento.Fecha = DateTime.Now;

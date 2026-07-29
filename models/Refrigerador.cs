@@ -8,7 +8,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
     {
         private int numeroPuertas;
 
-        public Refrigerador()
+        public Refrigerador() : base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")  
         {
         }
 

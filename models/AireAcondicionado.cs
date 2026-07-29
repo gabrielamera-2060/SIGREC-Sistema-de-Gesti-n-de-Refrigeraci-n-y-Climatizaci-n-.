@@ -10,8 +10,9 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string tipoFiltro;
 
         // Constructor vacío
-        public AireAcondicionado()
+        public AireAcondicionado(): base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
         {
+            this.tipoFiltro = "Estandar";
         }
 
         // Constructor con parámetros
@@ -33,6 +34,11 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         {
             Console.WriteLine("Limpieza de filtros.");
             Console.WriteLine("Revisión del nivel de refrigerante.");
+        }
+
+        internal void MostrarEquipo()
+        {
+            throw new NotImplementedException();
         }
     }
 }

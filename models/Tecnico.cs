@@ -30,6 +30,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         }
 
         public string Especialidad { get => especialidad; set => especialidad = value; }
+        public int Codigo { get; internal set; }
 
         public Tecnico (int id, string nombre, string apellido, string telefono, string especialidad)
         {
@@ -39,7 +40,10 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.Telefono = telefono;
             this.Especialidad = especialidad;
         }
-       
+
+        public Tecnico()
+        {
+        }
 
         public void Imprimir()
         {
@@ -50,5 +54,9 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         }
 
+        internal void AsignarTrabajo()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

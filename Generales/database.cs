@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales
 {
-    public static class DATABASE
+    public static class Database
     {
         private static readonly string rutaCarpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Datos");
         private static readonly string rutaArchivoClientes = Path.Combine(rutaCarpeta, "clientes.json");
@@ -22,6 +22,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
         public static List<Tecnico> Tecnicos { get; set; } = new();
         public static List<Repuesto> Repuestos { get; set; } = new();
         public static List<Mantenimiento> Mantenimientos { get; set; } = new();
+        public static List<Refrigerador> Refrigerador { get; private set; }
         public static List<Refrigerador> refrigeradors { get; set; } = new();
         public static List<CamaraFrigorifica> CamaraFrigorificas { get; set; } = new();
         public static List<AireAcondicionado> AireAcondicionados { get; set; } = new();
@@ -37,7 +38,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
             Tecnicos = ArchivoJson.Cargar<Tecnico>(rutaArchivoTecnicos);
             Repuestos = ArchivoJson.Cargar<Repuesto>(rutaArchivoRepuestos);
             Mantenimientos = ArchivoJson.Cargar<Mantenimiento>(rutaArchivoMantenimientos);
-            Refrigeradores = ArchivoJson.Cargar<Refrigerador>(rutaArchivoRefrigeradores);
+            Refrigerador = ArchivoJson.Cargar<Refrigerador>(rutaArchivoRefrigeradores);
             CamaraFrigorificas = ArchivoJson.Cargar<CamaraFrigorifica>(rutaArchivoCamaras);
             AireAcondicionados = ArchivoJson.Cargar<AireAcondicionado>(rutaArchivoAires);
         }
@@ -49,7 +50,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
             ArchivoJson.Guardar(rutaArchivoTecnicos, Tecnicos);
             ArchivoJson.Guardar(rutaArchivoRepuestos, Repuestos);
             ArchivoJson.Guardar(rutaArchivoMantenimientos, Mantenimientos);
-            ArchivoJson.Guardar(rutaArchivoRefrigeradores, Refrigeradores);
+            ArchivoJson.Guardar(rutaArchivoRefrigeradores, Refrigerador);
             ArchivoJson.Guardar(rutaArchivoCamaras, CamaraFrigorificas);
             ArchivoJson.Guardar(rutaArchivoAires, AireAcondicionados);
         }
@@ -81,7 +82,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
 
         public static void GuardarRefrigeradores()
         {
-            ArchivoJson.Guardar(rutaArchivoRefrigeradores, Refrigeradores);
+            ArchivoJson.Guardar(rutaArchivoRefrigeradores, Refrigerador);
         }
 
         public static void GuardarCamarasFrigorificas()
@@ -95,4 +96,4 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
         }
     }
 }
-}
+

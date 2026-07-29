@@ -29,3 +29,5 @@ se edito Json y database
 Se reagistraron las clases aire acondiconado
 refrigerador camara frigorifica
 y se registro el programs.
+Se edito la clase aire acondicionado y refrigerador, programas y se agregaron validaciones a las clases
+ok prgrama 

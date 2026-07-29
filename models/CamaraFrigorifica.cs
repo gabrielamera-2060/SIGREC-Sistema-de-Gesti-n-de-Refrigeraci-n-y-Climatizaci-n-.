@@ -8,8 +8,9 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
     {
         private double temperaturaMinima;
 
-        public CamaraFrigorifica()
+        public CamaraFrigorifica(): base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
         {
+            this.temperaturaMinima = 0;
         }
 
         public CamaraFrigorifica(string codigo, string marca, string modelo,

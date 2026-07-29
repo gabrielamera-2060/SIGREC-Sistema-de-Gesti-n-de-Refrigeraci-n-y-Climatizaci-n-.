@@ -23,4 +23,9 @@ se agregaron validaciones de las clases y se aprego el public void Imprimir
 
 28-07-2026
 se edito clase de ArchivoJson
-se edito database ok...
+se edito database
+
+28-07-2026
+Se reagistraron las clases aire acondiconado
+refrigerador camara frigorifica
+y se registro el programs.

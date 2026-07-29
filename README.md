@@ -32,3 +32,4 @@ y se registro el programs.
 
 29-07-2026
 prueba de commit
+se hicieron cambios en el crud y en algunas clases

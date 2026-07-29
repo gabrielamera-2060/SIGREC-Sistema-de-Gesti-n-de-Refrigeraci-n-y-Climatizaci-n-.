@@ -1,44 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
+﻿namespace SIGREC_Sistema_de_Gestión_de_Refrigeración_y_Climatización_.Generales
 {
-    public class AireAcondicionado : Equipo
+    public class AireAcondicionado
     {
-        // Atributo
-        private string tipoFiltro;
+        private string codigo;
+        private string marca;
+        private string modelo;
+        private string estado;
+        private int capacidadBTU;
 
-        // Constructor vacío
-        public AireAcondicionado() : base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
+        public string Codigo { get => codigo; set => codigo = value; }
+        public string Marca { get => marca; set => marca = value; }
+        public string Modelo { get => modelo; set => modelo = value; }
+        public string Estado { get => estado; set => estado = value; }
+        public int CapacidadBTU { get => capacidadBTU; set => capacidadBTU = value; }
+        public string? Id { get; internal set; }
+
+        public AireAcondicionado()
         {
-            this.tipoFiltro = "Estandar";
         }
 
-        // Constructor con parámetros
-        public AireAcondicionado(string codigo, string marca, string modelo,
-            int capacidadBTU, string estado, string tipoFiltro)
-            : base(codigo, marca, modelo, capacidadBTU, estado)
+        public AireAcondicionado(string codigo, string marca, string modelo, int capacidadBTU, string estado)
         {
-            this.tipoFiltro = tipoFiltro;
+            Codigo = codigo;
+            Marca = marca;
+            Modelo = modelo;
+            CapacidadBTU = capacidadBTU;
+            Estado = estado;
         }
 
-        // Propiedad
-        public string TipoFiltro
+        public void MostrarEquipo()
         {
-            get { return tipoFiltro; }
-            set { tipoFiltro = value; }
-        }
-
-        public override void RealizarMantenimiento()
-        {
-            Console.WriteLine("Limpieza de filtros.");
-            Console.WriteLine("Revisión del nivel de refrigerante.");
-        }
-
-        internal void MostrarEquipo()
-        {
-            throw new NotImplementedException();
+            Console.WriteLine("======================================");
+            Console.WriteLine("        DATOS DEL AIRE ACONDICIONADO");
+            Console.WriteLine("======================================");
+            Console.WriteLine($"Código: {Codigo}");
+            Console.WriteLine($"Marca: {Marca}");
+            Console.WriteLine($"Modelo: {Modelo}");
+            Console.WriteLine($"Capacidad: {CapacidadBTU} BTU");
+            Console.WriteLine($"Estado: {Estado}");
+            Console.WriteLine("======================================");
         }
     }
 }

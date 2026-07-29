@@ -4,41 +4,42 @@ using System.Text;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
-    public class AireAcondicionado : Equipo
+    public class CamaraFrigorifica : Equipo
     {
-        // Atributo
-        private string tipoFiltro;
+        private double temperaturaMinima;
 
-        // Constructor vacío
-        public AireAcondicionado() : base("Sin marca ", "Sin modelo ", "Sin código ", 0, "Sin estado ")
+        public CamaraFrigorifica()
+            : base("Sin código", "Sin marca", "Sin modelo", 0, "Sin estado")
         {
-            this.tipoFiltro = "Estandar";
+            this.temperaturaMinima = 0.0;
         }
 
-        // Constructor con parámetros
-        public AireAcondicionado(string codigo, string marca, string modelo,
-            int capacidadBTU, string estado, string tipoFiltro)
+       
+        public CamaraFrigorifica(string codigo, string marca, string modelo, int capacidadBTU, string estado, double temperaturaMinima)
             : base(codigo, marca, modelo, capacidadBTU, estado)
         {
-            this.tipoFiltro = tipoFiltro;
+            this.temperaturaMinima = temperaturaMinima;
         }
 
         // Propiedad
-        public string TipoFiltro
+        public double TemperaturaMinima
         {
-            get { return tipoFiltro; }
-            set { tipoFiltro = value; }
+            get { return temperaturaMinima; }
+            set { temperaturaMinima = value; }
         }
 
+        // Sobrescribir método de mantenimiento
         public override void RealizarMantenimiento()
         {
-            Console.WriteLine("Limpieza de filtros.");
-            Console.WriteLine("Revisión del nivel de refrigerante.");
+            Console.WriteLine("Descongelamiento y limpieza de evaporadores.");
+            Console.WriteLine("Verificación de empaques de puerta y hermeticidad.");
         }
 
-        internal void MostrarEquipo()
+        // Implementación de MostrarEquipo
+        public void MostrarEquipo()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Código: {Codigo} | Marca: {Marca} | Modelo: {Modelo}");
+            Console.WriteLine($"BTU: {CapacidadBTU} | Estado: {Estado} | Temp. Mínima: {TemperaturaMinima}°C");
         }
     }
 }

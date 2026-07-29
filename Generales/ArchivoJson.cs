@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales
 {

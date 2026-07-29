@@ -52,6 +52,15 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Estado = estado;
         }
 
+        protected Equipo(string codigo, string marca, string modelo, int capacidadBTU, string estado)
+        {
+            this.codigo = codigo;
+            this.marca = marca;
+            this.modelo = modelo;
+            this.capacidadBTU = capacidadBTU;
+            this.estado = estado;
+        }
+
         public void Imprimir()
         {
             Console.WriteLine("Codigo: " + Codigo);

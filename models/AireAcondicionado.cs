@@ -6,17 +6,33 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 {
     public class AireAcondicionado : Equipo
     {
+        // Atributo
+        private string tipoFiltro;
 
+        // Constructor vacío
+        public AireAcondicionado()
+        {
+        }
 
+        // Constructor con parámetros
+        public AireAcondicionado(string codigo, string marca, string modelo,
+            int capacidadBTU, string estado, string tipoFiltro)
+            : base(codigo, marca, modelo, capacidadBTU, estado)
+        {
+            this.tipoFiltro = tipoFiltro;
+        }
 
-
+        // Propiedad
+        public string TipoFiltro
+        {
+            get { return tipoFiltro; }
+            set { tipoFiltro = value; }
+        }
 
         public override void RealizarMantenimiento()
         {
-            Console.WriteLine("Mantenimiento de aire acondicionado:");
-            Console.WriteLine("- Limpieza de filtros");
-            Console.WriteLine("- Revision de refrigerante");
+            Console.WriteLine("Limpieza de filtros.");
+            Console.WriteLine("Revisión del nivel de refrigerante.");
         }
-
     }
 }

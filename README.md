@@ -24,3 +24,4 @@ se agregaron validaciones de las clases y se aprego el public void Imprimir
 28-07-2026
 se edito clase de ArchivoJson
 se edito database
+se edito Json y database

@@ -7,10 +7,9 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
 {
     public static class ArchivoJson
     {
-        private static readonly JsonSerializerOptions Opciones = new JsonSerializerOptions
+        private static readonly JsonSerializerOptions opciones = new JsonSerializerOptions
         {
-            WriteIndented = true,
-            PropertyNameCaseInsensitive = true
+            WriteIndented = true
         };
 
         public static List<T> Cargar<T>(string rutaArchivo)
@@ -19,18 +18,21 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
             {
                 return new List<T>();
             }
-            string contenido = File.ReadAllText(rutaArchivo);
-            return JsonSerializer.Deserialize<List<T>>(contenido, Opciones) ?? new List<T>();
+
+            string json = File.ReadAllText(rutaArchivo);
+
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return new List<T>();
+            }
+
+            return JsonSerializer.Deserialize<List<T>>(json, opciones) ?? new List<T>();
         }
 
-        public static void Guardar<T>(string rutaArchivo, List<T> lista)
+        public static void Guardar<T>(string rutaArchivo, List<T> datos)
         {
-            if (!Directory.Exists(Path.GetDirectoryName(rutaArchivo)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(rutaArchivo));
-            }
-            string contenido = JsonSerializer.Serialize(lista, Opciones);
-            File.WriteAllText(rutaArchivo, contenido);
+            string json = JsonSerializer.Serialize(datos, opciones);
+            File.WriteAllText(rutaArchivo, json);
         }
     }
 }

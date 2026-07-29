@@ -9,6 +9,7 @@ namespace SIGREC_Refrigeracion
         static void Main(string[] args)
         {
             Database.CargarDatos();
+
             int opcion = 0;
             do
             {

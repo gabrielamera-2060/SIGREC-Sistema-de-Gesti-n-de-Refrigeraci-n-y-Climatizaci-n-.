@@ -1,5 +1,6 @@
 ﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
+using SIGREC_Sistema_de_Gestion_de_Refrigeracion_y_Climatizacion__models;
 using System;
 
 namespace SIGREC_Refrigeracion

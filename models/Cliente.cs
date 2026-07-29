@@ -32,7 +32,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("el teleono es obligatorio");
+                    throw new Exception("el telefono es obligatorio");
                 }
                 telefono = value;
             } 

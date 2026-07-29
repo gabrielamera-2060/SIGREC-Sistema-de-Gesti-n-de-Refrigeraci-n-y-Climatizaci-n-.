@@ -31,3 +31,4 @@ refrigerador camara frigorifica
 y se registro el programs.
 Se edito la clase aire acondicionado y refrigerador, programas y se agregaron validaciones a las clases
 ok programa..
+YA ME VOY A DORMIR..ESPINOZA

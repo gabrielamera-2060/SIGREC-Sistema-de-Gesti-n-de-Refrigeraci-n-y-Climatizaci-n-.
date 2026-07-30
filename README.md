@@ -28,4 +28,4 @@ se edito database
 28-07-2026
 Se reagistraron las clases aire acondiconado
 refrigerador camara frigorifica
-y se registro el programs.
+y se registro el programs..

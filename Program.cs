@@ -492,28 +492,39 @@ void EliminarTecnico()
 
 void CrearEquipo() 
 {
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("    Crear Equipo    ");
-    Console.WriteLine("=================================\n");
+    void CrearEquipo()
+    {
+        Console.Clear();
+        Console.WriteLine("=================================");
+        Console.WriteLine("    Crear Equipo    ");
+        Console.WriteLine("=================================\n");
 
-    Console.Write("Código: ");
-    string codigo = Console.ReadLine();
+        Console.Write("Código: ");
+        string codigo = Console.ReadLine();
 
-    Console.Write("Marca: ");
-    string marca = Console.ReadLine();
+        Console.Write("Marca: ");
+        string marca = Console.ReadLine();
 
-    Console.Write("Modelo: ");
-    string modelo = Console.ReadLine();
+        Console.Write("Modelo: ");
+        string modelo = Console.ReadLine();
 
-    Console.Write("Capacidad BTU: ");
-    int.TryParse(Console.ReadLine(), out int capacidad);
+        Console.Write("Capacidad BTU: ");
+        int.TryParse(Console.ReadLine(), out int capacidad);
 
-    AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad);
-    Database.AireAcondicionados.Add(equipo);
-    Database.GuardarAiresAcondicionados();
-    Console.WriteLine("Equipo creado correctamente.");
-    Console.ReadLine();
+        Console.Write("Estado (Ej: Operativo / En Reparación): ");
+        string estado = Console.ReadLine();
+
+        AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad, estado);
+
+        Database.AireAcondicionados.Add(equipo);
+        Database.Equipos.Add(equipo);
+
+        Database.GuardarAiresAcondicionados();
+        Database.GuardarEquipos();
+
+        Console.WriteLine("\n¡Equipo creado y guardado correctamente!");
+        Console.ReadLine();
+    }
 }
 
 void ListarEquipos()
@@ -574,6 +585,9 @@ void ActualizarEquipo()
 
         Console.Write("Nuevo modelo: ");
         equipo.Modelo = Console.ReadLine();
+
+        Console.Write("Nuevo estado: ");
+        equipo.Estado = Console.ReadLine();
 
         Database.GuardarAiresAcondicionados();
         Console.WriteLine("Equipo actualizado correctamente.");
@@ -636,6 +650,9 @@ static void CrearMantenimiento()
 
     Console.Write("Ingrese Estado (Pendiente/Completado): ");
     string estado = Console.ReadLine();
+
+    Console.Write("Ingrese Observaciones: ");
+    string observaciones = Console.ReadLine();
 
     Console.WriteLine("\n¡Mantenimiento registrado con éxito!");
     Console.ReadKey();

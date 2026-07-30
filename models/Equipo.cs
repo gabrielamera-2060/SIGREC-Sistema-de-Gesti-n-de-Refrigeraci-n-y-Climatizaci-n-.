@@ -12,6 +12,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string marca;
         private string modelo;
         private int capacidadBTU;
+        private string estado;
 
         public string Codigo { get => codigo; set => codigo = value; }
         public string Marca
@@ -39,28 +40,29 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
                 capacidadBTU = value;
             }
         }
+        public string Estado { get => estado; set => estado = value; }
 
         public int Id { get => id; set => id = value; }
 
         public abstract void RealizarMantenimiento();
 
-        public Equipo(int id, string codigo, string marca, string modelo, int capacidadBTU)
+        public Equipo(int id, string codigo, string marca, string modelo, int capacidadBTU, string estado)
         {
             Id = id;
             Codigo = codigo;
             Marca = marca;
             Modelo = modelo;
             CapacidadBTU = capacidadBTU;
-            
+            Estado = estado;
         }
 
-        protected Equipo(string codigo, string marca, string modelo, int capacidadBTU)
+        protected Equipo(string codigo, string marca, string modelo, int capacidadBTU, string estado)
         {
             this.codigo = codigo;
             this.marca = marca;
             this.modelo = modelo;
             this.capacidadBTU = capacidadBTU;
-        
+            this.estado = estado;
         }
 
         public void Imprimir()
@@ -69,8 +71,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Console.WriteLine("Marca: " + Marca);
             Console.WriteLine("Modelo: " + Modelo);
             Console.WriteLine("Capacidad: " + CapacidadBTU + " BTU");
-            
+            Console.WriteLine("Estado: " + Estado);
         }
-
     }
 }

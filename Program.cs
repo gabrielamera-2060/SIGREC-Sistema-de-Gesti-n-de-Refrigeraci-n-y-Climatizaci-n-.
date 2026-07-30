@@ -1,6 +1,6 @@
 ﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
-using SIGREC_Refrigeracion;
+
 
 
 Database.CargarDatos();
@@ -38,7 +38,13 @@ do
     Console.WriteLine("19.- Actualizar Equipo");
     Console.WriteLine("20.- Eliminar Equipo");
 
-    Console.WriteLine("21.- Salir\n");
+    Console.WriteLine("21.- Registrar Mantenimiento");
+    Console.WriteLine("22.- Listar Mantenimientos");
+    Console.WriteLine("23.- Buscar Mantenimiento");
+    Console.WriteLine("24.- Actualizar Mantenimiento");
+    Console.WriteLine("25.- Eliminar Mantenimiento");
+
+    Console.WriteLine("26.- Salir\n");
     Console.Write("Ingrese una opción: ");
     if (!int.TryParse(Console.ReadLine(), out opcion))
     {
@@ -109,7 +115,23 @@ do
         case 20: 
             EliminarEquipo(); 
             break;
-        case 21:
+
+        case 21: 
+            CrearMantenimiento(); 
+            break;
+        case 22: 
+            ListarMantenimientos(); 
+            break;
+        case 23: 
+            BuscarMantenimiento(); 
+            break;
+        case 24: 
+            ActualizarMantenimiento(); 
+            break;
+        case 25: 
+            EliminarMantenimiento(); 
+            break;
+        case 26:
             Console.WriteLine("Saliendo del sistema...");
             break;
 
@@ -118,7 +140,7 @@ do
             break;
     }
     Console.ReadLine();
-} while (opcion != 21);
+} while (opcion != 26);
 
 void EliminarRepuesto()
 {
@@ -260,10 +282,10 @@ void CrearCliente()
     Console.Write("Ingrese cédula: ");
     string cedula = Console.ReadLine();
 
-    Console.Write("Ingrese nombre: "); // CORREGIDO: Se pide nombre por consola
+    Console.Write("Ingrese nombre: "); 
     string nombre = Console.ReadLine();
 
-    Console.Write("Ingrese teléfono: "); // CORREGIDO: Se pide teléfono por consola
+    Console.Write("Ingrese teléfono: "); 
     string telefono = Console.ReadLine();
 
     Console.Write("Ingrese dirección: ");
@@ -383,7 +405,7 @@ void CrearTecnico()
     Console.Write("Años de experiencia: ");
     int.TryParse(Console.ReadLine(), out int experiencia);
 
-    // CORREGIDO: Ajusta estos argumentos al orden exacto que requiere el constructor en Tecnico.cs
+    
     Tecnico tecnico = new Tecnico(id, nombre, telefono, especialidad, experiencia.ToString());
     Database.Tecnicos.Add(tecnico);
     Database.GuardarTecnicos();
@@ -464,7 +486,7 @@ void EliminarTecnico()
     Console.ReadLine();
 }
 
-void CrearEquipo() // CORREGIDO: Se retiraron parámetros de la firma
+void CrearEquipo() 
 {
     Console.Clear();
     Console.WriteLine("******** CREAR EQUIPO ********");
@@ -511,7 +533,7 @@ void BuscarEquipo()
     Console.Write("Ingrese el código: ");
     string codigo = Console.ReadLine();
 
-    // CORREGIDO: Se usa .Codigo en vez de .Id
+    
     AireAcondicionado equipo = Database.AireAcondicionados.Find(x => x.Codigo == codigo);
 
     if (equipo != null)
@@ -564,7 +586,6 @@ void EliminarEquipo()
     Console.Write("Ingrese el código del equipo: ");
     string codigo = Console.ReadLine();
 
-    // CORREGIDO: Se busca por propiedad válida como Código
     Equipo equipo = Database.Equipos.Find(x => x.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
 
     if (equipo != null)
@@ -584,4 +605,137 @@ void EliminarEquipo()
         Console.WriteLine("Equipo no encontrado.");
     }
     Console.ReadLine();
+}
+
+static void CrearMantenimiento()
+{
+    Console.Clear();
+    Console.WriteLine("=================================");
+    Console.WriteLine("     REGISTRAR MANTENIMIENTO     ");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese ID del mantenimiento: ");
+    int id = int.Parse(Console.ReadLine());
+
+    Console.Write("Ingrese Código del Equipo: ");
+    string codigoEquipo = Console.ReadLine();
+
+    Console.Write("Ingrese Descripción del trabajo: ");
+    string descripcion = Console.ReadLine();
+
+    Console.Write("Ingrese Costo ($): ");
+    double costo = double.Parse(Console.ReadLine());
+
+    Console.Write("Ingrese Estado (Pendiente/Completado): ");
+    string estado = Console.ReadLine();
+
+    Mantenimiento nuevo = new Mantenimiento(id, codigoEquipo, descripcion, DateTime.Now, costo, estado);
+    Database.Mantenimientos.Add(nuevo);
+
+    Console.WriteLine("\n¡Mantenimiento registrado con éxito!");
+    Console.ReadKey();
+}
+
+static void ListarMantenimientos()
+{
+    Console.Clear();
+    Console.WriteLine("=================================");
+    Console.WriteLine("    LISTADO DE MANTENIMIENTOS    ");
+    Console.WriteLine("=================================\n");
+
+    if (Database.Mantenimientos.Count == 0)
+    {
+        Console.WriteLine("No hay mantenimientos registrados.");
+    }
+    else
+    {
+        foreach (var m in Database.Mantenimientos)
+        {
+            m.Imprimir();
+        }
+    }
+    Console.ReadKey();
+}
+
+static void BuscarMantenimiento()
+{
+    Console.Clear();
+    Console.WriteLine("=================================");
+    Console.WriteLine("       BUSCAR MANTENIMIENTO      ");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese ID del mantenimiento a buscar: ");
+    int id = int.Parse(Console.ReadLine());
+
+    Mantenimiento encontrado = Database.Mantenimientos.Find(m => m.Id == id);
+
+    if (encontrado != null)
+    {
+        Console.WriteLine("\n¡Mantenimiento encontrado!\n");
+        encontrado.Imprimir();
+    }
+    else
+    {
+        Console.WriteLine("\nNo se encontró ningún mantenimiento con ese ID.");
+    }
+    Console.ReadKey();
+}
+
+static void ActualizarMantenimiento()
+{
+    Console.Clear();
+    Console.WriteLine("=================================");
+    Console.WriteLine("     ACTUALIZAR MANTENIMIENTO    ");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese ID del mantenimiento a actualizar: ");
+    int id = int.Parse(Console.ReadLine());
+
+    Mantenimiento m = Database.Mantenimientos.Find(x => x.Id == id);
+
+    if (m != null)
+    {
+        Console.Write($"Nueva Descripción (Actual: {m.Descripcion}): ");
+        string nuevaDesc = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(nuevaDesc)) m.Descripcion = nuevaDesc;
+
+        Console.Write($"Nuevo Costo (Actual: ${m.Costo}): ");
+        string nuevoCostoStr = Console.ReadLine();
+        if (double.TryParse(nuevoCostoStr, out double nuevoCosto)) m.Costo = nuevoCosto;
+
+        Console.Write($"Nuevo Estado (Actual: {m.Estado}): ");
+        string nuevoEstado = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(nuevoEstado)) m.Estado = nuevoEstado;
+
+        Console.WriteLine("\n¡Mantenimiento actualizado con éxito!");
+    }
+    else
+    {
+        Console.WriteLine("\nNo se encontró el mantenimiento.");
+    }
+    Console.ReadKey();
+}
+
+static void EliminarMantenimiento()
+{
+    Console.Clear();
+    Console.WriteLine("=================================");
+    Console.WriteLine("      ELIMINAR MANTENIMIENTO     ");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese ID del mantenimiento a eliminar: ");
+    int id = int.Parse(Console.ReadLine());
+
+    Mantenimiento m = Database.Mantenimientos.Find(x => x.Id == id);
+
+    if (m != null)
+    {
+        Database.Mantenimientos.Remove(m);
+        Console.WriteLine("\n¡Mantenimiento eliminado con éxito!");
+    }
+    else
+    {
+        Console.WriteLine("\nNo se encontró el mantenimiento.");
+    }
+    Console.ReadKey();
 }

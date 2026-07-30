@@ -1,51 +1,37 @@
 ﻿using System;
 
-// CORREGIDO: Namespace unificado con el resto del proyecto
-namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales
+namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
-    public class AireAcondicionado
+    public class AireAcondicionado : Equipo
     {
-        private string codigo;
-        private string marca;
-        private string modelo;
-        private string estado;
-        private int capacidadBTU;
+        // Atributo propio de esta clase
+        private string tipoFiltro;
 
-        public string Codigo { get => codigo; set => codigo = value; }
-        public string Marca { get => marca; set => marca = value; }
-        public string Modelo { get => modelo; set => modelo = value; }
-        public string Estado { get => estado; set => estado = value; }
-        public int CapacidadBTU { get => capacidadBTU; set => capacidadBTU = value; }
-        public string? Id { get; internal set; }
-
-        public AireAcondicionado() { }
-
-        public AireAcondicionado(string codigo, string marca, string modelo, int capacidadBTU, string estado)
+        // Constructor vacío
+        public AireAcondicionado() : base("Sin código", "Sin marca", "Sin modelo", 0, "Sin estado")
         {
-            Codigo = codigo;
-            Marca = marca;
-            Modelo = modelo;
-            CapacidadBTU = capacidadBTU;
-            Estado = estado;
+            this.tipoFiltro = "Estandar";
         }
 
-
-        public void MostrarEquipo()
+        // Constructor con parámetros
+        public AireAcondicionado(string codigo, string marca, string modelo, int capacidadBTU, string estado, string tipoFiltro)
+            : base(codigo, marca, modelo, capacidadBTU, estado)
         {
-            Console.WriteLine("======================================");
-            Console.WriteLine("        DATOS DEL AIRE ACONDICIONADO");
-            Console.WriteLine("======================================");
-            Console.WriteLine($"Código: {Codigo}");
-            Console.WriteLine($"Marca: {Marca}");
-            Console.WriteLine($"Modelo: {Modelo}");
-            Console.WriteLine($"Capacidad: {CapacidadBTU} BTU");
-            Console.WriteLine($"Estado: {Estado}");
-            Console.WriteLine("======================================");
+            this.tipoFiltro = tipoFiltro;
         }
 
-        public void Imprimir()
+        // Propiedad propia de esta clase
+        public string TipoFiltro
         {
-            MostrarEquipo();
+            get => tipoFiltro;
+            set => tipoFiltro = value;
+        }
+
+        // Implementación obligatoria del método abstracto de Equipo
+        public override void RealizarMantenimiento()
+        {
+            Console.WriteLine("Limpieza de filtros de aire acondicionado.");
+            Console.WriteLine("Revisión del nivel de refrigerante.");
         }
     }
 }

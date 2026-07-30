@@ -2,7 +2,6 @@
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
 
 
-
 Database.CargarDatos();
 int opcion = 0;
 do
@@ -38,7 +37,7 @@ do
     Console.WriteLine("19.- Actualizar Equipo");
     Console.WriteLine("20.- Eliminar Equipo");
 
-    Console.WriteLine("21.- Registrar Mantenimiento");
+    Console.WriteLine("21.- Crear Mantenimiento");
     Console.WriteLine("22.- Listar Mantenimientos");
     Console.WriteLine("23.- Buscar Mantenimiento");
     Console.WriteLine("24.- Actualizar Mantenimiento");
@@ -514,7 +513,10 @@ void CrearEquipo()
         Console.Write("Estado (Ej: Operativo / En Reparación): ");
         string estado = Console.ReadLine();
 
-        AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad, estado);
+        Console.Write("Tipo de filtro (Ej: Estándar / HEPA): ");
+        string tipoFiltro = Console.ReadLine();
+
+        AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad, estado, tipoFiltro);
 
         Database.AireAcondicionados.Add(equipo);
         Database.Equipos.Add(equipo);
@@ -557,7 +559,7 @@ void BuscarEquipo()
     if (equipo != null)
     {
         Console.WriteLine("Equipo encontrado:");
-        equipo.MostrarEquipo();
+        equipo.Imprimir();
     }
     else
     {
@@ -651,9 +653,6 @@ static void CrearMantenimiento()
     Console.Write("Ingrese Estado (Pendiente/Completado): ");
     string estado = Console.ReadLine();
 
-    Console.Write("Ingrese Observaciones: ");
-    string observaciones = Console.ReadLine();
-
     Console.WriteLine("\n¡Mantenimiento registrado con éxito!");
     Console.ReadKey();
 }
@@ -664,17 +663,20 @@ static void ListarMantenimientos()
     Console.WriteLine("=================================");
     Console.WriteLine("    LISTAR MANTENIMIENTO    ");
     Console.WriteLine("=================================\n");
-
-    if (Database.Mantenimientos.Count == 0)
+    
+    Console.ReadLine();
+    if (Database.Mantenimientos.Count == 1)
     {
         Console.WriteLine("No hay mantenimientos registrados.");
     }
     else
     {
-        foreach (var m in Database.Mantenimientos)
+        foreach (Mantenimiento mantenimiento in Database.Mantenimientos)
         {
-            m.Imprimir();
+            Mantenimiento.Imprimir();
+            Console.WriteLine("-----------------------------------");
         }
+        Console.ReadLine();
     }
     Console.ReadKey();
 }

@@ -13,7 +13,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string estado;
         private int duracionHoras;
 
-        public int Id { get => id; set => id = value; }
+        public int? Id { get; set; } = 0;
         public string TipoMantenimiento { get => tipoMantenimiento; set => tipoMantenimiento = value; }
         public string Descripcion
         {

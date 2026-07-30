@@ -11,14 +11,12 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
         {
             WriteIndented = true
         };
-
         public static List<T> Cargar<T>(string rutaArchivo)
         {
             if (!File.Exists(rutaArchivo))
             {
                 return new List<T>();
             }
-
             string json = File.ReadAllText(rutaArchivo);
 
             if (string.IsNullOrWhiteSpace(json))
@@ -26,7 +24,14 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
                 return new List<T>();
             }
 
-            return JsonSerializer.Deserialize<List<T>>(json, opciones) ?? new List<T>();
+            try
+            {
+                return JsonSerializer.Deserialize<List<T>>(json, opciones) ?? new List<T>();
+            }
+            catch (Exception)
+            {
+                return new List<T>();
+            }
         }
 
         public static void Guardar<T>(string rutaArchivo, List<T> datos)

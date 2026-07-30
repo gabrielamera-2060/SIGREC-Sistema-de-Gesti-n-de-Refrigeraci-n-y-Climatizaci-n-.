@@ -40,9 +40,55 @@ namespace SIGREC_Refrigeracion
 
                         Console.Clear();
 
-                        Cliente cliente = new Cliente();
+        case 11: 
+            CrearRepuesto(); 
+            break;
+        case 12: 
+            ListarRepuesto(); 
+            break;
+        case 13: 
+            BuscarRepuesto(); 
+            break;
+        case 14: 
+            ActualizarRepuesto(); 
+            break;
+        case 15: 
+            EliminarRepuesto(); 
+            break;
+        case 16: 
+            CrearEquipo(); 
+            break; 
+        case 17: 
+            ListarEquipos(); 
+            break;
+        case 18: 
+            BuscarEquipo(); 
+            break;
+        case 19: 
+            ActualizarEquipo(); 
+            break;
+        case 20: 
+            EliminarEquipo(); 
+            break;
 
-                        Console.WriteLine("=== REGISTRO DE CLIENTE ===");
+        case 21: 
+            CrearMantenimiento(); 
+            break;
+        case 22: 
+            ListarMantenimientos(); 
+            break;
+        case 23: 
+            BuscarMantenimiento(); 
+            break;
+        case 24: 
+            ActualizarMantenimiento(); 
+            break;
+        case 25: 
+            EliminarMantenimiento(); 
+            break;
+        case 26:
+            Console.WriteLine("Saliendo del sistema...");
+            break;
 
                         Console.Write("Cedula: ");
                         cliente.Cedula = Console.ReadLine();

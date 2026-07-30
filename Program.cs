@@ -144,7 +144,9 @@ do
 void EliminarRepuesto()
 {
     Console.Clear();
-    Console.WriteLine("===== ELIMINAR REPUESTO =====");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         ELIMINAR REPUESTO  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese el ID: ");
     if (int.TryParse(Console.ReadLine(), out int id))
     {
@@ -166,7 +168,9 @@ void EliminarRepuesto()
 void ActualizarRepuesto()
 {
     Console.Clear();
-    Console.WriteLine("===== EDITAR REPUESTO =====");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         ACTUALIZAR REPUESTO  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese el ID del repuesto: ");
     if (int.TryParse(Console.ReadLine(), out int id))
     {
@@ -204,7 +208,9 @@ void ActualizarRepuesto()
 void BuscarRepuesto()
 {
     Console.Clear();
-    Console.WriteLine("===== BUSCAR REPUESTO =====");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         BUSCAR REPUESTO  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese el ID del repuesto: ");
     if (int.TryParse(Console.ReadLine(), out int id))
     {
@@ -226,7 +232,9 @@ void BuscarRepuesto()
 void ListarRepuesto()
 {
     Console.Clear();
-    Console.WriteLine("===== LISTA DE REPUESTOS =====");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         LISTAR REPUESTO  ");
+    Console.WriteLine("=================================\n");
     if (Database.Repuestos.Count == 0)
     {
         Console.WriteLine("No existen repuestos registrados.");
@@ -245,7 +253,9 @@ void ListarRepuesto()
 void CrearRepuesto()
 {
     Console.Clear();
-    Console.WriteLine("===== REGISTRAR REPUESTO =====");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         CREAR REPUESTO  ");
+    Console.WriteLine("=================================\n");
     Console.Write("ID: ");
     int.TryParse(Console.ReadLine(), out int id);
 
@@ -274,7 +284,9 @@ void CrearRepuesto()
 void CrearCliente()
 {
     Console.Clear();
-    Console.WriteLine("******** CREAR CLIENTE ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         CREAR CLIENTE  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese ID: ");
     int.TryParse(Console.ReadLine(), out int id);
 
@@ -300,7 +312,9 @@ void CrearCliente()
 void ListarClientes()
 {
     Console.Clear();
-    Console.WriteLine("******** CLIENTES REGISTRADOS ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("        LISTAR CLIENTE  ");
+    Console.WriteLine("=================================\n");
     foreach (Cliente cliente in Database.Clientes)
     {
         cliente.Imprimir();
@@ -312,7 +326,9 @@ void ListarClientes()
 void BuscarCliente()
 {
     Console.Clear();
-    Console.WriteLine("******** BUSCAR CLIENTE ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("       BUSCAR CLIENTE  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese la cédula del cliente: ");
     string cedula = Console.ReadLine();
     Cliente objCliente = Database.Clientes.Find(x => x.Cedula == cedula);
@@ -331,7 +347,9 @@ void BuscarCliente()
 void ActualizarCliente()
 {
     Console.Clear();
-    Console.WriteLine("******** ACTUALIZAR CLIENTE ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("       ACTUALIZAR CLIENTE  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese la cédula del cliente: ");
     string cedula = Console.ReadLine();
     Cliente objCliente = Database.Clientes.Find(x => x.Cedula == cedula);
@@ -359,7 +377,9 @@ void ActualizarCliente()
 void EliminarCliente()
 {
     Console.Clear();
-    Console.WriteLine("******** ELIMINAR CLIENTE ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("       ELIMINAR CLIENTE  ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese la cédula del cliente: ");
     string cedula = Console.ReadLine();
     Cliente objCliente = Database.Clientes.Find(x => x.Cedula == cedula);
@@ -388,7 +408,9 @@ void EliminarCliente()
 void CrearTecnico()
 {
     Console.Clear();
-    Console.WriteLine("******** CREAR TÉCNICO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("        CREAR TECNICOS  ");
+    Console.WriteLine("=================================\n");
     Console.Write("ID del técnico: ");
     int.TryParse(Console.ReadLine(), out int id);
 
@@ -415,7 +437,9 @@ void CrearTecnico()
 void ListarTecnicos()
 {
     Console.Clear();
-    Console.WriteLine("******** TÉCNICOS REGISTRADOS ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("       LISTAR TECNICOS  ");
+    Console.WriteLine("=================================\n");
     foreach (Tecnico tecnico in Database.Tecnicos)
     {
         tecnico.Imprimir();
@@ -427,7 +451,9 @@ void ListarTecnicos()
 void BuscarTecnico()
 {
     Console.Clear();
-    Console.WriteLine("******** BUSCAR TÉCNICO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("         BUSCAR TECNICO   ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese el nombre del técnico: ");
     string nombre = Console.ReadLine();
     Tecnico tecnico = Database.Tecnicos.Find(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
@@ -446,7 +472,7 @@ void ActualizarTecnico()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("    ACTUALIZAR TECNICO   ");
+    Console.WriteLine("       ACTUALIZAR TECNICO   ");
     Console.WriteLine("=================================\n");
     Console.Write("Ingrese nombre del técnico: ");
     string nombre = Console.ReadLine();
@@ -469,7 +495,7 @@ void EliminarTecnico()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("   ELIMINAR TECNICO    ");
+    Console.WriteLine("       ELIMINAR TECNICO    ");
     Console.WriteLine("=================================\n");
     Console.Write("Nombre del técnico: ");
     string nombre = Console.ReadLine();
@@ -489,13 +515,13 @@ void EliminarTecnico()
     Console.ReadLine();
 }
 
-void CrearEquipo() 
-{
+
+
     void CrearEquipo()
     {
         Console.Clear();
         Console.WriteLine("=================================");
-        Console.WriteLine("    Crear Equipo    ");
+        Console.WriteLine("       CREAR EQUIPO   ");
         Console.WriteLine("=================================\n");
 
         Console.Write("Código: ");
@@ -527,13 +553,13 @@ void CrearEquipo()
         Console.WriteLine("\n¡Equipo creado y guardado correctamente!");
         Console.ReadLine();
     }
-}
+
 
 void ListarEquipos()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("    LISTAR EQUIPO    ");
+    Console.WriteLine("         LISTAR EQUIPO    ");
     Console.WriteLine("=================================\n");
     foreach (Equipo equipo in Database.Equipos)
     {
@@ -547,7 +573,7 @@ void BuscarEquipo()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("    BUSCAR EQUIPO   ");
+    Console.WriteLine("         BUSCAR EQUIPO   ");
     Console.WriteLine("=================================\n");
 
     Console.Write("Ingrese el código: ");
@@ -572,7 +598,7 @@ void ActualizarEquipo()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("  ACTUALIZAR EQUIPO    ");
+    Console.WriteLine("       ACTUALIZAR EQUIPO    ");
     Console.WriteLine("=================================\n");
 
     Console.Write("Ingrese el código: ");
@@ -605,7 +631,7 @@ void EliminarEquipo()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("    ELIMINAR EQUIPO    ");
+    Console.WriteLine("        ELIMINAR EQUIPO    ");
     Console.WriteLine("=================================\n");
     Console.Write("Ingrese el código del equipo: ");
     string codigo = Console.ReadLine();
@@ -631,7 +657,7 @@ void EliminarEquipo()
     Console.ReadLine();
 }
 
-static void CrearMantenimiento()
+ void CrearMantenimiento()
 {
     Console.Clear();
     Console.WriteLine("=================================");
@@ -655,9 +681,11 @@ static void CrearMantenimiento()
 
     Console.WriteLine("\n¡Mantenimiento registrado con éxito!");
     Console.ReadKey();
+
+    Console.ReadLine();
 }
 
-static void ListarMantenimientos()
+ void ListarMantenimientos()
 {
     Console.Clear();
     Console.WriteLine("=================================");
@@ -665,23 +693,17 @@ static void ListarMantenimientos()
     Console.WriteLine("=================================\n");
     
     Console.ReadLine();
-    if (Database.Mantenimientos.Count == 1)
+
+    foreach (Mantenimiento mantenimiento in Database.Mantenimientos)
     {
-        Console.WriteLine("No hay mantenimientos registrados.");
+        mantenimiento.Imprimir();
+        Console.WriteLine("---------------------------------------------");
     }
-    else
-    {
-        foreach (Mantenimiento mantenimiento in Database.Mantenimientos)
-        {
-            Mantenimiento.Imprimir();
-            Console.WriteLine("-----------------------------------");
-        }
-        Console.ReadLine();
-    }
+    
     Console.ReadKey();
 }
 
-static void BuscarMantenimiento()
+void BuscarMantenimiento()
 {
     Console.Clear();
     Console.WriteLine("=================================");
@@ -705,7 +727,7 @@ static void BuscarMantenimiento()
     Console.ReadKey();
 }
 
-static void ActualizarMantenimiento()
+void ActualizarMantenimiento()
 {
     Console.Clear();
     Console.WriteLine("=================================");
@@ -740,7 +762,7 @@ static void ActualizarMantenimiento()
     Console.ReadKey();
 }
 
-static void EliminarMantenimiento()
+void EliminarMantenimiento()
 {
     Console.Clear();
     Console.WriteLine("=================================");

@@ -691,8 +691,6 @@ void EliminarEquipo()
     Console.WriteLine("=================================");
     Console.WriteLine("    LISTAR MANTENIMIENTO    ");
     Console.WriteLine("=================================\n");
-    
-    Console.ReadLine();
 
     foreach (Mantenimiento mantenimiento in Database.Mantenimientos)
     {

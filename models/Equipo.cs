@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales;
+using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {

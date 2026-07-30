@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
+using System.IO; // AGREGADO
+using System.Text.Json; // AGREGADO
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales
 {

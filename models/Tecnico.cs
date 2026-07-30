@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
@@ -15,15 +13,15 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         public int Id { get => id; set => id = value; }
         public string Nombre { get => nombre; set => nombre = value; }
-        public string Apellido { get => apellido; set => nombre = value; }
-        public string Telefono 
-        { 
+        public string Apellido { get => apellido; set => apellido = value; } // CORREGIDO
+        public string Telefono
+        {
             get => telefono;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("el teleono es obligatorio");
+                    throw new Exception("El teléfono es obligatorio");
                 }
                 telefono = value;
             }
@@ -31,7 +29,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         public string Especialidad { get => especialidad; set => especialidad = value; }
 
-        public Tecnico (int id, string nombre, string apellido, string telefono, string especialidad)
+        public Tecnico(int id, string nombre, string apellido, string telefono, string especialidad)
         {
             this.Id = id;
             this.Nombre = nombre;
@@ -39,16 +37,13 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.Telefono = telefono;
             this.Especialidad = especialidad;
         }
-       
 
         public void Imprimir()
         {
-            Console.WriteLine("Tecnico" + Nombre);
-            Console.WriteLine("Apellido: " + Apellido);
-            Console.WriteLine("Telefono " + Telefono);
-            Console.WriteLine("Especialidad:" + Especialidad);
-
+            Console.WriteLine("ID: " + Id);
+            Console.WriteLine("Nombre: " + Nombre + " " + Apellido);
+            Console.WriteLine("Teléfono: " + Telefono);
+            Console.WriteLine("Especialidad: " + Especialidad);
         }
-
     }
 }

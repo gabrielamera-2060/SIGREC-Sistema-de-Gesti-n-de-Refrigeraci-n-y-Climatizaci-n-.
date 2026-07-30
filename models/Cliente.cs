@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Timers;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models
 {
@@ -15,7 +12,8 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private string direccion;
 
         public string Cedula
-        { get => cedula;
+        {
+            get => cedula;
             set
             {
                 if (value.Length != 10)
@@ -26,16 +24,17 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             }
         }
         public string Nombre { get => nombre; set => nombre = value; }
-        public string Telefono 
-        { get => telefono; 
+        public string Telefono
+        {
+            get => telefono;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("el teleono es obligatorio");
+                    throw new Exception("El teléfono es obligatorio");
                 }
                 telefono = value;
-            } 
+            }
         }
         public string Direccion { get => direccion; set => direccion = value; }
         public int Id { get => id; set => id = value; }
@@ -52,9 +51,15 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         public void MostrarCliente()
         {
             Console.WriteLine("Cliente: " + Nombre);
-            Console.WriteLine("Cedula: " + Cedula);
-            Console.WriteLine("Telefono: " + Telefono);
-            Console.WriteLine("Direccion: " + Direccion);
+            Console.WriteLine("Cédula: " + Cedula);
+            Console.WriteLine("Teléfono: " + Telefono);
+            Console.WriteLine("Dirección: " + Direccion);
+        }
+
+        // AGREGADO: Para evitar errores cuando Program.cs busque el método Imprimir
+        public void Imprimir()
+        {
+            MostrarCliente();
         }
     }
 }

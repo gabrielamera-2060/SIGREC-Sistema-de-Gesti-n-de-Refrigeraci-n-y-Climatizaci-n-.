@@ -1,4 +1,5 @@
 ﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
+using SIGREC_Sistema_de_Gestión_de_Refrigeración_y_Climatización_.Generales;
 using System;
 using System.Collections.Generic;
 using System.Text;

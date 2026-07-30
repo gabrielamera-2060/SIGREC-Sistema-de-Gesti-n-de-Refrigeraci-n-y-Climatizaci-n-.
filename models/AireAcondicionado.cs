@@ -1,4 +1,7 @@
-﻿namespace SIGREC_Sistema_de_Gestión_de_Refrigeración_y_Climatización_.Generales
+﻿using System;
+
+// CORREGIDO: Namespace unificado con el resto del proyecto
+namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales
 {
     public class AireAcondicionado
     {
@@ -15,9 +18,7 @@
         public int CapacidadBTU { get => capacidadBTU; set => capacidadBTU = value; }
         public string? Id { get; internal set; }
 
-        public AireAcondicionado()
-        {
-        }
+        public AireAcondicionado() { }
 
         public AireAcondicionado(string codigo, string marca, string modelo, int capacidadBTU, string estado)
         {
@@ -39,6 +40,11 @@
             Console.WriteLine($"Capacidad: {CapacidadBTU} BTU");
             Console.WriteLine($"Estado: {Estado}");
             Console.WriteLine("======================================");
+        }
+
+        public void Imprimir()
+        {
+            MostrarEquipo();
         }
     }
 }

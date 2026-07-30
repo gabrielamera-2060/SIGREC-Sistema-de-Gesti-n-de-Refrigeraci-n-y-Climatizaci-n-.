@@ -446,7 +446,9 @@ void BuscarTecnico()
 void ActualizarTecnico()
 {
     Console.Clear();
-    Console.WriteLine("******** ACTUALIZAR TÉCNICO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("    ACTUALIZAR TECNICO   ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese nombre del técnico: ");
     string nombre = Console.ReadLine();
     Tecnico tecnico = Database.Tecnicos.Find(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
@@ -467,7 +469,9 @@ void ActualizarTecnico()
 void EliminarTecnico()
 {
     Console.Clear();
-    Console.WriteLine("******** ELIMINAR TÉCNICO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("   ELIMINAR TECNICO    ");
+    Console.WriteLine("=================================\n");
     Console.Write("Nombre del técnico: ");
     string nombre = Console.ReadLine();
 
@@ -489,7 +493,9 @@ void EliminarTecnico()
 void CrearEquipo() 
 {
     Console.Clear();
-    Console.WriteLine("******** CREAR EQUIPO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("    Crear Equipo    ");
+    Console.WriteLine("=================================\n");
 
     Console.Write("Código: ");
     string codigo = Console.ReadLine();
@@ -503,10 +509,7 @@ void CrearEquipo()
     Console.Write("Capacidad BTU: ");
     int.TryParse(Console.ReadLine(), out int capacidad);
 
-    Console.Write("Estado: ");
-    string estado = Console.ReadLine();
-
-    AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad, estado);
+    AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad);
     Database.AireAcondicionados.Add(equipo);
     Database.GuardarAiresAcondicionados();
     Console.WriteLine("Equipo creado correctamente.");
@@ -516,7 +519,9 @@ void CrearEquipo()
 void ListarEquipos()
 {
     Console.Clear();
-    Console.WriteLine("******** EQUIPOS REGISTRADOS ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("    LISTAR EQUIPO    ");
+    Console.WriteLine("=================================\n");
     foreach (Equipo equipo in Database.Equipos)
     {
         equipo.Imprimir();
@@ -528,7 +533,9 @@ void ListarEquipos()
 void BuscarEquipo()
 {
     Console.Clear();
-    Console.WriteLine("******** BUSCAR EQUIPO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("    BUSCAR EQUIPO   ");
+    Console.WriteLine("=================================\n");
 
     Console.Write("Ingrese el código: ");
     string codigo = Console.ReadLine();
@@ -551,7 +558,9 @@ void BuscarEquipo()
 void ActualizarEquipo()
 {
     Console.Clear();
-    Console.WriteLine("******** ACTUALIZAR EQUIPO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("  ACTUALIZAR EQUIPO    ");
+    Console.WriteLine("=================================\n");
 
     Console.Write("Ingrese el código: ");
     string codigo = Console.ReadLine();
@@ -566,9 +575,6 @@ void ActualizarEquipo()
         Console.Write("Nuevo modelo: ");
         equipo.Modelo = Console.ReadLine();
 
-        Console.Write("Nuevo estado: ");
-        equipo.Estado = Console.ReadLine();
-
         Database.GuardarAiresAcondicionados();
         Console.WriteLine("Equipo actualizado correctamente.");
     }
@@ -582,7 +588,9 @@ void ActualizarEquipo()
 void EliminarEquipo()
 {
     Console.Clear();
-    Console.WriteLine("******** ELIMINAR EQUIPO ********");
+    Console.WriteLine("=================================");
+    Console.WriteLine("    ELIMINAR EQUIPO    ");
+    Console.WriteLine("=================================\n");
     Console.Write("Ingrese el código del equipo: ");
     string codigo = Console.ReadLine();
 
@@ -629,9 +637,6 @@ static void CrearMantenimiento()
     Console.Write("Ingrese Estado (Pendiente/Completado): ");
     string estado = Console.ReadLine();
 
-    Mantenimiento nuevo = new Mantenimiento(id, codigoEquipo, descripcion, DateTime.Now, costo, estado);
-    Database.Mantenimientos.Add(nuevo);
-
     Console.WriteLine("\n¡Mantenimiento registrado con éxito!");
     Console.ReadKey();
 }
@@ -640,7 +645,7 @@ static void ListarMantenimientos()
 {
     Console.Clear();
     Console.WriteLine("=================================");
-    Console.WriteLine("    LISTADO DE MANTENIMIENTOS    ");
+    Console.WriteLine("    LISTAR MANTENIMIENTO    ");
     Console.WriteLine("=================================\n");
 
     if (Database.Mantenimientos.Count == 0)
@@ -701,7 +706,7 @@ static void ActualizarMantenimiento()
 
         Console.Write($"Nuevo Costo (Actual: ${m.Costo}): ");
         string nuevoCostoStr = Console.ReadLine();
-        if (double.TryParse(nuevoCostoStr, out double nuevoCosto)) m.Costo = nuevoCosto;
+        if (decimal.TryParse(nuevoCostoStr, out decimal nuevoCosto)) m.Costo = nuevoCosto;
 
         Console.Write($"Nuevo Estado (Actual: {m.Estado}): ");
         string nuevoEstado = Console.ReadLine();

@@ -20,13 +20,12 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
 
         public AireAcondicionado() { }
 
-        public AireAcondicionado(string codigo, string marca, string modelo, int capacidadBTU, string estado)
+        public AireAcondicionado(string codigo, string marca, string modelo, int capacidadBTU)
         {
             Codigo = codigo;
             Marca = marca;
             Modelo = modelo;
             CapacidadBTU = capacidadBTU;
-            Estado = estado;
         }
 
         public void MostrarEquipo()
@@ -38,7 +37,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Gener
             Console.WriteLine($"Marca: {Marca}");
             Console.WriteLine($"Modelo: {Modelo}");
             Console.WriteLine($"Capacidad: {CapacidadBTU} BTU");
-            Console.WriteLine($"Estado: {Estado}");
             Console.WriteLine("======================================");
         }
 

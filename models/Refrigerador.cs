@@ -7,15 +7,15 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
     {
         private int numeroPuertas;
 
-        public Refrigerador() : base("Sin código", "Sin marca", "Sin modelo", 0, "Sin estado")
+        public Refrigerador() : base("Sin código", "Sin marca", "Sin modelo", 0)
         {
             this.numeroPuertas = 0;
         }
 
         // Constructor con parámetros (el que ya tenías)
         public Refrigerador(string codigo, string marca, string modelo,
-            int capacidadBTU, string estado, int numeroPuertas)
-            : base(codigo, marca, modelo, capacidadBTU, estado)
+            int capacidadBTU, int numeroPuertas)
+            : base(codigo, marca, modelo, capacidadBTU)
         {
             this.numeroPuertas = numeroPuertas;
         }

@@ -13,7 +13,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         public int Id { get => id; set => id = value; }
         public string Nombre { get => nombre; set => nombre = value; }
-        public string Apellido { get => apellido; set => apellido = value; } // CORREGIDO
+        public string Apellido { get => apellido; set => apellido = value; } 
         public string Telefono
         {
             get => telefono;
@@ -21,6 +21,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
+                    
                     throw new Exception("El teléfono es obligatorio");
                 }
                 telefono = value;

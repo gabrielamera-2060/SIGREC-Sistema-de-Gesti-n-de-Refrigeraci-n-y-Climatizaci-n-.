@@ -55,8 +55,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Console.WriteLine("Teléfono: " + Telefono);
             Console.WriteLine("Dirección: " + Direccion);
         }
-
-        // AGREGADO: Para evitar errores cuando Program.cs busque el método Imprimir
         public void Imprimir()
         {
             MostrarCliente();

@@ -21,21 +21,18 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.temperaturaMinima = temperaturaMinima;
         }
 
-        // Propiedad
         public double TemperaturaMinima
         {
             get { return temperaturaMinima; }
             set { temperaturaMinima = value; }
         }
 
-        // Sobrescribir método de mantenimiento
         public override void RealizarMantenimiento()
         {
             Console.WriteLine("Descongelamiento y limpieza de evaporadores.");
             Console.WriteLine("Verificación de empaques de puerta y hermeticidad.");
         }
 
-        // Implementación de MostrarEquipo
         public void MostrarEquipo()
         {
             Console.WriteLine($"Código: {Codigo} | Marca: {Marca} | Modelo: {Modelo}");

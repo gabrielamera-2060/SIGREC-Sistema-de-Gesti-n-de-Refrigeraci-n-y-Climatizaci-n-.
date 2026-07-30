@@ -12,7 +12,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             this.numeroPuertas = 0;
         }
 
-        // Constructor con parámetros (el que ya tenías)
         public Refrigerador(string codigo, string marca, string modelo,
             int capacidadBTU, string estado, int numeroPuertas)
             : base(codigo, marca, modelo, capacidadBTU, estado)

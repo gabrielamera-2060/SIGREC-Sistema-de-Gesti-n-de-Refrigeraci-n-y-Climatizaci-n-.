@@ -1,261 +1,940 @@
 ﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
 
-
 Database.CargarDatos();
-int opcion = 0;
+
+Console.OutputEncoding = System.Text.Encoding.UTF8;
+Console.Title = "SIGREC - Sistema de Gestión de Refrigeración y Climatización";
+
+int opcionPrincipal = 0;
+
 do
 {
     Console.Clear();
-    Console.WriteLine("========================================");
-    Console.WriteLine("               SIGREC");
-    Console.WriteLine(" Sistema de Refrigeracion y Climatizacion");
-    Console.WriteLine("========================================");
-    Console.WriteLine("Menú de Opciones:\n");
 
-    Console.WriteLine("1.- Crear Cliente");
-    Console.WriteLine("2.- Listar Clientes");
-    Console.WriteLine("3.- Buscar Cliente");
-    Console.WriteLine("4.- Actualizar Cliente");
-    Console.WriteLine("5.- Eliminar Cliente");
+    MostrarEncabezadoPrincipal();
 
-    Console.WriteLine("6.- Crear Técnico");
-    Console.WriteLine("7.- Listar Técnicos");
-    Console.WriteLine("8.- Buscar Técnico");
-    Console.WriteLine("9.- Actualizar Técnico");
-    Console.WriteLine("10.- Eliminar Técnico");
+    Console.ForegroundColor = ConsoleColor.White;
 
-    Console.WriteLine("11.- Crear Repuesto");
-    Console.WriteLine("12.- Listar Repuestos");
-    Console.WriteLine("13.- Buscar Repuesto");
-    Console.WriteLine("14.- Actualizar Repuesto");
-    Console.WriteLine("15.- Eliminar Repuesto");
+    Console.WriteLine("   ╔══════════════════════════════════════════════╗");
+    Console.WriteLine("   ║               MENÚ PRINCIPAL                 ║");
+    Console.WriteLine("   ╠══════════════════════════════════════════════╣");
 
-    Console.WriteLine("16.- Crear Equipo");
-    Console.WriteLine("17.- Listar Equipos");
-    Console.WriteLine("18.- Buscar Equipo");
-    Console.WriteLine("19.- Actualizar Equipo");
-    Console.WriteLine("20.- Eliminar Equipo");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("   ║  [1] Gestión de Clientes                     ║");
+    Console.WriteLine("   ║  [2] Gestión de Técnicos                     ║");
+    Console.WriteLine("   ║  [3] Gestión de Repuestos                    ║");
+    Console.WriteLine("   ║  [4] Gestión de Equipos                      ║");
+    Console.WriteLine("   ║  [5] Gestión de Mantenimientos               ║");
 
-    Console.WriteLine("21.- Crear Mantenimiento");
-    Console.WriteLine("22.- Listar Mantenimientos");
-    Console.WriteLine("23.- Buscar Mantenimiento");
-    Console.WriteLine("24.- Actualizar Mantenimiento");
-    Console.WriteLine("25.- Eliminar Mantenimiento");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("   ║  [6] Salir del Sistema                       ║");
 
-    Console.WriteLine("26.- Salir\n");
-    Console.Write("Ingrese una opción: ");
-    if (!int.TryParse(Console.ReadLine(), out opcion))
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("   ╚══════════════════════════════════════════════╝");
+
+    Console.ResetColor();
+
+    Console.Write("\n   Seleccione una opción: ");
+
+    if (!int.TryParse(Console.ReadLine(), out opcionPrincipal))
     {
-        opcion = 0;
+        opcionPrincipal = 0;
     }
 
-    switch (opcion)
+    switch (opcionPrincipal)
     {
-        case 1: 
-            CrearCliente(); 
-            break;
-        case 2: 
-            ListarClientes(); 
-            break;
-        case 3: 
-            BuscarCliente(); 
-            break;
-        case 4: 
-            ActualizarCliente(); 
-            break;
-        case 5: 
-            EliminarCliente(); 
+        case 1:
+            MenuClientes();
             break;
 
-        case 6: 
-            CrearTecnico(); 
-            break;
-        case 7: 
-            ListarTecnicos(); 
-            break;
-        case 8: 
-            BuscarTecnico(); 
-            break;
-        case 9: 
-            ActualizarTecnico(); 
-            break;
-        case 10: 
-            EliminarTecnico(); 
+        case 2:
+            MenuTecnicos();
             break;
 
-        case 11: 
-            CrearRepuesto(); 
-            break;
-        case 12: 
-            ListarRepuesto(); 
-            break;
-        case 13: 
-            BuscarRepuesto(); 
-            break;
-        case 14: 
-            ActualizarRepuesto(); 
-            break;
-        case 15: 
-            EliminarRepuesto(); 
-            break;
-        case 16: 
-            CrearEquipo(); 
-            break; 
-        case 17: 
-            ListarEquipos(); 
-            break;
-        case 18: 
-            BuscarEquipo(); 
-            break;
-        case 19: 
-            ActualizarEquipo(); 
-            break;
-        case 20: 
-            EliminarEquipo(); 
+        case 3:
+            MenuRepuestos();
             break;
 
-        case 21: 
-            CrearMantenimiento(); 
+        case 4:
+            MenuEquipos();
             break;
-        case 22: 
-            ListarMantenimientos(); 
+
+        case 5:
+            MenuMantenimientos();
             break;
-        case 23: 
-            BuscarMantenimiento(); 
-            break;
-        case 24: 
-            ActualizarMantenimiento(); 
-            break;
-        case 25: 
-            EliminarMantenimiento(); 
-            break;
-        case 26:
-            Console.WriteLine("Saliendo del sistema...");
+
+        case 6:
+            MostrarSalida();
             break;
 
         default:
-            Console.WriteLine("Opción inválida.");
+            MostrarError("Opción inválida.");
             break;
     }
-    Console.ReadLine();
-} while (opcion != 26);
 
-void EliminarRepuesto()
+} while (opcionPrincipal != 6);
+
+
+// ================================================================
+// ENCABEZADO PRINCIPAL
+// ================================================================
+
+void MostrarEncabezadoPrincipal()
 {
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("         ELIMINAR REPUESTO  ");
-    Console.WriteLine("=================================\n");
-    Console.Write("Ingrese el ID: ");
-    if (int.TryParse(Console.ReadLine(), out int id))
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+    Console.WriteLine();
+    Console.WriteLine("      ███████╗██╗ ██████╗ ██████╗ ███████╗ ██████╗");
+    Console.WriteLine("      ██╔════╝██║██╔════╝ ██╔══██╗██╔════╝██╔════╝");
+    Console.WriteLine("      ███████╗██║██║  ███╗██████╔╝█████╗  ██║     ");
+    Console.WriteLine("      ╚════██║██║██║   ██║██╔══██╗██╔══╝  ██║     ");
+    Console.WriteLine("      ███████║██║╚██████╔╝██║  ██║███████╗╚██████╗");
+    Console.WriteLine("      ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝ ╚═════╝");
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+
+    Console.WriteLine();
+    Console.WriteLine("   ╔══════════════════════════════════════════════╗");
+    Console.WriteLine("   ║ SISTEMA DE GESTIÓN DE REFRIGERACIÓN          ║");
+    Console.WriteLine("   ║              Y CLIMATIZACIÓN                 ║");
+    Console.WriteLine("   ╚══════════════════════════════════════════════╝");
+
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine("      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+
+    Console.ResetColor();
+}
+
+
+// ================================================================
+// MENÚ CLIENTES
+// ================================================================
+
+void MenuClientes()
+{
+    int opcion;
+
+    do
     {
-        Repuesto repuesto = Database.Repuestos.Find(r => r.Id == id);
-        if (repuesto == null)
+        Console.Clear();
+
+        MostrarEncabezadoModulo(
+            "GESTIÓN DE CLIENTES",
+            "Administración y control de clientes");
+
+        MostrarMenuCrud();
+
+        Console.Write("\n   Seleccione una opción: ");
+
+        if (!int.TryParse(Console.ReadLine(), out opcion))
         {
-            Console.WriteLine("No existe ese repuesto.");
+            opcion = 0;
         }
-        else
+
+        switch (opcion)
         {
-            Database.Repuestos.Remove(repuesto);
-            Database.GuardarRepuestos();
-            Console.WriteLine("Repuesto eliminado correctamente.");
+            case 1:
+                CrearCliente();
+                break;
+
+            case 2:
+                ListarClientes();
+                break;
+
+            case 3:
+                BuscarCliente();
+                break;
+
+            case 4:
+                ActualizarCliente();
+                break;
+
+            case 5:
+                EliminarCliente();
+                break;
+
+            case 6:
+                break;
+
+            default:
+                MostrarError("Opción inválida.");
+                break;
         }
+
+    } while (opcion != 6);
+}
+
+
+// ================================================================
+// MENÚ TÉCNICOS
+// ================================================================
+
+void MenuTecnicos()
+{
+    int opcion;
+
+    do
+    {
+        Console.Clear();
+
+        MostrarEncabezadoModulo(
+            "GESTIÓN DE TÉCNICOS",
+            "Administración del personal técnico");
+
+        MostrarMenuCrud();
+
+        Console.Write("\n   Seleccione una opción: ");
+
+        if (!int.TryParse(Console.ReadLine(), out opcion))
+        {
+            opcion = 0;
+        }
+
+        switch (opcion)
+        {
+            case 1:
+                CrearTecnico();
+                break;
+
+            case 2:
+                ListarTecnicos();
+                break;
+
+            case 3:
+                BuscarTecnico();
+                break;
+
+            case 4:
+                ActualizarTecnico();
+                break;
+
+            case 5:
+                EliminarTecnico();
+                break;
+
+            case 6:
+                break;
+
+            default:
+                MostrarError("Opción inválida.");
+                break;
+        }
+
+    } while (opcion != 6);
+}
+
+
+// ================================================================
+// MENÚ REPUESTOS
+// ================================================================
+
+void MenuRepuestos()
+{
+    int opcion;
+
+    do
+    {
+        Console.Clear();
+
+        MostrarEncabezadoModulo(
+            "GESTIÓN DE REPUESTOS",
+            "Control del inventario de repuestos");
+
+        MostrarMenuCrud();
+
+        Console.Write("\n   Seleccione una opción: ");
+
+        if (!int.TryParse(Console.ReadLine(), out opcion))
+        {
+            opcion = 0;
+        }
+
+        switch (opcion)
+        {
+            case 1:
+                CrearRepuesto();
+                break;
+
+            case 2:
+                ListarRepuesto();
+                break;
+
+            case 3:
+                BuscarRepuesto();
+                break;
+
+            case 4:
+                ActualizarRepuesto();
+                break;
+
+            case 5:
+                EliminarRepuesto();
+                break;
+
+            case 6:
+                break;
+
+            default:
+                MostrarError("Opción inválida.");
+                break;
+        }
+
+    } while (opcion != 6);
+}
+
+
+// ================================================================
+// MENÚ EQUIPOS
+// ================================================================
+
+void MenuEquipos()
+{
+    int opcion;
+
+    do
+    {
+        Console.Clear();
+
+        MostrarEncabezadoModulo(
+            "GESTIÓN DE EQUIPOS",
+            "Control de equipos de refrigeración y climatización");
+
+        MostrarMenuCrud();
+
+        Console.Write("\n   Seleccione una opción: ");
+
+        if (!int.TryParse(Console.ReadLine(), out opcion))
+        {
+            opcion = 0;
+        }
+
+        switch (opcion)
+        {
+            case 1:
+                CrearEquipo();
+                break;
+
+            case 2:
+                ListarEquipos();
+                break;
+
+            case 3:
+                BuscarEquipo();
+                break;
+
+            case 4:
+                ActualizarEquipo();
+                break;
+
+            case 5:
+                EliminarEquipo();
+                break;
+
+            case 6:
+                break;
+
+            default:
+                MostrarError("Opción inválida.");
+                break;
+        }
+
+    } while (opcion != 6);
+}
+
+
+// ================================================================
+// MENÚ MANTENIMIENTOS
+// ================================================================
+
+void MenuMantenimientos()
+{
+    int opcion;
+
+    do
+    {
+        Console.Clear();
+
+        MostrarEncabezadoModulo(
+            "GESTIÓN DE MANTENIMIENTOS",
+            "Control de mantenimientos preventivos y correctivos");
+
+        MostrarMenuCrud();
+
+        Console.Write("\n   Seleccione una opción: ");
+
+        if (!int.TryParse(Console.ReadLine(), out opcion))
+        {
+            opcion = 0;
+        }
+
+        switch (opcion)
+        {
+            case 1:
+                CrearMantenimiento();
+                break;
+
+            case 2:
+                ListarMantenimientos();
+                break;
+
+            case 3:
+                BuscarMantenimiento();
+                break;
+
+            case 4:
+                ActualizarMantenimiento();
+                break;
+
+            case 5:
+                EliminarMantenimiento();
+                break;
+
+            case 6:
+                break;
+
+            default:
+                MostrarError("Opción inválida.");
+                break;
+        }
+
+    } while (opcion != 6);
+}
+
+
+// ================================================================
+// MENÚ CRUD GENÉRICO
+// ================================================================
+
+void MostrarMenuCrud()
+{
+    Console.ForegroundColor = ConsoleColor.White;
+
+    Console.WriteLine("   ╔══════════════════════════════════════╗");
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+
+    Console.WriteLine("   ║  [1] Crear                           ║");
+    Console.WriteLine("   ║  [2] Listar                          ║");
+    Console.WriteLine("   ║  [3] Buscar                          ║");
+    Console.WriteLine("   ║  [4] Actualizar                      ║");
+
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("   ║  [5] Eliminar                        ║");
+
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("   ║  [6] Volver al Menú Principal        ║");
+
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("   ╚══════════════════════════════════════╝");
+
+    Console.ResetColor();
+}
+
+
+// ================================================================
+// ENCABEZADO SUBMENÚ
+// ================================================================
+
+void MostrarEncabezadoModulo(string titulo, string subtitulo)
+{
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+    Console.WriteLine();
+    Console.WriteLine("   ╔══════════════════════════════════════════════╗");
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("   ║                    SIGREC                     ║");
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("   ╠══════════════════════════════════════════════╣");
+
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine($"   ║  {titulo,-44}║");
+
+    Console.ForegroundColor = ConsoleColor.Gray;
+
+    if (subtitulo.Length > 44)
+    {
+        subtitulo = subtitulo.Substring(0, 44);
     }
+
+    Console.WriteLine($"   ║  {subtitulo,-44}║");
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("   ╚══════════════════════════════════════════════╝");
+
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine("      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+
+    Console.ResetColor();
+
+    Console.WriteLine();
+}
+
+
+// ================================================================
+// ERROR
+// ================================================================
+
+void MostrarError(string mensaje)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+
+    Console.WriteLine();
+    Console.WriteLine("   ╔════════════════════════════════════════════╗");
+    Console.WriteLine("   ║                  ERROR                     ║");
+    Console.WriteLine("   ╚════════════════════════════════════════════╝");
+
+    Console.WriteLine("\n   " + mensaje);
+
+    Console.ResetColor();
+
+    Console.WriteLine("\nPresione una tecla para continuar...");
     Console.ReadKey();
 }
 
-void ActualizarRepuesto()
+
+// ================================================================
+// SALIDA
+// ================================================================
+
+void MostrarSalida()
 {
     Console.Clear();
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+    Console.WriteLine();
+    Console.WriteLine("   ╔══════════════════════════════════════════════╗");
+
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    Console.WriteLine("   ║                    SIGREC                     ║");
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("   ╠══════════════════════════════════════════════╣");
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("   ║       SISTEMA CERRADO CORRECTAMENTE          ║");
+
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.WriteLine("   ║                                              ║");
+    Console.WriteLine("   ║          Gracias por utilizar SIGREC         ║");
+
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.WriteLine("   ╚══════════════════════════════════════════════╝");
+
+    Console.ResetColor();
+}
+
+
+// ================================================================
+// CRUD CLIENTES
+// ================================================================
+
+void CrearCliente()
+{
+    Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("         ACTUALIZAR REPUESTO  ");
+    Console.WriteLine("         CREAR CLIENTE");
     Console.WriteLine("=================================\n");
-    Console.Write("Ingrese el ID del repuesto: ");
-    if (int.TryParse(Console.ReadLine(), out int id))
+
+    Console.Write("Ingrese ID: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int id))
     {
-        Repuesto repuesto = Database.Repuestos.Find(r => r.Id == id);
-        if (repuesto == null)
-        {
-            Console.WriteLine("No existe ese repuesto.");
-            Console.ReadKey();
-            return;
-        }
-
-        Console.Write("Nuevo Nombre: ");
-        repuesto.Nombre = Console.ReadLine();
-
-        Console.Write("Nueva Marca: ");
-        repuesto.Marca = Console.ReadLine();
-
-        Console.Write("Nuevo Tipo: ");
-        repuesto.TipoRepuesto = Console.ReadLine();
-
-        Console.Write("Nueva Cantidad: ");
-        int.TryParse(Console.ReadLine(), out int cantidad);
-        repuesto.Cantidad = cantidad;
-
-        Console.Write("Nuevo Precio: ");
-        decimal.TryParse(Console.ReadLine(), out decimal precio);
-        repuesto.Precio = precio;
-
-        Database.GuardarRepuestos();
-        Console.WriteLine("Repuesto actualizado correctamente.");
+        MostrarError("ID inválido.");
+        return;
     }
+
+    Console.Write("Ingrese cédula: ");
+    string cedula = Console.ReadLine();
+
+    Console.Write("Ingrese nombre: ");
+    string nombre = Console.ReadLine();
+
+    Console.Write("Ingrese teléfono: ");
+    string telefono = Console.ReadLine();
+
+    Console.Write("Ingrese dirección: ");
+    string direccion = Console.ReadLine();
+
+    Cliente cliente =
+        new Cliente(
+            cedula,
+            nombre,
+            telefono,
+            direccion,
+            id);
+
+    Database.Clientes.Add(cliente);
+    Database.GuardarClientes();
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\nCliente creado correctamente.");
+    Console.ResetColor();
+
     Console.ReadKey();
 }
 
-void BuscarRepuesto()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("         BUSCAR REPUESTO  ");
-    Console.WriteLine("=================================\n");
-    Console.Write("Ingrese el ID del repuesto: ");
-    if (int.TryParse(Console.ReadLine(), out int id))
-    {
-        Repuesto repuesto = Database.Repuestos.Find(r => r.Id == id);
-        if (repuesto == null)
-        {
-            Console.WriteLine("\nNo se encontró el repuesto.");
-        }
-        else
-        {
-            Console.WriteLine("\nRepuesto encontrado:");
-            Console.WriteLine("-----------------------------");
-            repuesto.Imprimir();
-        }
-    }
-    Console.ReadKey();
-}
 
-void ListarRepuesto()
+void ListarClientes()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("         LISTAR REPUESTO  ");
+    Console.WriteLine("        LISTAR CLIENTES");
     Console.WriteLine("=================================\n");
-    if (Database.Repuestos.Count == 0)
+
+    if (Database.Clientes.Count == 0)
     {
-        Console.WriteLine("No existen repuestos registrados.");
+        Console.WriteLine("No existen clientes registrados.");
     }
     else
     {
-        foreach (var repuesto in Database.Repuestos)
+        foreach (Cliente cliente in Database.Clientes)
         {
-            repuesto.Imprimir();
-            Console.WriteLine("----------------------------");
+            cliente.Imprimir();
+            Console.WriteLine("-----------------------------------");
         }
     }
+
     Console.ReadKey();
 }
+
+
+void BuscarCliente()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("         BUSCAR CLIENTE");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese la cédula del cliente: ");
+    string cedula = Console.ReadLine();
+
+    Cliente cliente =
+        Database.Clientes.Find(x => x.Cedula == cedula);
+
+    if (cliente != null)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nCliente encontrado:");
+        Console.ResetColor();
+
+        cliente.Imprimir();
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("\nCliente no encontrado.");
+        Console.ResetColor();
+    }
+
+    Console.ReadKey();
+}
+
+
+void ActualizarCliente()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("       ACTUALIZAR CLIENTE");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese la cédula del cliente: ");
+    string cedula = Console.ReadLine();
+
+    Cliente cliente =
+        Database.Clientes.Find(x => x.Cedula == cedula);
+
+    if (cliente != null)
+    {
+        cliente.Imprimir();
+
+        Console.Write("\nNuevo nombre: ");
+        cliente.Nombre = Console.ReadLine();
+
+        Console.Write("Nuevo teléfono: ");
+        cliente.Telefono = Console.ReadLine();
+
+        Console.Write("Nueva dirección: ");
+        cliente.Direccion = Console.ReadLine();
+
+        Database.GuardarClientes();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nCliente actualizado correctamente.");
+        Console.ResetColor();
+    }
+    else
+    {
+        Console.WriteLine("\nCliente no encontrado.");
+    }
+
+    Console.ReadKey();
+}
+
+
+void EliminarCliente()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("        ELIMINAR CLIENTE");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese la cédula: ");
+    string cedula = Console.ReadLine();
+
+    Cliente cliente =
+        Database.Clientes.Find(x => x.Cedula == cedula);
+
+    if (cliente != null)
+    {
+        cliente.Imprimir();
+
+        Console.Write("\n¿Desea eliminar este cliente? S/N: ");
+
+        if (Console.ReadLine()?.ToUpper() == "S")
+        {
+            Database.Clientes.Remove(cliente);
+            Database.GuardarClientes();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nCliente eliminado correctamente.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("\nOperación cancelada.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("\nCliente no encontrado.");
+    }
+
+    Console.ReadKey();
+}
+
+
+// ================================================================
+// CRUD TÉCNICOS
+// ================================================================
+
+void CrearTecnico()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("          CREAR TÉCNICO");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("ID del técnico: ");
+    int.TryParse(Console.ReadLine(), out int id);
+
+    Console.Write("Nombre: ");
+    string nombre = Console.ReadLine();
+
+    Console.Write("Cédula: ");
+    string cedula = Console.ReadLine();
+
+    Console.Write("Teléfono: ");
+    string telefono = Console.ReadLine();
+
+    Console.Write("Especialidad: ");
+    string especialidad = Console.ReadLine();
+
+    Console.Write("Años de experiencia: ");
+    int.TryParse(Console.ReadLine(), out int experiencia);
+
+    Tecnico tecnico =
+        new Tecnico(
+            id,
+            nombre,
+            cedula,
+            telefono,
+            especialidad,
+            experiencia);
+
+    Database.Tecnicos.Add(tecnico);
+    Database.GuardarTecnicos();
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\nTécnico creado correctamente.");
+    Console.ResetColor();
+
+    Console.ReadKey();
+}
+
+
+void ListarTecnicos()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("         LISTAR TÉCNICOS");
+    Console.WriteLine("=================================\n");
+
+    if (Database.Tecnicos.Count == 0)
+    {
+        Console.WriteLine("No existen técnicos registrados.");
+    }
+    else
+    {
+        foreach (Tecnico tecnico in Database.Tecnicos)
+        {
+            tecnico.Imprimir();
+            Console.WriteLine("-----------------------------------");
+        }
+    }
+
+    Console.ReadKey();
+}
+
+
+void BuscarTecnico()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("         BUSCAR TÉCNICO");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese la cédula del técnico: ");
+    string cedula = Console.ReadLine();
+
+    Tecnico tecnico =
+        Database.Tecnicos.Find(x => x.Cedula == cedula);
+
+    if (tecnico != null)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nTécnico encontrado:");
+        Console.ResetColor();
+
+        tecnico.Imprimir();
+    }
+    else
+    {
+        Console.WriteLine("\nTécnico no encontrado.");
+    }
+
+    Console.ReadKey();
+}
+
+
+void ActualizarTecnico()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("       ACTUALIZAR TÉCNICO");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese la cédula del técnico: ");
+    string cedula = Console.ReadLine();
+
+    Tecnico tecnico =
+        Database.Tecnicos.Find(x => x.Cedula == cedula);
+
+    if (tecnico != null)
+    {
+        tecnico.Imprimir();
+
+        Console.Write("\nNuevo nombre: ");
+        tecnico.Nombre = Console.ReadLine();
+
+        Console.Write("Nueva cédula: ");
+        tecnico.Cedula = Console.ReadLine();
+
+        Console.Write("Nuevo teléfono: ");
+        tecnico.Telefono = Console.ReadLine();
+
+        Console.Write("Nueva especialidad: ");
+        tecnico.Especialidad = Console.ReadLine();
+
+        Console.Write("Nuevos años de experiencia: ");
+
+        if (int.TryParse(Console.ReadLine(), out int experiencia))
+        {
+            tecnico.Experiencia = experiencia;
+        }
+
+        Database.GuardarTecnicos();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nTécnico actualizado correctamente.");
+        Console.ResetColor();
+    }
+    else
+    {
+        Console.WriteLine("\nTécnico no encontrado.");
+    }
+
+    Console.ReadKey();
+}
+
+
+void EliminarTecnico()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("        ELIMINAR TÉCNICO");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese la cédula del técnico: ");
+    string cedula = Console.ReadLine();
+
+    Tecnico tecnico =
+        Database.Tecnicos.Find(x => x.Cedula == cedula);
+
+    if (tecnico != null)
+    {
+        tecnico.Imprimir();
+
+        Console.Write("\n¿Desea eliminar este técnico? S/N: ");
+
+        if (Console.ReadLine()?.ToUpper() == "S")
+        {
+            Database.Tecnicos.Remove(tecnico);
+            Database.GuardarTecnicos();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nTécnico eliminado correctamente.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("\nOperación cancelada.");
+        }
+    }
+    else
+    {
+        Console.WriteLine("\nTécnico no encontrado.");
+    }
+
+    Console.ReadKey();
+}
+
+
+// ================================================================
+// CRUD REPUESTOS
+// ================================================================
 
 void CrearRepuesto()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("         CREAR REPUESTO  ");
+    Console.WriteLine("         CREAR REPUESTO");
     Console.WriteLine("=================================\n");
+
     Console.Write("ID: ");
     int.TryParse(Console.ReadLine(), out int id);
 
@@ -274,341 +953,324 @@ void CrearRepuesto()
     Console.Write("Precio: ");
     decimal.TryParse(Console.ReadLine(), out decimal precio);
 
-    Repuesto nuevo = new Repuesto(id, nombre, marca, tipo, cantidad, precio);
-    Database.Repuestos.Add(nuevo);
+    Repuesto repuesto =
+        new Repuesto(
+            id,
+            nombre,
+            marca,
+            tipo,
+            cantidad,
+            precio);
+
+    Database.Repuestos.Add(repuesto);
     Database.GuardarRepuestos();
-    Console.WriteLine("\nRepuesto registrado correctamente.");
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\nRepuesto creado correctamente.");
+    Console.ResetColor();
+
     Console.ReadKey();
 }
 
-void CrearCliente()
+
+void ListarRepuesto()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("         CREAR CLIENTE  ");
+    Console.WriteLine("        LISTAR REPUESTOS");
     Console.WriteLine("=================================\n");
-    Console.Write("Ingrese ID: ");
-    int.TryParse(Console.ReadLine(), out int id);
 
-    Console.Write("Ingrese cédula: ");
-    string cedula = Console.ReadLine();
-
-    Console.Write("Ingrese nombre: "); 
-    string nombre = Console.ReadLine();
-
-    Console.Write("Ingrese teléfono: "); 
-    string telefono = Console.ReadLine();
-
-    Console.Write("Ingrese dirección: ");
-    string direccion = Console.ReadLine();
-
-    Cliente cliente = new Cliente(cedula, nombre, telefono, direccion, id);
-    Database.Clientes.Add(cliente);
-    Database.GuardarClientes();
-    Console.WriteLine("Cliente creado correctamente.");
-    Console.ReadLine();
-}
-
-void ListarClientes()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("        LISTAR CLIENTE  ");
-    Console.WriteLine("=================================\n");
-    foreach (Cliente cliente in Database.Clientes)
+    if (Database.Repuestos.Count == 0)
     {
-        cliente.Imprimir();
-        Console.WriteLine("-----------------------------------");
-    }
-    Console.ReadLine();
-}
-
-void BuscarCliente()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("       BUSCAR CLIENTE  ");
-    Console.WriteLine("=================================\n");
-    Console.Write("Ingrese la cédula del cliente: ");
-    string cedula = Console.ReadLine();
-    Cliente objCliente = Database.Clientes.Find(x => x.Cedula == cedula);
-    if (objCliente != null)
-    {
-        Console.WriteLine("Cliente encontrado:");
-        objCliente.Imprimir();
+        Console.WriteLine("No existen repuestos registrados.");
     }
     else
     {
-        Console.WriteLine("Cliente no encontrado.");
+        foreach (Repuesto repuesto in Database.Repuestos)
+        {
+            repuesto.Imprimir();
+            Console.WriteLine("-----------------------------------");
+        }
     }
-    Console.ReadLine();
+
+    Console.ReadKey();
 }
 
-void ActualizarCliente()
+
+void BuscarRepuesto()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("       ACTUALIZAR CLIENTE  ");
+    Console.WriteLine("         BUSCAR REPUESTO");
     Console.WriteLine("=================================\n");
-    Console.Write("Ingrese la cédula del cliente: ");
-    string cedula = Console.ReadLine();
-    Cliente objCliente = Database.Clientes.Find(x => x.Cedula == cedula);
-    if (objCliente != null)
+
+    Console.Write("Ingrese el ID: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int id))
     {
-        Console.Write("Nuevo nombre: ");
-        objCliente.Nombre = Console.ReadLine();
+        MostrarError("ID inválido.");
+        return;
+    }
 
-        Console.Write("Nuevo teléfono: ");
-        objCliente.Telefono = Console.ReadLine();
+    Repuesto repuesto =
+        Database.Repuestos.Find(r => r.Id == id);
 
-        Console.Write("Nueva dirección: ");
-        objCliente.Direccion = Console.ReadLine();
+    if (repuesto != null)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nRepuesto encontrado:");
+        Console.ResetColor();
 
-        Database.GuardarClientes();
-        Console.WriteLine("Cliente actualizado correctamente.");
+        repuesto.Imprimir();
     }
     else
     {
-        Console.WriteLine("Cliente no encontrado.");
+        Console.WriteLine("\nRepuesto no encontrado.");
     }
-    Console.ReadLine();
+
+    Console.ReadKey();
 }
 
-void EliminarCliente()
+
+void ActualizarRepuesto()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("       ELIMINAR CLIENTE  ");
+    Console.WriteLine("       ACTUALIZAR REPUESTO");
     Console.WriteLine("=================================\n");
-    Console.Write("Ingrese la cédula del cliente: ");
-    string cedula = Console.ReadLine();
-    Cliente objCliente = Database.Clientes.Find(x => x.Cedula == cedula);
-    if (objCliente != null)
+
+    Console.Write("Ingrese el ID: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int id))
     {
-        objCliente.Imprimir();
-        Console.WriteLine("¿Desea eliminar este cliente? S/N");
+        MostrarError("ID inválido.");
+        return;
+    }
+
+    Repuesto repuesto =
+        Database.Repuestos.Find(r => r.Id == id);
+
+    if (repuesto != null)
+    {
+        repuesto.Imprimir();
+
+        Console.Write("\nNuevo nombre: ");
+        repuesto.Nombre = Console.ReadLine();
+
+        Console.Write("Nueva marca: ");
+        repuesto.Marca = Console.ReadLine();
+
+        Console.Write("Nuevo tipo: ");
+        repuesto.TipoRepuesto = Console.ReadLine();
+
+        Console.Write("Nueva cantidad: ");
+        int.TryParse(Console.ReadLine(), out int cantidad);
+        repuesto.Cantidad = cantidad;
+
+        Console.Write("Nuevo precio: ");
+        decimal.TryParse(Console.ReadLine(), out decimal precio);
+        repuesto.Precio = precio;
+
+        Database.GuardarRepuestos();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nRepuesto actualizado correctamente.");
+        Console.ResetColor();
+    }
+    else
+    {
+        Console.WriteLine("\nRepuesto no encontrado.");
+    }
+
+    Console.ReadKey();
+}
+
+
+void EliminarRepuesto()
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("        ELIMINAR REPUESTO");
+    Console.WriteLine("=================================\n");
+
+    Console.Write("Ingrese el ID: ");
+
+    if (!int.TryParse(Console.ReadLine(), out int id))
+    {
+        MostrarError("ID inválido.");
+        return;
+    }
+
+    Repuesto repuesto =
+        Database.Repuestos.Find(r => r.Id == id);
+
+    if (repuesto != null)
+    {
+        repuesto.Imprimir();
+
+        Console.Write("\n¿Desea eliminar este repuesto? S/N: ");
+
         if (Console.ReadLine()?.ToUpper() == "S")
         {
-            Database.Clientes.Remove(objCliente);
-            Database.GuardarClientes();
-            Console.WriteLine("Cliente eliminado.");
+            Database.Repuestos.Remove(repuesto);
+            Database.GuardarRepuestos();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nRepuesto eliminado correctamente.");
+            Console.ResetColor();
         }
         else
         {
-            Console.WriteLine("Operación cancelada.");
+            Console.WriteLine("\nOperación cancelada.");
         }
     }
     else
     {
-        Console.WriteLine("Cliente no encontrado.");
+        Console.WriteLine("\nRepuesto no encontrado.");
     }
-    Console.ReadLine();
+
+    Console.ReadKey();
 }
 
-void CrearTecnico()
+
+// ================================================================
+// CRUD EQUIPOS
+// ================================================================
+
+void CrearEquipo()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("        CREAR TECNICOS  ");
+    Console.WriteLine("          CREAR EQUIPO");
     Console.WriteLine("=================================\n");
-    Console.Write("ID del técnico: ");
-    int.TryParse(Console.ReadLine(), out int id);
 
-    Console.Write("Nombre del técnico: ");
-    string nombre = Console.ReadLine();
+    Console.Write("Código: ");
+    string codigo = Console.ReadLine();
 
-    Console.Write("Teléfono: ");
-    string telefono = Console.ReadLine();
+    Console.Write("Marca: ");
+    string marca = Console.ReadLine();
 
-    Console.Write("Especialidad: ");
-    string especialidad = Console.ReadLine();
+    Console.Write("Modelo: ");
+    string modelo = Console.ReadLine();
 
-    Console.Write("Años de experiencia: ");
-    int.TryParse(Console.ReadLine(), out int experiencia);
+    Console.Write("Capacidad BTU: ");
+    int.TryParse(Console.ReadLine(), out int capacidad);
 
-    
-    Tecnico tecnico = new Tecnico(id, nombre, telefono, especialidad, experiencia.ToString());
-    Database.Tecnicos.Add(tecnico);
-    Database.GuardarTecnicos();
-    Console.WriteLine("Técnico creado correctamente.");
-    Console.ReadLine();
+    Console.Write("Estado: ");
+    string estado = Console.ReadLine();
+
+    Console.Write("Tipo de filtro: ");
+    string tipoFiltro = Console.ReadLine();
+
+    AireAcondicionado equipo =
+        new AireAcondicionado(
+            codigo,
+            marca,
+            modelo,
+            capacidad,
+            estado,
+            tipoFiltro);
+
+    Database.AireAcondicionados.Add(equipo);
+    Database.Equipos.Add(equipo);
+
+    Database.GuardarAiresAcondicionados();
+    Database.GuardarEquipos();
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\nEquipo creado correctamente.");
+    Console.ResetColor();
+
+    Console.ReadKey();
 }
-
-void ListarTecnicos()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("       LISTAR TECNICOS  ");
-    Console.WriteLine("=================================\n");
-    foreach (Tecnico tecnico in Database.Tecnicos)
-    {
-        tecnico.Imprimir();
-        Console.WriteLine("-----------------------------------");
-    }
-    Console.ReadLine();
-}
-
-void BuscarTecnico()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("         BUSCAR TECNICO   ");
-    Console.WriteLine("=================================\n");
-    Console.Write("Ingrese el nombre del técnico: ");
-    string nombre = Console.ReadLine();
-    Tecnico tecnico = Database.Tecnicos.Find(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
-    if (tecnico != null)
-    {
-        tecnico.Imprimir();
-    }
-    else
-    {
-        Console.WriteLine("Técnico no encontrado.");
-    }
-    Console.ReadLine();
-}
-
-void ActualizarTecnico()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("       ACTUALIZAR TECNICO   ");
-    Console.WriteLine("=================================\n");
-    Console.Write("Ingrese nombre del técnico: ");
-    string nombre = Console.ReadLine();
-    Tecnico tecnico = Database.Tecnicos.Find(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
-    if (tecnico != null)
-    {
-        Console.Write("Nueva especialidad: ");
-        tecnico.Especialidad = Console.ReadLine();
-        Database.GuardarTecnicos();
-        Console.WriteLine("Técnico actualizado.");
-    }
-    else
-    {
-        Console.WriteLine("Técnico no encontrado.");
-    }
-    Console.ReadLine();
-}
-
-void EliminarTecnico()
-{
-    Console.Clear();
-    Console.WriteLine("=================================");
-    Console.WriteLine("       ELIMINAR TECNICO    ");
-    Console.WriteLine("=================================\n");
-    Console.Write("Nombre del técnico: ");
-    string nombre = Console.ReadLine();
-
-    Tecnico tecnico = Database.Tecnicos.Find(x => x.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
-
-    if (tecnico != null)
-    {
-        Database.Tecnicos.Remove(tecnico);
-        Database.GuardarTecnicos();
-        Console.WriteLine("Técnico eliminado.");
-    }
-    else
-    {
-        Console.WriteLine("Técnico no encontrado.");
-    }
-    Console.ReadLine();
-}
-
-
-
-    void CrearEquipo()
-    {
-        Console.Clear();
-        Console.WriteLine("=================================");
-        Console.WriteLine("       CREAR EQUIPO   ");
-        Console.WriteLine("=================================\n");
-
-        Console.Write("Código: ");
-        string codigo = Console.ReadLine();
-
-        Console.Write("Marca: ");
-        string marca = Console.ReadLine();
-
-        Console.Write("Modelo: ");
-        string modelo = Console.ReadLine();
-
-        Console.Write("Capacidad BTU: ");
-        int.TryParse(Console.ReadLine(), out int capacidad);
-
-        Console.Write("Estado (Ej: Operativo / En Reparación): ");
-        string estado = Console.ReadLine();
-
-        Console.Write("Tipo de filtro (Ej: Estándar / HEPA): ");
-        string tipoFiltro = Console.ReadLine();
-
-        AireAcondicionado equipo = new AireAcondicionado(codigo, marca, modelo, capacidad, estado, tipoFiltro);
-
-        Database.AireAcondicionados.Add(equipo);
-        Database.Equipos.Add(equipo);
-
-        Database.GuardarAiresAcondicionados();
-        Database.GuardarEquipos();
-
-        Console.WriteLine("\n¡Equipo creado y guardado correctamente!");
-        Console.ReadLine();
-    }
 
 
 void ListarEquipos()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("         LISTAR EQUIPO    ");
+    Console.WriteLine("         LISTAR EQUIPOS");
     Console.WriteLine("=================================\n");
-    foreach (Equipo equipo in Database.Equipos)
+
+    if (Database.Equipos.Count == 0)
     {
-        equipo.Imprimir();
-        Console.WriteLine("-----------------------------------");
+        Console.WriteLine("No existen equipos registrados.");
     }
-    Console.ReadLine();
+    else
+    {
+        foreach (Equipo equipo in Database.Equipos)
+        {
+            equipo.Imprimir();
+            Console.WriteLine("-----------------------------------");
+        }
+    }
+
+    Console.ReadKey();
 }
+
 
 void BuscarEquipo()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("         BUSCAR EQUIPO   ");
+    Console.WriteLine("          BUSCAR EQUIPO");
     Console.WriteLine("=================================\n");
 
     Console.Write("Ingrese el código: ");
     string codigo = Console.ReadLine();
 
-    
-    AireAcondicionado equipo = Database.AireAcondicionados.Find(x => x.Codigo == codigo);
+    AireAcondicionado equipo =
+        Database.AireAcondicionados.Find(
+            x => x.Codigo.Equals(
+                codigo,
+                StringComparison.OrdinalIgnoreCase));
 
     if (equipo != null)
     {
-        Console.WriteLine("Equipo encontrado:");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nEquipo encontrado:");
+        Console.ResetColor();
+
         equipo.Imprimir();
     }
     else
     {
-        Console.WriteLine("Equipo no encontrado.");
+        Console.WriteLine("\nEquipo no encontrado.");
     }
-    Console.ReadLine();
+
+    Console.ReadKey();
 }
+
 
 void ActualizarEquipo()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("       ACTUALIZAR EQUIPO    ");
+    Console.WriteLine("       ACTUALIZAR EQUIPO");
     Console.WriteLine("=================================\n");
 
     Console.Write("Ingrese el código: ");
     string codigo = Console.ReadLine();
 
-    AireAcondicionado equipo = Database.AireAcondicionados.Find(x => x.Codigo == codigo);
+    AireAcondicionado equipo =
+        Database.AireAcondicionados.Find(
+            x => x.Codigo.Equals(
+                codigo,
+                StringComparison.OrdinalIgnoreCase));
 
     if (equipo != null)
     {
-        Console.Write("Nueva marca: ");
+        equipo.Imprimir();
+
+        Console.Write("\nNueva marca: ");
         equipo.Marca = Console.ReadLine();
 
         Console.Write("Nuevo modelo: ");
@@ -618,168 +1280,365 @@ void ActualizarEquipo()
         equipo.Estado = Console.ReadLine();
 
         Database.GuardarAiresAcondicionados();
-        Console.WriteLine("Equipo actualizado correctamente.");
+        Database.GuardarEquipos();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nEquipo actualizado correctamente.");
+        Console.ResetColor();
     }
     else
     {
-        Console.WriteLine("Equipo no encontrado.");
+        Console.WriteLine("\nEquipo no encontrado.");
     }
-    Console.ReadLine();
+
+    Console.ReadKey();
 }
+
 
 void EliminarEquipo()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("        ELIMINAR EQUIPO    ");
+    Console.WriteLine("        ELIMINAR EQUIPO");
     Console.WriteLine("=================================\n");
-    Console.Write("Ingrese el código del equipo: ");
+
+    Console.Write("Ingrese el código: ");
     string codigo = Console.ReadLine();
 
-    Equipo equipo = Database.Equipos.Find(x => x.Codigo.Equals(codigo, StringComparison.OrdinalIgnoreCase));
+    Equipo equipo =
+        Database.Equipos.Find(
+            x => x.Codigo.Equals(
+                codigo,
+                StringComparison.OrdinalIgnoreCase));
 
     if (equipo != null)
     {
         equipo.Imprimir();
-        Console.WriteLine("¿Desea eliminar este equipo? S/N");
+
+        Console.Write("\n¿Desea eliminar este equipo? S/N: ");
 
         if (Console.ReadLine()?.ToUpper() == "S")
         {
             Database.Equipos.Remove(equipo);
+
+            AireAcondicionado aire =
+                Database.AireAcondicionados.Find(
+                    x => x.Codigo.Equals(
+                        codigo,
+                        StringComparison.OrdinalIgnoreCase));
+
+            if (aire != null)
+            {
+                Database.AireAcondicionados.Remove(aire);
+                Database.GuardarAiresAcondicionados();
+            }
+
             Database.GuardarEquipos();
-            Console.WriteLine("Equipo eliminado correctamente.");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nEquipo eliminado correctamente.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("\nOperación cancelada.");
         }
     }
     else
     {
-        Console.WriteLine("Equipo no encontrado.");
+        Console.WriteLine("\nEquipo no encontrado.");
     }
-    Console.ReadLine();
+
+    Console.ReadKey();
 }
 
- void CrearMantenimiento()
+
+// ================================================================
+// CRUD MANTENIMIENTOS
+// ================================================================
+
+void CrearMantenimiento()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("     REGISTRAR MANTENIMIENTO     ");
+    Console.WriteLine("      CREAR MANTENIMIENTO");
     Console.WriteLine("=================================\n");
 
-    Console.Write("Ingrese ID del mantenimiento: ");
-    int id = int.Parse(Console.ReadLine());
+    Console.Write("Ingrese ID: ");
 
-    Console.Write("Ingrese Código del Equipo: ");
+    if (!int.TryParse(Console.ReadLine(), out int id))
+    {
+        MostrarError("ID inválido.");
+        return;
+    }
+
+    Mantenimiento existente =
+        Database.Mantenimientos.Find(m => m.Id == id);
+
+    if (existente != null)
+    {
+        MostrarError("Ya existe un mantenimiento con ese ID.");
+        return;
+    }
+
+    Console.Write("Código del equipo: ");
     string codigoEquipo = Console.ReadLine();
 
-    Console.Write("Ingrese Descripción del trabajo: ");
+    Equipo equipo =
+        Database.Equipos.Find(
+            e => e.Codigo.Equals(
+                codigoEquipo,
+                StringComparison.OrdinalIgnoreCase));
+
+    if (equipo == null)
+    {
+        MostrarError("El equipo ingresado no existe.");
+        return;
+    }
+
+    Console.Write("Tipo (Preventivo/Correctivo): ");
+    string tipo = Console.ReadLine();
+
+    Console.Write("Descripción: ");
     string descripcion = Console.ReadLine();
 
-    Console.Write("Ingrese Costo ($): ");
-    double costo = double.Parse(Console.ReadLine());
+    Console.Write("Costo: ");
 
-    Console.Write("Ingrese Estado (Pendiente/Completado): ");
+    if (!decimal.TryParse(Console.ReadLine(), out decimal costo))
+    {
+        MostrarError("Costo inválido.");
+        return;
+    }
+
+    Console.Write("Estado (Pendiente/Completado): ");
     string estado = Console.ReadLine();
 
-    Console.WriteLine("\n¡Mantenimiento registrado con éxito!");
-    Console.ReadKey();
+    Console.Write("Duración en horas: ");
 
-    Console.ReadLine();
+    if (!int.TryParse(Console.ReadLine(), out int duracion))
+    {
+        MostrarError("Duración inválida.");
+        return;
+    }
+
+    Mantenimiento mantenimiento =
+        new Mantenimiento(
+            id,
+            codigoEquipo,
+            tipo,
+            descripcion,
+            costo,
+            estado,
+            duracion);
+
+    Database.Mantenimientos.Add(mantenimiento);
+    Database.GuardarMantenimientos();
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\nMantenimiento creado correctamente.");
+    Console.ResetColor();
+
+    Console.ReadKey();
 }
 
- void ListarMantenimientos()
+
+void ListarMantenimientos()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("    LISTAR MANTENIMIENTO    ");
+    Console.WriteLine("      LISTAR MANTENIMIENTOS");
     Console.WriteLine("=================================\n");
 
-    foreach (Mantenimiento mantenimiento in Database.Mantenimientos)
+    if (Database.Mantenimientos.Count == 0)
     {
-        mantenimiento.Imprimir();
-        Console.WriteLine("---------------------------------------------");
+        Console.WriteLine("No existen mantenimientos registrados.");
     }
-    
+    else
+    {
+        foreach (Mantenimiento mantenimiento
+                 in Database.Mantenimientos)
+        {
+            mantenimiento.Imprimir();
+
+            Console.WriteLine("-----------------------------------");
+        }
+    }
+
     Console.ReadKey();
 }
+
 
 void BuscarMantenimiento()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("       BUSCAR MANTENIMIENTO      ");
+    Console.WriteLine("       BUSCAR MANTENIMIENTO");
     Console.WriteLine("=================================\n");
 
-    Console.Write("Ingrese ID del mantenimiento a buscar: ");
-    int id = int.Parse(Console.ReadLine());
+    Console.Write("Ingrese ID: ");
 
-    Mantenimiento encontrado = Database.Mantenimientos.Find(m => m.Id == id);
-
-    if (encontrado != null)
+    if (!int.TryParse(Console.ReadLine(), out int id))
     {
-        Console.WriteLine("\n¡Mantenimiento encontrado!\n");
-        encontrado.Imprimir();
+        MostrarError("ID inválido.");
+        return;
+    }
+
+    Mantenimiento mantenimiento =
+        Database.Mantenimientos.Find(m => m.Id == id);
+
+    if (mantenimiento != null)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nMantenimiento encontrado:");
+        Console.ResetColor();
+
+        mantenimiento.Imprimir();
     }
     else
     {
-        Console.WriteLine("\nNo se encontró ningún mantenimiento con ese ID.");
+        Console.WriteLine("\nMantenimiento no encontrado.");
     }
+
     Console.ReadKey();
 }
+
 
 void ActualizarMantenimiento()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("     ACTUALIZAR MANTENIMIENTO    ");
+    Console.WriteLine("     ACTUALIZAR MANTENIMIENTO");
     Console.WriteLine("=================================\n");
 
-    Console.Write("Ingrese ID del mantenimiento a actualizar: ");
-    int id = int.Parse(Console.ReadLine());
+    Console.Write("Ingrese ID: ");
 
-    Mantenimiento m = Database.Mantenimientos.Find(x => x.Id == id);
-
-    if (m != null)
+    if (!int.TryParse(Console.ReadLine(), out int id))
     {
-        Console.Write($"Nueva Descripción (Actual: {m.Descripcion}): ");
-        string nuevaDesc = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(nuevaDesc)) m.Descripcion = nuevaDesc;
+        MostrarError("ID inválido.");
+        return;
+    }
 
-        Console.Write($"Nuevo Costo (Actual: ${m.Costo}): ");
-        string nuevoCostoStr = Console.ReadLine();
-        if (decimal.TryParse(nuevoCostoStr, out decimal nuevoCosto)) m.Costo = nuevoCosto;
+    Mantenimiento mantenimiento =
+        Database.Mantenimientos.Find(m => m.Id == id);
 
-        Console.Write($"Nuevo Estado (Actual: {m.Estado}): ");
-        string nuevoEstado = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(nuevoEstado)) m.Estado = nuevoEstado;
+    if (mantenimiento != null)
+    {
+        mantenimiento.Imprimir();
 
-        Console.WriteLine("\n¡Mantenimiento actualizado con éxito!");
+        Console.Write(
+            $"\nNuevo tipo ({mantenimiento.TipoMantenimiento}): ");
+
+        string tipo = Console.ReadLine();
+
+        if (!string.IsNullOrWhiteSpace(tipo))
+        {
+            mantenimiento.TipoMantenimiento = tipo;
+        }
+
+        Console.Write(
+            $"Nueva descripción ({mantenimiento.Descripcion}): ");
+
+        string descripcion = Console.ReadLine();
+
+        if (!string.IsNullOrWhiteSpace(descripcion))
+        {
+            mantenimiento.Descripcion = descripcion;
+        }
+
+        Console.Write(
+            $"Nuevo costo (${mantenimiento.Costo}): ");
+
+        string costoTexto = Console.ReadLine();
+
+        if (decimal.TryParse(costoTexto, out decimal costo))
+        {
+            mantenimiento.Costo = costo;
+        }
+
+        Console.Write(
+            $"Nuevo estado ({mantenimiento.Estado}): ");
+
+        string estado = Console.ReadLine();
+
+        if (!string.IsNullOrWhiteSpace(estado))
+        {
+            mantenimiento.Estado = estado;
+        }
+
+        Console.Write(
+            $"Nueva duración ({mantenimiento.DuracionHoras} horas): ");
+
+        string duracionTexto = Console.ReadLine();
+
+        if (int.TryParse(duracionTexto, out int duracion))
+        {
+            mantenimiento.DuracionHoras = duracion;
+        }
+
+        Database.GuardarMantenimientos();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("\nMantenimiento actualizado correctamente.");
+        Console.ResetColor();
     }
     else
     {
-        Console.WriteLine("\nNo se encontró el mantenimiento.");
+        Console.WriteLine("\nMantenimiento no encontrado.");
     }
+
     Console.ReadKey();
 }
+
 
 void EliminarMantenimiento()
 {
     Console.Clear();
+
     Console.WriteLine("=================================");
-    Console.WriteLine("      ELIMINAR MANTENIMIENTO     ");
+    Console.WriteLine("      ELIMINAR MANTENIMIENTO");
     Console.WriteLine("=================================\n");
 
-    Console.Write("Ingrese ID del mantenimiento a eliminar: ");
-    int id = int.Parse(Console.ReadLine());
+    Console.Write("Ingrese ID: ");
 
-    Mantenimiento m = Database.Mantenimientos.Find(x => x.Id == id);
-
-    if (m != null)
+    if (!int.TryParse(Console.ReadLine(), out int id))
     {
-        Database.Mantenimientos.Remove(m);
-        Console.WriteLine("\n¡Mantenimiento eliminado con éxito!");
+        MostrarError("ID inválido.");
+        return;
+    }
+
+    Mantenimiento mantenimiento =
+        Database.Mantenimientos.Find(m => m.Id == id);
+
+    if (mantenimiento != null)
+    {
+        mantenimiento.Imprimir();
+
+        Console.Write(
+            "\n¿Desea eliminar este mantenimiento? S/N: ");
+
+        if (Console.ReadLine()?.ToUpper() == "S")
+        {
+            Database.Mantenimientos.Remove(mantenimiento);
+            Database.GuardarMantenimientos();
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nMantenimiento eliminado correctamente.");
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine("\nOperación cancelada.");
+        }
     }
     else
     {
-        Console.WriteLine("\nNo se encontró el mantenimiento.");
+        Console.WriteLine("\nMantenimiento no encontrado.");
     }
+
     Console.ReadKey();
 }

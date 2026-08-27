@@ -7,6 +7,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         // ATRIBUTO
         private string tipoFiltro;
 
+
         // PROPIEDAD
         public string TipoFiltro
         {
@@ -14,29 +15,43 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             set => tipoFiltro = value;
         }
 
+
+        // =====================================================
         // CONSTRUCTOR VACÍO
-        // Importante para cargar los datos desde JSON
+        // =====================================================
+
         public AireAcondicionado() : base()
         {
         }
 
+
+        // =====================================================
         // CONSTRUCTOR CON PARÁMETROS
+        // =====================================================
+
         public AireAcondicionado(
             string codigo,
             string marca,
             string modelo,
             int capacidadBTU,
             string estado,
-            string tipoFiltro)
+            string tipoFiltro,
+            int clienteId)
             : base(
                 codigo,
                 marca,
                 modelo,
                 capacidadBTU,
-                estado)
+                estado,
+                clienteId)
         {
             TipoFiltro = tipoFiltro;
         }
+
+
+        // =====================================================
+        // MÉTODO HEREDADO
+        // =====================================================
 
         public override void RealizarMantenimiento()
         {
@@ -46,6 +61,11 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Console.WriteLine(
                 "Revisión del nivel de refrigerante.");
         }
+
+
+        // =====================================================
+        // IMPRIMIR
+        // =====================================================
 
         public override void Imprimir()
         {

@@ -1,4 +1,9 @@
-﻿using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Generales;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
+using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
 
 
@@ -6,10 +11,35 @@ using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
 // INICIO DEL SISTEMA
 // ================================================================
 
-Database.CargarDatos();
+Console.OutputEncoding = Encoding.UTF8;
 
-Console.OutputEncoding = System.Text.Encoding.UTF8;
-Console.Title = "SIGREC - Sistema de Gestión de Refrigeración y Climatización";
+Console.Title =
+    "SIGREC - Sistema de Gestión de Refrigeración y Climatización";
+
+// Comprobar conexión con SQL Server
+try
+{
+    using (var context = new SigrecDbContext())
+    {
+        context.Database.CanConnect();
+    }
+}
+catch (Exception ex)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+
+    Console.WriteLine(
+        "No se pudo establecer conexión con SQL Server.");
+
+    Console.WriteLine(ex.Message);
+
+    Console.ResetColor();
+
+    Console.ReadKey();
+
+    return;
+}
+
 
 int opcionPrincipal;
 
@@ -21,7 +51,8 @@ do
 
     MostrarMenuPrincipal();
 
-    opcionPrincipal = LeerOpcionCentrada("Seleccione una opción");
+    opcionPrincipal =
+        LeerOpcionCentrada("Seleccione una opción");
 
     switch (opcionPrincipal)
     {
@@ -50,7 +81,8 @@ do
             break;
 
         default:
-            MostrarError("Opción inválida. Intente nuevamente.");
+            MostrarError(
+                "Opción inválida. Intente nuevamente.");
             break;
     }
 
@@ -158,7 +190,7 @@ void MenuRepuestos()
         "GESTIÓN DE REPUESTOS",
         "Control del inventario de repuestos",
         CrearRepuesto,
-        ListarRepuesto,
+        ListarRepuestos,
         BuscarRepuesto,
         ActualizarRepuesto,
         EliminarRepuesto
@@ -221,9 +253,12 @@ void EjecutarMenuCrud(
     {
         Console.Clear();
 
-        MostrarEncabezadoModulo(titulo, subtitulo);
+        MostrarEncabezadoModulo(
+            titulo,
+            subtitulo);
 
-        int ancho = ObtenerAnchoCaja(70);
+        int ancho =
+            ObtenerAnchoCaja(70);
 
         DibujarBordeSuperior(ancho);
 
@@ -259,7 +294,9 @@ void EjecutarMenuCrud(
 
         DibujarBordeInferior(ancho);
 
-        opcion = LeerOpcionCentrada("Seleccione una opción");
+        opcion =
+            LeerOpcionCentrada(
+                "Seleccione una opción");
 
         switch (opcion)
         {
@@ -287,7 +324,8 @@ void EjecutarMenuCrud(
                 break;
 
             default:
-                MostrarError("Opción inválida.");
+                MostrarError(
+                    "Opción inválida.");
                 break;
         }
 
@@ -296,19 +334,29 @@ void EjecutarMenuCrud(
 
 
 // ================================================================
-// ENCABEZADO PRINCIPAL ADAPTABLE
+// ENCABEZADO PRINCIPAL
 // ================================================================
 
 void MostrarEncabezadoPrincipal()
 {
-    int anchoConsola = Console.WindowWidth;
+    int anchoConsola;
+
+    try
+    {
+        anchoConsola =
+            Console.WindowWidth;
+    }
+    catch
+    {
+        anchoConsola = 100;
+    }
 
     Console.WriteLine();
 
-    // Logo grande solamente cuando existe espacio suficiente
     if (anchoConsola >= 75)
     {
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.ForegroundColor =
+            ConsoleColor.DarkCyan;
 
         CentrarTexto(
             "███████╗██╗ ██████╗ ██████╗ ███████╗ ██████╗");
@@ -316,7 +364,8 @@ void MostrarEncabezadoPrincipal()
         CentrarTexto(
             "██╔════╝██║██╔════╝ ██╔══██╗██╔════╝██╔════╝");
 
-        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.ForegroundColor =
+            ConsoleColor.Cyan;
 
         CentrarTexto(
             "███████╗██║██║  ███╗██████╔╝█████╗  ██║     ");
@@ -324,7 +373,8 @@ void MostrarEncabezadoPrincipal()
         CentrarTexto(
             "╚════██║██║██║   ██║██╔══██╗██╔══╝  ██║     ");
 
-        Console.ForegroundColor = ConsoleColor.White;
+        Console.ForegroundColor =
+            ConsoleColor.White;
 
         CentrarTexto(
             "███████║██║╚██████╔╝██║  ██║███████╗╚██████╗");
@@ -334,15 +384,16 @@ void MostrarEncabezadoPrincipal()
     }
     else
     {
-        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.ForegroundColor =
+            ConsoleColor.Cyan;
 
-        CentrarTexto("███████╗██╗ ██████╗ ██████╗ ███████╗ ██████╗");
-        CentrarTexto("                 SIGREC");
+        CentrarTexto("SIGREC");
     }
 
     Console.WriteLine();
 
-    int ancho = ObtenerAnchoCaja(90);
+    int ancho =
+        ObtenerAnchoCaja(90);
 
     DibujarBordeSuperior(ancho);
 
@@ -365,20 +416,23 @@ void MostrarEncabezadoPrincipal()
 
     DibujarBordeInferior(ancho);
 
-    // Efecto sombra
-    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.ForegroundColor =
+        ConsoleColor.DarkGray;
 
     string sombra =
-        new string('░', Math.Max(1, ancho - 4));
+        new string(
+            '░',
+            Math.Max(1, ancho - 4));
 
-    CentrarTexto("   " + sombra);
+    CentrarTexto(
+        "   " + sombra);
 
     Console.ResetColor();
 }
 
 
 // ================================================================
-// ENCABEZADOS DE LOS MÓDULOS
+// ENCABEZADO MÓDULO
 // ================================================================
 
 void MostrarEncabezadoModulo(
@@ -387,7 +441,8 @@ void MostrarEncabezadoModulo(
 {
     Console.WriteLine();
 
-    int ancho = ObtenerAnchoCaja(90);
+    int ancho =
+        ObtenerAnchoCaja(90);
 
     DibujarBordeSuperior(ancho);
 
@@ -410,21 +465,12 @@ void MostrarEncabezadoModulo(
 
     DibujarBordeInferior(ancho);
 
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-
-    string sombra =
-        new string('░', Math.Max(1, ancho - 4));
-
-    CentrarTexto("   " + sombra);
-
-    Console.ResetColor();
-
     Console.WriteLine();
 }
 
 
 // ================================================================
-// ENCABEZADO PARA CADA OPERACIÓN CRUD
+// PANTALLA OPERACIÓN
 // ================================================================
 
 void MostrarPantallaOperacion(
@@ -433,7 +479,8 @@ void MostrarPantallaOperacion(
 {
     Console.Clear();
 
-    int ancho = ObtenerAnchoCaja(80);
+    int ancho =
+        ObtenerAnchoCaja(80);
 
     Console.WriteLine();
 
@@ -463,7 +510,7 @@ void MostrarPantallaOperacion(
 
 
 // ================================================================
-// FUNCIONES VISUALES ADAPTABLES
+// FUNCIONES VISUALES
 // ================================================================
 
 int ObtenerAnchoCaja(int maximo)
@@ -472,7 +519,8 @@ int ObtenerAnchoCaja(int maximo)
 
     try
     {
-        disponible = Console.WindowWidth - 6;
+        disponible =
+            Console.WindowWidth - 6;
     }
     catch
     {
@@ -480,14 +528,10 @@ int ObtenerAnchoCaja(int maximo)
     }
 
     if (disponible < 32)
-    {
         disponible = 32;
-    }
 
     if (disponible > maximo)
-    {
         disponible = maximo;
-    }
 
     return disponible;
 }
@@ -499,7 +543,8 @@ void CentrarTexto(string texto)
 
     try
     {
-        ancho = Console.WindowWidth;
+        ancho =
+            Console.WindowWidth;
     }
     catch
     {
@@ -507,20 +552,28 @@ void CentrarTexto(string texto)
     }
 
     int espacios =
-        Math.Max(0, (ancho - texto.Length) / 2);
+        Math.Max(
+            0,
+            (ancho - texto.Length) / 2);
 
     Console.WriteLine(
-        new string(' ', espacios) + texto);
+        new string(
+            ' ',
+            espacios)
+        + texto);
 }
 
 
 void DibujarBordeSuperior(int ancho)
 {
-    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.ForegroundColor =
+        ConsoleColor.DarkCyan;
 
     CentrarTexto(
         "╔" +
-        new string('═', ancho - 2) +
+        new string(
+            '═',
+            ancho - 2) +
         "╗");
 
     Console.ResetColor();
@@ -529,11 +582,14 @@ void DibujarBordeSuperior(int ancho)
 
 void DibujarSeparador(int ancho)
 {
-    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.ForegroundColor =
+        ConsoleColor.DarkCyan;
 
     CentrarTexto(
         "╠" +
-        new string('═', ancho - 2) +
+        new string(
+            '═',
+            ancho - 2) +
         "╣");
 
     Console.ResetColor();
@@ -542,11 +598,14 @@ void DibujarSeparador(int ancho)
 
 void DibujarBordeInferior(int ancho)
 {
-    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    Console.ForegroundColor =
+        ConsoleColor.DarkCyan;
 
     CentrarTexto(
         "╚" +
-        new string('═', ancho - 2) +
+        new string(
+            '═',
+            ancho - 2) +
         "╝");
 
     Console.ResetColor();
@@ -558,14 +617,17 @@ void EscribirFila(
     int ancho,
     ConsoleColor color)
 {
-    int interior = ancho - 2;
+    int interior =
+        ancho - 2;
 
     if (texto.Length > interior - 4)
     {
         texto =
             texto.Substring(
                 0,
-                Math.Max(1, interior - 7))
+                Math.Max(
+                    1,
+                    interior - 7))
             + "...";
     }
 
@@ -573,9 +635,11 @@ void EscribirFila(
         "  " + texto;
 
     contenido =
-        contenido.PadRight(interior);
+        contenido.PadRight(
+            interior);
 
-    Console.ForegroundColor = color;
+    Console.ForegroundColor =
+        color;
 
     CentrarTexto(
         "║" +
@@ -591,14 +655,17 @@ void EscribirFilaCentrada(
     int ancho,
     ConsoleColor color)
 {
-    int interior = ancho - 2;
+    int interior =
+        ancho - 2;
 
     if (texto.Length > interior)
     {
         texto =
             texto.Substring(
                 0,
-                Math.Max(1, interior - 3))
+                Math.Max(
+                    1,
+                    interior - 3))
             + "...";
     }
 
@@ -612,11 +679,16 @@ void EscribirFilaCentrada(
         espaciosTotales - izquierda;
 
     string contenido =
-        new string(' ', izquierda) +
-        texto +
-        new string(' ', derecha);
+        new string(
+            ' ',
+            izquierda)
+        + texto
+        + new string(
+            ' ',
+            derecha);
 
-    Console.ForegroundColor = color;
+    Console.ForegroundColor =
+        color;
 
     CentrarTexto(
         "║" +
@@ -627,7 +699,8 @@ void EscribirFilaCentrada(
 }
 
 
-int LeerOpcionCentrada(string mensaje)
+int LeerOpcionCentrada(
+    string mensaje)
 {
     Console.WriteLine();
 
@@ -638,7 +711,8 @@ int LeerOpcionCentrada(string mensaje)
 
     try
     {
-        ancho = Console.WindowWidth;
+        ancho =
+            Console.WindowWidth;
     }
     catch
     {
@@ -648,14 +722,19 @@ int LeerOpcionCentrada(string mensaje)
     int espacios =
         Math.Max(
             0,
-            (ancho - texto.Length - 4) / 2);
+            (ancho -
+             texto.Length -
+             4) / 2);
 
-    Console.ForegroundColor = ConsoleColor.Green;
+    Console.ForegroundColor =
+        ConsoleColor.Green;
 
     Console.Write(
-        new string(' ', espacios) +
-        "► " +
-        texto);
+        new string(
+            ' ',
+            espacios)
+        + "► "
+        + texto);
 
     Console.ResetColor();
 
@@ -674,11 +753,13 @@ int LeerOpcionCentrada(string mensaje)
 // MENSAJES
 // ================================================================
 
-void MostrarError(string mensaje)
+void MostrarError(
+    string mensaje)
 {
     Console.WriteLine();
 
-    int ancho = ObtenerAnchoCaja(65);
+    int ancho =
+        ObtenerAnchoCaja(65);
 
     DibujarBordeSuperior(ancho);
 
@@ -700,23 +781,31 @@ void MostrarError(string mensaje)
 }
 
 
-void MostrarExito(string mensaje)
+void MostrarExito(
+    string mensaje)
 {
-    Console.ForegroundColor = ConsoleColor.Green;
+    Console.ForegroundColor =
+        ConsoleColor.Green;
 
     Console.WriteLine();
-    CentrarTexto("✔ " + mensaje);
+
+    CentrarTexto(
+        "✔ " + mensaje);
 
     Console.ResetColor();
 }
 
 
-void MostrarAdvertencia(string mensaje)
+void MostrarAdvertencia(
+    string mensaje)
 {
-    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.ForegroundColor =
+        ConsoleColor.Yellow;
 
     Console.WriteLine();
-    CentrarTexto("⚠ " + mensaje);
+
+    CentrarTexto(
+        "⚠ " + mensaje);
 
     Console.ResetColor();
 }
@@ -731,7 +820,7 @@ void Pausar()
     CentrarTexto(
         "Presione una tecla para continuar...");
 
-    Console.ReadKey();
+    Console.ReadKey(true);
 }
 
 
@@ -743,7 +832,8 @@ void MostrarSalida()
 {
     Console.Clear();
 
-    int ancho = ObtenerAnchoCaja(80);
+    int ancho =
+        ObtenerAnchoCaja(80);
 
     Console.WriteLine();
     Console.WriteLine();
@@ -788,61 +878,71 @@ void CrearCliente()
         "GESTIÓN DE CLIENTES",
         "CREAR CLIENTE");
 
-    Console.Write("Ingrese ID: ");
+    Console.Write(
+        "Ingrese cédula: ");
 
-    if (!int.TryParse(
-        Console.ReadLine(),
-        out int id))
-    {
-        MostrarError("ID inválido.");
-        return;
-    }
+    string cedula =
+        Console.ReadLine() ?? "";
 
-    Console.Write("Ingrese cédula: ");
-    string cedula = Console.ReadLine();
+    Console.Write(
+        "Ingrese nombre: ");
 
-    Console.Write("Ingrese nombre: ");
-    string nombre = Console.ReadLine();
+    string nombre =
+        Console.ReadLine() ?? "";
 
-    Console.Write("Ingrese teléfono: ");
-    string telefono = Console.ReadLine();
+    Console.Write(
+        "Ingrese teléfono: ");
 
-    Console.Write("Ingrese dirección: ");
-    string direccion = Console.ReadLine();
+    string telefono =
+        Console.ReadLine() ?? "";
 
-    Cliente existente =
-        Database.Clientes.Find(
-            x => x.Cedula == cedula);
+    Console.Write(
+        "Ingrese dirección: ");
 
-    if (existente != null)
-    {
-        MostrarAdvertencia(
-            "Ya existe un cliente con esa cédula.");
-
-        Pausar();
-        return;
-    }
+    string direccion =
+        Console.ReadLine() ?? "";
 
     try
     {
+        using var context =
+            new SigrecDbContext();
+
+        Cliente existente =
+            context.Clientes
+                .FirstOrDefault(
+                    c =>
+                    c.Cedula == cedula);
+
+        if (existente != null)
+        {
+            MostrarAdvertencia(
+                "Ya existe un cliente con esa cédula.");
+
+            Pausar();
+            return;
+        }
+
         Cliente cliente =
             new Cliente(
                 cedula,
                 nombre,
                 telefono,
                 direccion,
-                id);
+                0);
 
-        Database.Clientes.Add(cliente);
+        context.Clientes.Add(
+            cliente);
 
-        Database.GuardarClientes();
+        context.SaveChanges();
 
         MostrarExito(
-            "Cliente creado correctamente.");
+            $"Cliente creado correctamente. ID: {cliente.Id}");
     }
     catch (Exception ex)
     {
-        MostrarError(ex.Message);
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
 
@@ -856,26 +956,47 @@ void ListarClientes()
         "GESTIÓN DE CLIENTES",
         "LISTAR CLIENTES");
 
-    if (Database.Clientes.Count == 0)
+    try
     {
-        MostrarAdvertencia(
-            "No existen clientes registrados.");
-    }
-    else
-    {
-        foreach (Cliente cliente
-                 in Database.Clientes)
+        using var context =
+            new SigrecDbContext();
+
+        List<Cliente> clientes =
+            context.Clientes
+                .OrderBy(c => c.Nombre)
+                .ToList();
+
+        if (clientes.Count == 0)
         {
-            cliente.Imprimir();
-
-            Console.ForegroundColor =
-                ConsoleColor.DarkGray;
-
-            Console.WriteLine(
-                new string('-', 45));
-
-            Console.ResetColor();
+            MostrarAdvertencia(
+                "No existen clientes registrados.");
         }
+        else
+        {
+            foreach (
+                Cliente cliente
+                in clientes)
+            {
+                cliente.Imprimir();
+
+                Console.ForegroundColor =
+                    ConsoleColor.DarkGray;
+
+                Console.WriteLine(
+                    new string(
+                        '-',
+                        45));
+
+                Console.ResetColor();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -892,25 +1013,40 @@ void BuscarCliente()
         "Ingrese la cédula del cliente: ");
 
     string cedula =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Cliente cliente =
-        Database.Clientes.Find(
-            x => x.Cedula == cedula);
-
-    if (cliente != null)
+    try
     {
-        MostrarExito(
-            "Cliente encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Console.WriteLine();
+        Cliente cliente =
+            context.Clientes
+                .FirstOrDefault(
+                    c =>
+                    c.Cedula == cedula);
 
-        cliente.Imprimir();
+        if (cliente != null)
+        {
+            MostrarExito(
+                "Cliente encontrado.");
+
+            Console.WriteLine();
+
+            cliente.Imprimir();
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Cliente no encontrado.");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        MostrarAdvertencia(
-            "Cliente no encontrado.");
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -927,58 +1063,83 @@ void ActualizarCliente()
         "Ingrese la cédula del cliente: ");
 
     string cedula =
-        Console.ReadLine();
-
-    Cliente cliente =
-        Database.Clientes.Find(
-            x => x.Cedula == cedula);
-
-    if (cliente == null)
-    {
-        MostrarAdvertencia(
-            "Cliente no encontrado.");
-
-        Pausar();
-        return;
-    }
-
-    Console.WriteLine();
-
-    cliente.Imprimir();
-
-    Console.WriteLine();
-
-    Console.Write("Nuevo nombre: ");
-    string nuevoNombre =
-        Console.ReadLine();
-
-    Console.Write("Nuevo teléfono: ");
-    string nuevoTelefono =
-        Console.ReadLine();
-
-    Console.Write("Nueva dirección: ");
-    string nuevaDireccion =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
     try
     {
-        if (!string.IsNullOrWhiteSpace(nuevoNombre))
-            cliente.Nombre = nuevoNombre;
+        using var context =
+            new SigrecDbContext();
 
-        if (!string.IsNullOrWhiteSpace(nuevoTelefono))
-            cliente.Telefono = nuevoTelefono;
+        Cliente cliente =
+            context.Clientes
+                .FirstOrDefault(
+                    c =>
+                    c.Cedula == cedula);
 
-        if (!string.IsNullOrWhiteSpace(nuevaDireccion))
-            cliente.Direccion = nuevaDireccion;
+        if (cliente == null)
+        {
+            MostrarAdvertencia(
+                "Cliente no encontrado.");
 
-        Database.GuardarClientes();
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+
+        cliente.Imprimir();
+
+        Console.WriteLine();
+
+        Console.Write(
+            "Nuevo nombre (Enter para mantener): ");
+
+        string nuevoNombre =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo teléfono (Enter para mantener): ");
+
+        string nuevoTelefono =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nueva dirección (Enter para mantener): ");
+
+        string nuevaDireccion =
+            Console.ReadLine() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevoNombre))
+        {
+            cliente.Nombre =
+                nuevoNombre;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevoTelefono))
+        {
+            cliente.Telefono =
+                nuevoTelefono;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevaDireccion))
+        {
+            cliente.Direccion =
+                nuevaDireccion;
+        }
+
+        context.SaveChanges();
 
         MostrarExito(
             "Cliente actualizado correctamente.");
     }
     catch (Exception ex)
     {
-        MostrarError(ex.Message);
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
 
@@ -996,49 +1157,78 @@ void EliminarCliente()
         "Ingrese la cédula del cliente: ");
 
     string cedula =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Cliente cliente =
-        Database.Clientes.Find(
-            x => x.Cedula == cedula);
-
-    if (cliente == null)
+    try
     {
-        MostrarAdvertencia(
-            "Cliente no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
+        Cliente cliente =
+            context.Clientes
+                .Include(c => c.Equipos)
+                .FirstOrDefault(
+                    c =>
+                    c.Cedula == cedula);
+
+        if (cliente == null)
+        {
+            MostrarAdvertencia(
+                "Cliente no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+
+        cliente.Imprimir();
+
+        if (cliente.Equipos != null &&
+            cliente.Equipos.Count > 0)
+        {
+            MostrarAdvertencia(
+                "No se puede eliminar porque tiene equipos registrados.");
+
+            Pausar();
+            return;
+        }
+
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.Write(
+            "\n¿Desea eliminar este cliente? S/N: ");
+
+        Console.ResetColor();
+
+        string respuesta =
+            (Console.ReadLine() ?? "")
+            .Trim()
+            .ToUpper();
+
+        if (respuesta == "S")
+        {
+            context.Clientes.Remove(
+                cliente);
+
+            context.SaveChanges();
+
+            MostrarExito(
+                "Cliente eliminado correctamente.");
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Operación cancelada.");
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
-    }
-
-    Console.WriteLine();
-
-    cliente.Imprimir();
-
-    Console.ForegroundColor =
-        ConsoleColor.Yellow;
-
-    Console.Write(
-        "\n¿Desea eliminar este cliente? S/N: ");
-
-    Console.ResetColor();
-
-    string respuesta =
-        Console.ReadLine()?.ToUpper();
-
-    if (respuesta == "S")
-    {
-        Database.Clientes.Remove(cliente);
-
-        Database.GuardarClientes();
-
-        MostrarExito(
-            "Cliente eliminado correctamente.");
-    }
-    else
-    {
-        MostrarAdvertencia(
-            "Operación cancelada.");
     }
 
     Pausar();
@@ -1055,33 +1245,32 @@ void CrearTecnico()
         "GESTIÓN DE TÉCNICOS",
         "CREAR TÉCNICO");
 
-    Console.Write("ID del técnico: ");
+    Console.Write(
+        "Nombre: ");
 
-    if (!int.TryParse(
-        Console.ReadLine(),
-        out int id))
-    {
-        MostrarError("ID inválido.");
-        return;
-    }
-
-    Console.Write("Nombre: ");
     string nombre =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Cédula: ");
+    Console.Write(
+        "Cédula: ");
+
     string cedula =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Teléfono: ");
+    Console.Write(
+        "Teléfono: ");
+
     string telefono =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Especialidad: ");
+    Console.Write(
+        "Especialidad: ");
+
     string especialidad =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Años de experiencia: ");
+    Console.Write(
+        "Años de experiencia: ");
 
     if (!int.TryParse(
         Console.ReadLine(),
@@ -1093,34 +1282,58 @@ void CrearTecnico()
         return;
     }
 
-    Tecnico existente =
-        Database.Tecnicos.Find(
-            x => x.Cedula == cedula);
-
-    if (existente != null)
+    if (experiencia < 0)
     {
-        MostrarAdvertencia(
-            "Ya existe un técnico con esa cédula.");
+        MostrarError(
+            "La experiencia no puede ser negativa.");
 
-        Pausar();
         return;
     }
 
-    Tecnico tecnico =
-        new Tecnico(
-            id,
-            nombre,
-            cedula,
-            telefono,
-            especialidad,
-            experiencia);
+    try
+    {
+        using var context =
+            new SigrecDbContext();
 
-    Database.Tecnicos.Add(tecnico);
+        Tecnico existente =
+            context.Tecnicos
+                .FirstOrDefault(
+                    t =>
+                    t.Cedula == cedula);
 
-    Database.GuardarTecnicos();
+        if (existente != null)
+        {
+            MostrarAdvertencia(
+                "Ya existe un técnico con esa cédula.");
 
-    MostrarExito(
-        "Técnico creado correctamente.");
+            Pausar();
+            return;
+        }
+
+        Tecnico tecnico =
+            new Tecnico(
+                0,
+                nombre,
+                cedula,
+                telefono,
+                especialidad,
+                experiencia);
+
+        context.Tecnicos.Add(
+            tecnico);
+
+        context.SaveChanges();
+
+        MostrarExito(
+            $"Técnico creado correctamente. ID: {tecnico.Id}");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
+    }
 
     Pausar();
 }
@@ -1132,26 +1345,47 @@ void ListarTecnicos()
         "GESTIÓN DE TÉCNICOS",
         "LISTAR TÉCNICOS");
 
-    if (Database.Tecnicos.Count == 0)
+    try
     {
-        MostrarAdvertencia(
-            "No existen técnicos registrados.");
-    }
-    else
-    {
-        foreach (Tecnico tecnico
-                 in Database.Tecnicos)
+        using var context =
+            new SigrecDbContext();
+
+        List<Tecnico> tecnicos =
+            context.Tecnicos
+                .OrderBy(t => t.Nombre)
+                .ToList();
+
+        if (tecnicos.Count == 0)
         {
-            tecnico.Imprimir();
-
-            Console.ForegroundColor =
-                ConsoleColor.DarkGray;
-
-            Console.WriteLine(
-                new string('-', 45));
-
-            Console.ResetColor();
+            MostrarAdvertencia(
+                "No existen técnicos registrados.");
         }
+        else
+        {
+            foreach (
+                Tecnico tecnico
+                in tecnicos)
+            {
+                tecnico.Imprimir();
+
+                Console.ForegroundColor =
+                    ConsoleColor.DarkGray;
+
+                Console.WriteLine(
+                    new string(
+                        '-',
+                        45));
+
+                Console.ResetColor();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1168,25 +1402,40 @@ void BuscarTecnico()
         "Ingrese la cédula del técnico: ");
 
     string cedula =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Tecnico tecnico =
-        Database.Tecnicos.Find(
-            x => x.Cedula == cedula);
-
-    if (tecnico != null)
+    try
     {
-        MostrarExito(
-            "Técnico encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Console.WriteLine();
+        Tecnico tecnico =
+            context.Tecnicos
+                .FirstOrDefault(
+                    t =>
+                    t.Cedula == cedula);
 
-        tecnico.Imprimir();
+        if (tecnico != null)
+        {
+            MostrarExito(
+                "Técnico encontrado.");
+
+            Console.WriteLine();
+
+            tecnico.Imprimir();
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Técnico no encontrado.");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        MostrarAdvertencia(
-            "Técnico no encontrado.");
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1203,73 +1452,138 @@ void ActualizarTecnico()
         "Ingrese la cédula del técnico: ");
 
     string cedula =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Tecnico tecnico =
-        Database.Tecnicos.Find(
-            x => x.Cedula == cedula);
-
-    if (tecnico == null)
+    try
     {
-        MostrarAdvertencia(
-            "Técnico no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
+        Tecnico tecnico =
+            context.Tecnicos
+                .FirstOrDefault(
+                    t =>
+                    t.Cedula == cedula);
+
+        if (tecnico == null)
+        {
+            MostrarAdvertencia(
+                "Técnico no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+
+        tecnico.Imprimir();
+
+        Console.WriteLine();
+
+        Console.Write(
+            "Nuevo nombre: ");
+
+        string nombre =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nueva cédula: ");
+
+        string nuevaCedula =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo teléfono: ");
+
+        string telefono =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nueva especialidad: ");
+
+        string especialidad =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevos años de experiencia: ");
+
+        string experienciaTexto =
+            Console.ReadLine() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevaCedula))
+        {
+            bool existeCedula =
+                context.Tecnicos.Any(
+                    t =>
+                    t.Cedula == nuevaCedula &&
+                    t.Id != tecnico.Id);
+
+            if (existeCedula)
+            {
+                MostrarAdvertencia(
+                    "La nueva cédula ya pertenece a otro técnico.");
+
+                Pausar();
+                return;
+            }
+
+            tecnico.Cedula =
+                nuevaCedula;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nombre))
+        {
+            tecnico.Nombre =
+                nombre;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            telefono))
+        {
+            tecnico.Telefono =
+                telefono;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            especialidad))
+        {
+            tecnico.Especialidad =
+                especialidad;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            experienciaTexto))
+        {
+            if (!int.TryParse(
+                experienciaTexto,
+                out int experiencia) ||
+                experiencia < 0)
+            {
+                MostrarAdvertencia(
+                    "Experiencia inválida.");
+
+                Pausar();
+                return;
+            }
+
+            tecnico.Experiencia =
+                experiencia;
+        }
+
+        context.SaveChanges();
+
+        MostrarExito(
+            "Técnico actualizado correctamente.");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
-
-    Console.WriteLine();
-
-    tecnico.Imprimir();
-
-    Console.WriteLine();
-
-    Console.Write("Nuevo nombre: ");
-    string nombre =
-        Console.ReadLine();
-
-    Console.Write("Nueva cédula: ");
-    string nuevaCedula =
-        Console.ReadLine();
-
-    Console.Write("Nuevo teléfono: ");
-    string telefono =
-        Console.ReadLine();
-
-    Console.Write("Nueva especialidad: ");
-    string especialidad =
-        Console.ReadLine();
-
-    Console.Write(
-        "Nuevos años de experiencia: ");
-
-    string experienciaTexto =
-        Console.ReadLine();
-
-    if (!string.IsNullOrWhiteSpace(nombre))
-        tecnico.Nombre = nombre;
-
-    if (!string.IsNullOrWhiteSpace(nuevaCedula))
-        tecnico.Cedula = nuevaCedula;
-
-    if (!string.IsNullOrWhiteSpace(telefono))
-        tecnico.Telefono = telefono;
-
-    if (!string.IsNullOrWhiteSpace(especialidad))
-        tecnico.Especialidad = especialidad;
-
-    if (int.TryParse(
-        experienciaTexto,
-        out int experiencia))
-    {
-        tecnico.Experiencia =
-            experiencia;
-    }
-
-    Database.GuardarTecnicos();
-
-    MostrarExito(
-        "Técnico actualizado correctamente.");
 
     Pausar();
 }
@@ -1285,46 +1599,75 @@ void EliminarTecnico()
         "Ingrese la cédula del técnico: ");
 
     string cedula =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Tecnico tecnico =
-        Database.Tecnicos.Find(
-            x => x.Cedula == cedula);
-
-    if (tecnico == null)
+    try
     {
-        MostrarAdvertencia(
-            "Técnico no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
+        Tecnico tecnico =
+            context.Tecnicos
+                .Include(
+                    t =>
+                    t.Mantenimientos)
+                .FirstOrDefault(
+                    t =>
+                    t.Cedula == cedula);
+
+        if (tecnico == null)
+        {
+            MostrarAdvertencia(
+                "Técnico no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        tecnico.Imprimir();
+
+        if (tecnico.Mantenimientos != null &&
+            tecnico.Mantenimientos.Count > 0)
+        {
+            MostrarAdvertencia(
+                "No se puede eliminar porque tiene mantenimientos registrados.");
+
+            Pausar();
+            return;
+        }
+
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.Write(
+            "\n¿Desea eliminar este técnico? S/N: ");
+
+        Console.ResetColor();
+
+        if ((Console.ReadLine() ?? "")
+            .Trim()
+            .ToUpper() == "S")
+        {
+            context.Tecnicos.Remove(
+                tecnico);
+
+            context.SaveChanges();
+
+            MostrarExito(
+                "Técnico eliminado correctamente.");
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Operación cancelada.");
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
-    }
-
-    Console.WriteLine();
-
-    tecnico.Imprimir();
-
-    Console.ForegroundColor =
-        ConsoleColor.Yellow;
-
-    Console.Write(
-        "\n¿Desea eliminar este técnico? S/N: ");
-
-    Console.ResetColor();
-
-    if (Console.ReadLine()?.ToUpper() == "S")
-    {
-        Database.Tecnicos.Remove(tecnico);
-
-        Database.GuardarTecnicos();
-
-        MostrarExito(
-            "Técnico eliminado correctamente.");
-    }
-    else
-    {
-        MostrarAdvertencia(
-            "Operación cancelada.");
     }
 
     Pausar();
@@ -1341,29 +1684,26 @@ void CrearRepuesto()
         "GESTIÓN DE REPUESTOS",
         "CREAR REPUESTO");
 
-    Console.Write("ID: ");
+    Console.Write(
+        "Nombre: ");
 
-    if (!int.TryParse(
-        Console.ReadLine(),
-        out int id))
-    {
-        MostrarError("ID inválido.");
-        return;
-    }
-
-    Console.Write("Nombre: ");
     string nombre =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Marca: ");
+    Console.Write(
+        "Marca: ");
+
     string marca =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Tipo: ");
+    Console.Write(
+        "Tipo: ");
+
     string tipo =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Console.Write("Cantidad: ");
+    Console.Write(
+        "Cantidad: ");
 
     if (!int.TryParse(
         Console.ReadLine(),
@@ -1375,7 +1715,8 @@ void CrearRepuesto()
         return;
     }
 
-    Console.Write("Precio: ");
+    Console.Write(
+        "Precio: ");
 
     if (!decimal.TryParse(
         Console.ReadLine(),
@@ -1387,65 +1728,87 @@ void CrearRepuesto()
         return;
     }
 
-    Repuesto existente =
-        Database.Repuestos.Find(
-            r => r.Id == id);
-
-    if (existente != null)
+    try
     {
-        MostrarAdvertencia(
-            "Ya existe un repuesto con ese ID.");
+        Repuesto repuesto =
+            new Repuesto(
+                0,
+                nombre,
+                marca,
+                tipo,
+                cantidad,
+                precio);
 
-        Pausar();
+        using var context =
+            new SigrecDbContext();
+
+        context.Repuestos.Add(
+            repuesto);
+
+        context.SaveChanges();
+
+        MostrarExito(
+            $"Repuesto registrado correctamente. ID: {repuesto.Id}");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
-
-    Repuesto repuesto =
-        new Repuesto(
-            id,
-            nombre,
-            marca,
-            tipo,
-            cantidad,
-            precio);
-
-    Database.Repuestos.Add(repuesto);
-
-    Database.GuardarRepuestos();
-
-    MostrarExito(
-        "Repuesto registrado correctamente.");
 
     Pausar();
 }
 
 
-void ListarRepuesto()
+void ListarRepuestos()
 {
     MostrarPantallaOperacion(
         "GESTIÓN DE REPUESTOS",
         "LISTAR REPUESTOS");
 
-    if (Database.Repuestos.Count == 0)
+    try
     {
-        MostrarAdvertencia(
-            "No existen repuestos registrados.");
-    }
-    else
-    {
-        foreach (Repuesto repuesto
-                 in Database.Repuestos)
+        using var context =
+            new SigrecDbContext();
+
+        List<Repuesto> repuestos =
+            context.Repuestos
+                .OrderBy(r => r.Nombre)
+                .ToList();
+
+        if (repuestos.Count == 0)
         {
-            repuesto.Imprimir();
-
-            Console.ForegroundColor =
-                ConsoleColor.DarkGray;
-
-            Console.WriteLine(
-                new string('-', 45));
-
-            Console.ResetColor();
+            MostrarAdvertencia(
+                "No existen repuestos registrados.");
         }
+        else
+        {
+            foreach (
+                Repuesto repuesto
+                in repuestos)
+            {
+                repuesto.Imprimir();
+
+                Console.ForegroundColor =
+                    ConsoleColor.DarkGray;
+
+                Console.WriteLine(
+                    new string(
+                        '-',
+                        45));
+
+                Console.ResetColor();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1465,27 +1828,41 @@ void BuscarRepuesto()
         Console.ReadLine(),
         out int id))
     {
-        MostrarError("ID inválido.");
+        MostrarError(
+            "ID inválido.");
+
         return;
     }
 
-    Repuesto repuesto =
-        Database.Repuestos.Find(
-            r => r.Id == id);
-
-    if (repuesto != null)
+    try
     {
-        MostrarExito(
-            "Repuesto encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Console.WriteLine();
+        Repuesto repuesto =
+            context.Repuestos.Find(id);
 
-        repuesto.Imprimir();
+        if (repuesto != null)
+        {
+            MostrarExito(
+                "Repuesto encontrado.");
+
+            Console.WriteLine();
+
+            repuesto.Imprimir();
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Repuesto no encontrado.");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        MostrarAdvertencia(
-            "Repuesto no encontrado.");
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1505,78 +1882,134 @@ void ActualizarRepuesto()
         Console.ReadLine(),
         out int id))
     {
-        MostrarError("ID inválido.");
+        MostrarError(
+            "ID inválido.");
+
         return;
     }
 
-    Repuesto repuesto =
-        Database.Repuestos.Find(
-            r => r.Id == id);
-
-    if (repuesto == null)
+    try
     {
-        MostrarAdvertencia(
-            "Repuesto no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
+        Repuesto repuesto =
+            context.Repuestos.Find(id);
+
+        if (repuesto == null)
+        {
+            MostrarAdvertencia(
+                "Repuesto no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+
+        repuesto.Imprimir();
+
+        Console.WriteLine();
+
+        Console.Write(
+            "Nuevo nombre: ");
+
+        string nombre =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nueva marca: ");
+
+        string marca =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo tipo: ");
+
+        string tipo =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nueva cantidad: ");
+
+        string cantidadTexto =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo precio: ");
+
+        string precioTexto =
+            Console.ReadLine() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(
+            nombre))
+        {
+            repuesto.Nombre =
+                nombre;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            marca))
+        {
+            repuesto.Marca =
+                marca;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            tipo))
+        {
+            repuesto.TipoRepuesto =
+                tipo;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            cantidadTexto))
+        {
+            if (!int.TryParse(
+                cantidadTexto,
+                out int cantidad))
+            {
+                MostrarAdvertencia(
+                    "Cantidad inválida.");
+
+                Pausar();
+                return;
+            }
+
+            repuesto.Cantidad =
+                cantidad;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            precioTexto))
+        {
+            if (!decimal.TryParse(
+                precioTexto,
+                out decimal precio))
+            {
+                MostrarAdvertencia(
+                    "Precio inválido.");
+
+                Pausar();
+                return;
+            }
+
+            repuesto.Precio =
+                precio;
+        }
+
+        context.SaveChanges();
+
+        MostrarExito(
+            "Repuesto actualizado correctamente.");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
-
-    Console.WriteLine();
-
-    repuesto.Imprimir();
-
-    Console.WriteLine();
-
-    Console.Write("Nuevo nombre: ");
-    string nombre =
-        Console.ReadLine();
-
-    Console.Write("Nueva marca: ");
-    string marca =
-        Console.ReadLine();
-
-    Console.Write("Nuevo tipo: ");
-    string tipo =
-        Console.ReadLine();
-
-    Console.Write("Nueva cantidad: ");
-    string cantidadTexto =
-        Console.ReadLine();
-
-    Console.Write("Nuevo precio: ");
-    string precioTexto =
-        Console.ReadLine();
-
-    if (!string.IsNullOrWhiteSpace(nombre))
-        repuesto.Nombre = nombre;
-
-    if (!string.IsNullOrWhiteSpace(marca))
-        repuesto.Marca = marca;
-
-    if (!string.IsNullOrWhiteSpace(tipo))
-        repuesto.TipoRepuesto = tipo;
-
-    if (int.TryParse(
-        cantidadTexto,
-        out int cantidad))
-    {
-        repuesto.Cantidad =
-            cantidad;
-    }
-
-    if (decimal.TryParse(
-        precioTexto,
-        out decimal precio))
-    {
-        repuesto.Precio =
-            precio;
-    }
-
-    Database.GuardarRepuestos();
-
-    MostrarExito(
-        "Repuesto actualizado correctamente.");
 
     Pausar();
 }
@@ -1595,48 +2028,63 @@ void EliminarRepuesto()
         Console.ReadLine(),
         out int id))
     {
-        MostrarError("ID inválido.");
+        MostrarError(
+            "ID inválido.");
+
         return;
     }
 
-    Repuesto repuesto =
-        Database.Repuestos.Find(
-            r => r.Id == id);
-
-    if (repuesto == null)
+    try
     {
-        MostrarAdvertencia(
-            "Repuesto no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
+        Repuesto repuesto =
+            context.Repuestos.Find(id);
+
+        if (repuesto == null)
+        {
+            MostrarAdvertencia(
+                "Repuesto no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        repuesto.Imprimir();
+
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.Write(
+            "\n¿Desea eliminar este repuesto? S/N: ");
+
+        Console.ResetColor();
+
+        if ((Console.ReadLine() ?? "")
+            .Trim()
+            .ToUpper() == "S")
+        {
+            context.Repuestos.Remove(
+                repuesto);
+
+            context.SaveChanges();
+
+            MostrarExito(
+                "Repuesto eliminado correctamente.");
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Operación cancelada.");
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
-    }
-
-    Console.WriteLine();
-
-    repuesto.Imprimir();
-
-    Console.ForegroundColor =
-        ConsoleColor.Yellow;
-
-    Console.Write(
-        "\n¿Desea eliminar este repuesto? S/N: ");
-
-    Console.ResetColor();
-
-    if (Console.ReadLine()?.ToUpper() == "S")
-    {
-        Database.Repuestos.Remove(repuesto);
-
-        Database.GuardarRepuestos();
-
-        MostrarExito(
-            "Repuesto eliminado correctamente.");
-    }
-    else
-    {
-        MostrarAdvertencia(
-            "Operación cancelada.");
     }
 
     Pausar();
@@ -1653,78 +2101,124 @@ void CrearEquipo()
         "GESTIÓN DE EQUIPOS",
         "CREAR EQUIPO");
 
-    Console.Write("Código: ");
-    string codigo =
-        Console.ReadLine();
-
-    Equipo existente =
-        Database.Equipos.Find(
-            e => e.Codigo.Equals(
-                codigo,
-                StringComparison.OrdinalIgnoreCase));
-
-    if (existente != null)
+    try
     {
-        MostrarAdvertencia(
-            "Ya existe un equipo con ese código.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
-        return;
+        if (!context.Clientes.Any())
+        {
+            MostrarAdvertencia(
+                "Primero debe registrar al menos un cliente.");
+
+            Pausar();
+            return;
+        }
+
+        Console.Write(
+            "Cédula del cliente propietario: ");
+
+        string cedula =
+            Console.ReadLine() ?? "";
+
+        Cliente cliente =
+            context.Clientes
+                .FirstOrDefault(
+                    c =>
+                    c.Cedula == cedula);
+
+        if (cliente == null)
+        {
+            MostrarAdvertencia(
+                "No existe un cliente con esa cédula.");
+
+            Pausar();
+            return;
+        }
+
+        Console.Write(
+            "Código: ");
+
+        string codigo =
+            Console.ReadLine() ?? "";
+
+        Equipo existente =
+            context.Equipos
+                .FirstOrDefault(
+                    e =>
+                    e.Codigo == codigo);
+
+        if (existente != null)
+        {
+            MostrarAdvertencia(
+                "Ya existe un equipo con ese código.");
+
+            Pausar();
+            return;
+        }
+
+        Console.Write(
+            "Marca: ");
+
+        string marca =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Modelo: ");
+
+        string modelo =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Capacidad BTU: ");
+
+        if (!int.TryParse(
+            Console.ReadLine(),
+            out int capacidad))
+        {
+            MostrarError(
+                "Capacidad BTU inválida.");
+
+            return;
+        }
+
+        Console.Write(
+            "Estado (Operativo / En Reparación): ");
+
+        string estado =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Tipo de filtro (Estándar / HEPA): ");
+
+        string tipoFiltro =
+            Console.ReadLine() ?? "";
+
+        AireAcondicionado equipo =
+            new AireAcondicionado(
+                codigo,
+                marca,
+                modelo,
+                capacidad,
+                estado,
+                tipoFiltro,
+                cliente.Id);
+
+        context.Equipos.Add(
+            equipo);
+
+        context.SaveChanges();
+
+        MostrarExito(
+            $"Equipo creado correctamente. ID: {equipo.Id}");
     }
-
-    Console.Write("Marca: ");
-    string marca =
-        Console.ReadLine();
-
-    Console.Write("Modelo: ");
-    string modelo =
-        Console.ReadLine();
-
-    Console.Write("Capacidad BTU: ");
-
-    if (!int.TryParse(
-        Console.ReadLine(),
-        out int capacidad))
+    catch (Exception ex)
     {
         MostrarError(
-            "Capacidad BTU inválida.");
+            ObtenerMensajeError(ex));
 
         return;
     }
-
-    Console.Write(
-        "Estado (Operativo / En Reparación): ");
-
-    string estado =
-        Console.ReadLine();
-
-    Console.Write(
-        "Tipo de filtro (Estándar / HEPA): ");
-
-    string tipoFiltro =
-        Console.ReadLine();
-
-    AireAcondicionado equipo =
-        new AireAcondicionado(
-            codigo,
-            marca,
-            modelo,
-            capacidad,
-            estado,
-            tipoFiltro);
-
-    Database.AireAcondicionados.Add(
-        equipo);
-
-    Database.Equipos.Add(
-        equipo);
-
-    Database.GuardarAiresAcondicionados();
-
-    Database.GuardarEquipos();
-
-    MostrarExito(
-        "Equipo creado y guardado correctamente.");
 
     Pausar();
 }
@@ -1736,26 +2230,55 @@ void ListarEquipos()
         "GESTIÓN DE EQUIPOS",
         "LISTAR EQUIPOS");
 
-    if (Database.Equipos.Count == 0)
+    try
     {
-        MostrarAdvertencia(
-            "No existen equipos registrados.");
-    }
-    else
-    {
-        foreach (Equipo equipo
-                 in Database.Equipos)
+        using var context =
+            new SigrecDbContext();
+
+        List<Equipo> equipos =
+            context.Equipos
+                .Include(e => e.Cliente)
+                .OrderBy(e => e.Codigo)
+                .ToList();
+
+        if (equipos.Count == 0)
         {
-            equipo.Imprimir();
-
-            Console.ForegroundColor =
-                ConsoleColor.DarkGray;
-
-            Console.WriteLine(
-                new string('-', 45));
-
-            Console.ResetColor();
+            MostrarAdvertencia(
+                "No existen equipos registrados.");
         }
+        else
+        {
+            foreach (
+                Equipo equipo
+                in equipos)
+            {
+                equipo.Imprimir();
+
+                if (equipo is
+                    AireAcondicionado aire)
+                {
+                    Console.WriteLine(
+                        $"Tipo de filtro: {aire.TipoFiltro}");
+                }
+
+                Console.ForegroundColor =
+                    ConsoleColor.DarkGray;
+
+                Console.WriteLine(
+                    new string(
+                        '-',
+                        50));
+
+                Console.ResetColor();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1772,27 +2295,48 @@ void BuscarEquipo()
         "Ingrese el código del equipo: ");
 
     string codigo =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Equipo equipo =
-        Database.Equipos.Find(
-            x => x.Codigo.Equals(
-                codigo,
-                StringComparison.OrdinalIgnoreCase));
-
-    if (equipo != null)
+    try
     {
-        MostrarExito(
-            "Equipo encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Console.WriteLine();
+        Equipo equipo =
+            context.Equipos
+                .Include(e => e.Cliente)
+                .FirstOrDefault(
+                    e =>
+                    e.Codigo == codigo);
 
-        equipo.Imprimir();
+        if (equipo != null)
+        {
+            MostrarExito(
+                "Equipo encontrado.");
+
+            Console.WriteLine();
+
+            equipo.Imprimir();
+
+            if (equipo is
+                AireAcondicionado aire)
+            {
+                Console.WriteLine(
+                    $"Tipo de filtro: {aire.TipoFiltro}");
+            }
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Equipo no encontrado.");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        MostrarAdvertencia(
-            "Equipo no encontrado.");
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1805,88 +2349,132 @@ void ActualizarEquipo()
         "GESTIÓN DE EQUIPOS",
         "ACTUALIZAR EQUIPO");
 
-    Console.Write("Ingrese el código del equipo: ");
-    string codigo = Console.ReadLine();
+    Console.Write(
+        "Ingrese el código del equipo: ");
 
-    // Buscar en la lista principal
-    Equipo equipo = Database.Equipos.Find(
-        e => e.Codigo.Equals(
-            codigo,
-            StringComparison.OrdinalIgnoreCase));
+    string codigo =
+        Console.ReadLine() ?? "";
 
-    if (equipo == null)
+    try
     {
-        MostrarAdvertencia("Equipo no encontrado.");
-        Pausar();
+        using var context =
+            new SigrecDbContext();
+
+        AireAcondicionado equipo =
+            context.AiresAcondicionados
+                .Include(e => e.Cliente)
+                .FirstOrDefault(
+                    e =>
+                    e.Codigo == codigo);
+
+        if (equipo == null)
+        {
+            MostrarAdvertencia(
+                "Equipo no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine(
+            "\nEquipo encontrado:");
+
+        Console.WriteLine(
+            "-----------------------------------");
+
+        equipo.Imprimir();
+
+        Console.WriteLine(
+            "-----------------------------------");
+
+        Console.Write(
+            "\nNueva marca: ");
+
+        string nuevaMarca =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo modelo: ");
+
+        string nuevoModelo =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nueva capacidad BTU: ");
+
+        string capacidadTexto =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo estado: ");
+
+        string nuevoEstado =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Nuevo tipo de filtro: ");
+
+        string nuevoFiltro =
+            Console.ReadLine() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevaMarca))
+        {
+            equipo.Marca =
+                nuevaMarca;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevoModelo))
+        {
+            equipo.Modelo =
+                nuevoModelo;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            capacidadTexto))
+        {
+            if (!int.TryParse(
+                capacidadTexto,
+                out int nuevaCapacidad))
+            {
+                MostrarAdvertencia(
+                    "Capacidad BTU inválida.");
+
+                Pausar();
+                return;
+            }
+
+            equipo.CapacidadBTU =
+                nuevaCapacidad;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevoEstado))
+        {
+            equipo.Estado =
+                nuevoEstado;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevoFiltro))
+        {
+            equipo.TipoFiltro =
+                nuevoFiltro;
+        }
+
+        context.SaveChanges();
+
+        MostrarExito(
+            "Equipo actualizado correctamente.");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
-
-    Console.WriteLine("\nEquipo encontrado:");
-    Console.WriteLine("-----------------------------------");
-    equipo.Imprimir();
-    Console.WriteLine("-----------------------------------");
-
-    Console.Write("\nNueva marca: ");
-    string nuevaMarca = Console.ReadLine();
-
-    Console.Write("Nuevo modelo: ");
-    string nuevoModelo = Console.ReadLine();
-
-    Console.Write("Nueva capacidad BTU: ");
-    string capacidadTexto = Console.ReadLine();
-
-    Console.Write("Nuevo estado: ");
-    string nuevoEstado = Console.ReadLine();
-
-    // ACTUALIZAR LISTA EQUIPOS
-    if (!string.IsNullOrWhiteSpace(nuevaMarca))
-    {
-        equipo.Marca = nuevaMarca;
-    }
-
-    if (!string.IsNullOrWhiteSpace(nuevoModelo))
-    {
-        equipo.Modelo = nuevoModelo;
-    }
-
-    if (int.TryParse(capacidadTexto, out int nuevaCapacidad))
-    {
-        equipo.CapacidadBTU = nuevaCapacidad;
-    }
-
-    if (!string.IsNullOrWhiteSpace(nuevoEstado))
-    {
-        equipo.Estado = nuevoEstado;
-    }
-
-    // BUSCAR EL MISMO EQUIPO EN AIRE ACONDICIONADO
-    AireAcondicionado aire = Database.AireAcondicionados.Find(
-        a => a.Codigo.Equals(
-            codigo,
-            StringComparison.OrdinalIgnoreCase));
-
-    // SINCRONIZAR LA SEGUNDA LISTA
-    if (aire != null)
-    {
-        aire.Marca = equipo.Marca;
-        aire.Modelo = equipo.Modelo;
-        aire.CapacidadBTU = equipo.CapacidadBTU;
-        aire.Estado = equipo.Estado;
-
-        Console.Write("Nuevo tipo de filtro: ");
-        string nuevoFiltro = Console.ReadLine();
-
-        if (!string.IsNullOrWhiteSpace(nuevoFiltro))
-        {
-            aire.TipoFiltro = nuevoFiltro;
-        }
-    }
-
-    // GUARDAR LOS DOS ARCHIVOS JSON
-    Database.GuardarEquipos();
-    Database.GuardarAiresAcondicionados();
-
-    MostrarExito("Equipo actualizado correctamente.");
 
     Pausar();
 }
@@ -1902,63 +2490,78 @@ void EliminarEquipo()
         "Ingrese el código del equipo: ");
 
     string codigo =
-        Console.ReadLine();
+        Console.ReadLine() ?? "";
 
-    Equipo equipo =
-        Database.Equipos.Find(
-            x => x.Codigo.Equals(
-                codigo,
-                StringComparison.OrdinalIgnoreCase));
-
-    if (equipo == null)
+    try
     {
-        MostrarAdvertencia(
-            "Equipo no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
-        return;
-    }
+        Equipo equipo =
+            context.Equipos
+                .Include(
+                    e =>
+                    e.Mantenimientos)
+                .Include(
+                    e =>
+                    e.Cliente)
+                .FirstOrDefault(
+                    e =>
+                    e.Codigo == codigo);
 
-    Console.WriteLine();
-
-    equipo.Imprimir();
-
-    Console.ForegroundColor =
-        ConsoleColor.Yellow;
-
-    Console.Write(
-        "\n¿Desea eliminar este equipo? S/N: ");
-
-    Console.ResetColor();
-
-    if (Console.ReadLine()?.ToUpper() == "S")
-    {
-        Database.Equipos.Remove(
-            equipo);
-
-        AireAcondicionado aire =
-            Database.AireAcondicionados.Find(
-                x => x.Codigo.Equals(
-                    codigo,
-                    StringComparison.OrdinalIgnoreCase));
-
-        if (aire != null)
+        if (equipo == null)
         {
-            Database.AireAcondicionados.Remove(
-                aire);
+            MostrarAdvertencia(
+                "Equipo no encontrado.");
 
-            Database.GuardarAiresAcondicionados();
+            Pausar();
+            return;
         }
 
-        Database.GuardarEquipos();
+        equipo.Imprimir();
 
-        MostrarExito(
-            "Equipo eliminado correctamente.");
+        if (equipo.Mantenimientos != null &&
+            equipo.Mantenimientos.Count > 0)
+        {
+            MostrarAdvertencia(
+                "No se puede eliminar porque tiene mantenimientos registrados.");
+
+            Pausar();
+            return;
+        }
+
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.Write(
+            "\n¿Desea eliminar este equipo? S/N: ");
+
+        Console.ResetColor();
+
+        if ((Console.ReadLine() ?? "")
+            .Trim()
+            .ToUpper() == "S")
+        {
+            context.Equipos.Remove(
+                equipo);
+
+            context.SaveChanges();
+
+            MostrarExito(
+                "Equipo eliminado correctamente.");
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Operación cancelada.");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        MostrarAdvertencia(
-            "Operación cancelada.");
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -1975,120 +2578,139 @@ void CrearMantenimiento()
         "GESTIÓN DE MANTENIMIENTOS",
         "REGISTRAR MANTENIMIENTO");
 
-    Console.Write(
-        "Ingrese ID del mantenimiento: ");
-
-    if (!int.TryParse(
-        Console.ReadLine(),
-        out int id))
-    {
-        MostrarError(
-            "ID inválido.");
-
-        return;
-    }
-
-    Mantenimiento existente =
-        Database.Mantenimientos.Find(
-            m => m.Id == id);
-
-    if (existente != null)
-    {
-        MostrarAdvertencia(
-            "Ya existe un mantenimiento con ese ID.");
-
-        Pausar();
-        return;
-    }
-
-    Console.Write(
-        "Ingrese código del equipo: ");
-
-    string codigoEquipo =
-        Console.ReadLine();
-
-    Equipo equipo =
-        Database.Equipos.Find(
-            e => e.Codigo.Equals(
-                codigoEquipo,
-                StringComparison.OrdinalIgnoreCase));
-
-    if (equipo == null)
-    {
-        MostrarAdvertencia(
-            "No existe un equipo con ese código.");
-
-        Pausar();
-        return;
-    }
-
-    Console.Write(
-        "Tipo de mantenimiento (Preventivo/Correctivo): ");
-
-    string tipo =
-        Console.ReadLine();
-
-    Console.Write(
-        "Descripción del trabajo: ");
-
-    string descripcion =
-        Console.ReadLine();
-
-    Console.Write(
-        "Costo ($): ");
-
-    if (!decimal.TryParse(
-        Console.ReadLine(),
-        out decimal costo))
-    {
-        MostrarError(
-            "Costo inválido.");
-
-        return;
-    }
-
-    Console.Write(
-        "Estado (Pendiente/Completado): ");
-
-    string estado =
-        Console.ReadLine();
-
-    Console.Write(
-        "Duración en horas: ");
-
-    if (!int.TryParse(
-        Console.ReadLine(),
-        out int duracion))
-    {
-        MostrarError(
-            "Duración inválida.");
-
-        return;
-    }
-
     try
     {
+        using var context =
+            new SigrecDbContext();
+
+        if (!context.Equipos.Any())
+        {
+            MostrarAdvertencia(
+                "No existen equipos registrados.");
+
+            Pausar();
+            return;
+        }
+
+        if (!context.Tecnicos.Any())
+        {
+            MostrarAdvertencia(
+                "No existen técnicos registrados.");
+
+            Pausar();
+            return;
+        }
+
+        Console.Write(
+            "Ingrese código del equipo: ");
+
+        string codigoEquipo =
+            Console.ReadLine() ?? "";
+
+        Equipo equipo =
+            context.Equipos
+                .FirstOrDefault(
+                    e =>
+                    e.Codigo == codigoEquipo);
+
+        if (equipo == null)
+        {
+            MostrarAdvertencia(
+                "No existe un equipo con ese código.");
+
+            Pausar();
+            return;
+        }
+
+        Console.Write(
+            "Ingrese cédula del técnico: ");
+
+        string cedulaTecnico =
+            Console.ReadLine() ?? "";
+
+        Tecnico tecnico =
+            context.Tecnicos
+                .FirstOrDefault(
+                    t =>
+                    t.Cedula == cedulaTecnico);
+
+        if (tecnico == null)
+        {
+            MostrarAdvertencia(
+                "No existe un técnico con esa cédula.");
+
+            Pausar();
+            return;
+        }
+
+        Console.Write(
+            "Tipo de mantenimiento (Preventivo/Correctivo): ");
+
+        string tipo =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Descripción del trabajo: ");
+
+        string descripcion =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Costo ($): ");
+
+        if (!decimal.TryParse(
+            Console.ReadLine(),
+            out decimal costo))
+        {
+            MostrarError(
+                "Costo inválido.");
+
+            return;
+        }
+
+        Console.Write(
+            "Estado (Pendiente/Completado): ");
+
+        string estado =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Duración en horas: ");
+
+        if (!int.TryParse(
+            Console.ReadLine(),
+            out int duracion))
+        {
+            MostrarError(
+                "Duración inválida.");
+
+            return;
+        }
+
         Mantenimiento mantenimiento =
             new Mantenimiento(
-                id,
-                codigoEquipo,
+                0,
+                equipo.Id,
+                tecnico.Id,
                 tipo,
                 descripcion,
                 costo,
                 estado,
                 duracion);
 
-        Database.Mantenimientos.Add(
+        context.Mantenimientos.Add(
             mantenimiento);
 
-        Database.GuardarMantenimientos();
+        context.SaveChanges();
 
         MostrarExito(
-            "Mantenimiento registrado correctamente.");
+            $"Mantenimiento registrado correctamente. ID: {mantenimiento.Id}");
     }
     catch (Exception ex)
     {
-        MostrarError(ex.Message);
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
 
@@ -2102,26 +2724,49 @@ void ListarMantenimientos()
         "GESTIÓN DE MANTENIMIENTOS",
         "LISTAR MANTENIMIENTOS");
 
-    if (Database.Mantenimientos.Count == 0)
+    try
     {
-        MostrarAdvertencia(
-            "No existen mantenimientos registrados.");
-    }
-    else
-    {
-        foreach (Mantenimiento mantenimiento
-                 in Database.Mantenimientos)
+        using var context =
+            new SigrecDbContext();
+
+        List<Mantenimiento> mantenimientos =
+            context.Mantenimientos
+                .Include(m => m.Equipo)
+                .Include(m => m.Tecnico)
+                .OrderBy(m => m.Id)
+                .ToList();
+
+        if (mantenimientos.Count == 0)
         {
-            mantenimiento.Imprimir();
-
-            Console.ForegroundColor =
-                ConsoleColor.DarkGray;
-
-            Console.WriteLine(
-                new string('-', 50));
-
-            Console.ResetColor();
+            MostrarAdvertencia(
+                "No existen mantenimientos registrados.");
         }
+        else
+        {
+            foreach (
+                Mantenimiento mantenimiento
+                in mantenimientos)
+            {
+                mantenimiento.Imprimir();
+
+                Console.ForegroundColor =
+                    ConsoleColor.DarkGray;
+
+                Console.WriteLine(
+                    new string(
+                        '-',
+                        55));
+
+                Console.ResetColor();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -2147,23 +2792,40 @@ void BuscarMantenimiento()
         return;
     }
 
-    Mantenimiento mantenimiento =
-        Database.Mantenimientos.Find(
-            m => m.Id == id);
-
-    if (mantenimiento != null)
+    try
     {
-        MostrarExito(
-            "Mantenimiento encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Console.WriteLine();
+        Mantenimiento mantenimiento =
+            context.Mantenimientos
+                .Include(m => m.Equipo)
+                .Include(m => m.Tecnico)
+                .FirstOrDefault(
+                    m =>
+                    m.Id == id);
 
-        mantenimiento.Imprimir();
+        if (mantenimiento != null)
+        {
+            MostrarExito(
+                "Mantenimiento encontrado.");
+
+            Console.WriteLine();
+
+            mantenimiento.Imprimir();
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Mantenimiento no encontrado.");
+        }
     }
-    else
+    catch (Exception ex)
     {
-        MostrarAdvertencia(
-            "Mantenimiento no encontrado.");
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
     }
 
     Pausar();
@@ -2189,89 +2851,131 @@ void ActualizarMantenimiento()
         return;
     }
 
-    Mantenimiento mantenimiento =
-        Database.Mantenimientos.Find(
-            m => m.Id == id);
-
-    if (mantenimiento == null)
-    {
-        MostrarAdvertencia(
-            "Mantenimiento no encontrado.");
-
-        Pausar();
-        return;
-    }
-
-    Console.WriteLine();
-
-    mantenimiento.Imprimir();
-
-    Console.WriteLine();
-
-    Console.Write(
-        $"Nuevo tipo (Actual: {mantenimiento.TipoMantenimiento}): ");
-
-    string tipo =
-        Console.ReadLine();
-
-    Console.Write(
-        $"Nueva descripción (Actual: {mantenimiento.Descripcion}): ");
-
-    string descripcion =
-        Console.ReadLine();
-
-    Console.Write(
-        $"Nuevo costo (Actual: ${mantenimiento.Costo}): ");
-
-    string costoTexto =
-        Console.ReadLine();
-
-    Console.Write(
-        $"Nuevo estado (Actual: {mantenimiento.Estado}): ");
-
-    string estado =
-        Console.ReadLine();
-
-    Console.Write(
-        $"Nueva duración (Actual: {mantenimiento.DuracionHoras} horas): ");
-
-    string duracionTexto =
-        Console.ReadLine();
-
     try
     {
-        if (!string.IsNullOrWhiteSpace(tipo))
-            mantenimiento.TipoMantenimiento = tipo;
+        using var context =
+            new SigrecDbContext();
 
-        if (!string.IsNullOrWhiteSpace(descripcion))
-            mantenimiento.Descripcion = descripcion;
+        Mantenimiento mantenimiento =
+            context.Mantenimientos
+                .Include(m => m.Equipo)
+                .Include(m => m.Tecnico)
+                .FirstOrDefault(
+                    m =>
+                    m.Id == id);
 
-        if (decimal.TryParse(
-            costoTexto,
-            out decimal costo))
+        if (mantenimiento == null)
         {
-            mantenimiento.Costo = costo;
+            MostrarAdvertencia(
+                "Mantenimiento no encontrado.");
+
+            Pausar();
+            return;
         }
 
-        if (!string.IsNullOrWhiteSpace(estado))
-            mantenimiento.Estado = estado;
+        Console.WriteLine();
 
-        if (int.TryParse(
-            duracionTexto,
-            out int duracion))
+        mantenimiento.Imprimir();
+
+        Console.WriteLine();
+
+        Console.Write(
+            $"Nuevo tipo (Actual: {mantenimiento.TipoMantenimiento}): ");
+
+        string tipo =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            $"Nueva descripción (Actual: {mantenimiento.Descripcion}): ");
+
+        string descripcion =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            $"Nuevo costo (Actual: ${mantenimiento.Costo}): ");
+
+        string costoTexto =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            $"Nuevo estado (Actual: {mantenimiento.Estado}): ");
+
+        string estado =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            $"Nueva duración (Actual: {mantenimiento.DuracionHoras} horas): ");
+
+        string duracionTexto =
+            Console.ReadLine() ?? "";
+
+        if (!string.IsNullOrWhiteSpace(
+            tipo))
         {
+            mantenimiento.TipoMantenimiento =
+                tipo;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            descripcion))
+        {
+            mantenimiento.Descripcion =
+                descripcion;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            costoTexto))
+        {
+            if (!decimal.TryParse(
+                costoTexto,
+                out decimal costo))
+            {
+                MostrarAdvertencia(
+                    "Costo inválido.");
+
+                Pausar();
+                return;
+            }
+
+            mantenimiento.Costo =
+                costo;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            estado))
+        {
+            mantenimiento.Estado =
+                estado;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            duracionTexto))
+        {
+            if (!int.TryParse(
+                duracionTexto,
+                out int duracion))
+            {
+                MostrarAdvertencia(
+                    "Duración inválida.");
+
+                Pausar();
+                return;
+            }
+
             mantenimiento.DuracionHoras =
                 duracion;
         }
 
-        Database.GuardarMantenimientos();
+        context.SaveChanges();
 
         MostrarExito(
             "Mantenimiento actualizado correctamente.");
     }
     catch (Exception ex)
     {
-        MostrarError(ex.Message);
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
 
@@ -2298,46 +3002,84 @@ void EliminarMantenimiento()
         return;
     }
 
-    Mantenimiento mantenimiento =
-        Database.Mantenimientos.Find(
-            m => m.Id == id);
-
-    if (mantenimiento == null)
+    try
     {
-        MostrarAdvertencia(
-            "Mantenimiento no encontrado.");
+        using var context =
+            new SigrecDbContext();
 
-        Pausar();
+        Mantenimiento mantenimiento =
+            context.Mantenimientos
+                .Include(m => m.Equipo)
+                .Include(m => m.Tecnico)
+                .FirstOrDefault(
+                    m =>
+                    m.Id == id);
+
+        if (mantenimiento == null)
+        {
+            MostrarAdvertencia(
+                "Mantenimiento no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+
+        mantenimiento.Imprimir();
+
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.Write(
+            "\n¿Desea eliminar este mantenimiento? S/N: ");
+
+        Console.ResetColor();
+
+        if ((Console.ReadLine() ?? "")
+            .Trim()
+            .ToUpper() == "S")
+        {
+            context.Mantenimientos.Remove(
+                mantenimiento);
+
+            context.SaveChanges();
+
+            MostrarExito(
+                "Mantenimiento eliminado correctamente.");
+        }
+        else
+        {
+            MostrarAdvertencia(
+                "Operación cancelada.");
+        }
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
         return;
     }
 
-    Console.WriteLine();
-
-    mantenimiento.Imprimir();
-
-    Console.ForegroundColor =
-        ConsoleColor.Yellow;
-
-    Console.Write(
-        "\n¿Desea eliminar este mantenimiento? S/N: ");
-
-    Console.ResetColor();
-
-    if (Console.ReadLine()?.ToUpper() == "S")
-    {
-        Database.Mantenimientos.Remove(
-            mantenimiento);
-
-        Database.GuardarMantenimientos();
-
-        MostrarExito(
-            "Mantenimiento eliminado correctamente.");
-    }
-    else
-    {
-        MostrarAdvertencia(
-            "Operación cancelada.");
-    }
-
     Pausar();
+}
+
+
+// ================================================================
+// OBTENER MENSAJE REAL DE ERROR SQL
+// ================================================================
+
+string ObtenerMensajeError(
+    Exception ex)
+{
+    Exception error = ex;
+
+    while (error.InnerException != null)
+    {
+        error =
+            error.InnerException;
+    }
+
+    return error.Message;
 }

@@ -13,19 +13,12 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private decimal costo;
         private string estado;
         private int duracionHoras;
-        private string codigoEquipo;
 
         // PROPIEDADES
         public int Id
         {
             get => id;
             set => id = value;
-        }
-
-        public string CodigoEquipo
-        {
-            get => codigoEquipo;
-            set => codigoEquipo = value;
         }
 
         public string TipoMantenimiento
@@ -76,16 +69,41 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             set => duracionHoras = value;
         }
 
+        // =====================================================
+        // RELACIÓN CON EQUIPO
+        // =====================================================
+
+        public int EquipoId { get; set; }
+
+        public Equipo Equipo { get; set; }
+
+
+        // =====================================================
+        // RELACIÓN CON TÉCNICO
+        // =====================================================
+
+        public int TecnicoId { get; set; }
+
+        public Tecnico Tecnico { get; set; }
+
+
+        // =====================================================
         // CONSTRUCTOR VACÍO
-        // IMPORTANTE PARA CARGAR DESDE JSON
+        // =====================================================
+
         public Mantenimiento()
         {
         }
 
+
+        // =====================================================
         // CONSTRUCTOR CON PARÁMETROS
+        // =====================================================
+
         public Mantenimiento(
             int id,
-            string codigoEquipo,
+            int equipoId,
+            int tecnicoId,
             string tipoMantenimiento,
             string descripcion,
             decimal costo,
@@ -93,7 +111,8 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             int duracionHoras)
         {
             Id = id;
-            CodigoEquipo = codigoEquipo;
+            EquipoId = equipoId;
+            TecnicoId = tecnicoId;
             TipoMantenimiento = tipoMantenimiento;
             Descripcion = descripcion;
             Costo = costo;
@@ -101,16 +120,41 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             DuracionHoras = duracionHoras;
         }
 
+
+        // =====================================================
         // MÉTODO IMPRIMIR
+        // =====================================================
+
         public void Imprimir()
         {
-            Console.WriteLine("Id: " + Id);
-            Console.WriteLine("Código Equipo: " + CodigoEquipo);
-            Console.WriteLine("Tipo: " + TipoMantenimiento);
-            Console.WriteLine("Descripción: " + Descripcion);
-            Console.WriteLine("Costo: $ " + Costo);
-            Console.WriteLine("Duración: " + DuracionHoras + " horas");
-            Console.WriteLine("Estado: " + Estado);
+            Console.WriteLine($"Id: {Id}");
+
+            if (Equipo != null)
+            {
+                Console.WriteLine(
+                    $"Equipo: {Equipo.Codigo} - {Equipo.Marca} {Equipo.Modelo}");
+            }
+
+            if (Tecnico != null)
+            {
+                Console.WriteLine(
+                    $"Técnico: {Tecnico.Nombre}");
+            }
+
+            Console.WriteLine(
+                $"Tipo: {TipoMantenimiento}");
+
+            Console.WriteLine(
+                $"Descripción: {Descripcion}");
+
+            Console.WriteLine(
+                $"Costo: ${Costo}");
+
+            Console.WriteLine(
+                $"Duración: {DuracionHoras} horas");
+
+            Console.WriteLine(
+                $"Estado: {Estado}");
         }
     }
 }

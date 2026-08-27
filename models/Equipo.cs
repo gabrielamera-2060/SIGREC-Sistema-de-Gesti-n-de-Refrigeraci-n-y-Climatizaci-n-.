@@ -7,7 +7,10 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 {
     public abstract class Equipo
     {
+        // =====================================================
         // ATRIBUTOS
+        // =====================================================
+
         private int id;
         private string codigo;
         private string marca;
@@ -15,12 +18,17 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         private int capacidadBTU;
         private string estado;
 
+
+        // =====================================================
         // PROPIEDADES
+        // =====================================================
+
         public int Id
         {
             get => id;
             set => id = value;
         }
+
 
         public string Codigo
         {
@@ -28,19 +36,23 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             set => codigo = value;
         }
 
+
         public string Marca
         {
             get => marca;
+
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new Exception("La marca es obligatoria");
+                    throw new Exception(
+                        "La marca es obligatoria");
                 }
 
                 marca = value;
             }
         }
+
 
         public string Modelo
         {
@@ -48,9 +60,11 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             set => modelo = value;
         }
 
+
         public int CapacidadBTU
         {
             get => capacidadBTU;
+
             set
             {
                 if (value <= 0)
@@ -63,25 +77,59 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             }
         }
 
+
         public string Estado
         {
             get => estado;
             set => estado = value;
         }
 
+
+        // =====================================================
+        // RELACIÓN CON CLIENTE
+        // =====================================================
+
+        // Clave foránea
+        // Indica a qué cliente pertenece el equipo
+        public int ClienteId { get; set; }
+
+
+        // Propiedad de navegación
+        // Permite acceder al cliente desde el equipo
+        public Cliente Cliente { get; set; }
+
+
+        // =====================================================
+        // RELACIÓN CON MANTENIMIENTOS
+        // =====================================================
+
+        // Un equipo puede tener varios mantenimientos
+        public List<Mantenimiento> Mantenimientos { get; set; }
+            = new List<Mantenimiento>();
+
+
+        // =====================================================
         // CONSTRUCTOR VACÍO
+        // =====================================================
+
+        // Necesario para Entity Framework Core
         protected Equipo()
         {
         }
 
+
+        // =====================================================
         // CONSTRUCTOR CON ID
+        // =====================================================
+
         public Equipo(
             int id,
             string codigo,
             string marca,
             string modelo,
             int capacidadBTU,
-            string estado)
+            string estado,
+            int clienteId)
         {
             Id = id;
             Codigo = codigo;
@@ -89,35 +137,61 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             Modelo = modelo;
             CapacidadBTU = capacidadBTU;
             Estado = estado;
+            ClienteId = clienteId;
         }
 
+
+        // =====================================================
         // CONSTRUCTOR SIN ID
+        // =====================================================
+
         protected Equipo(
             string codigo,
             string marca,
             string modelo,
             int capacidadBTU,
-            string estado)
+            string estado,
+            int clienteId)
         {
             Codigo = codigo;
             Marca = marca;
             Modelo = modelo;
             CapacidadBTU = capacidadBTU;
             Estado = estado;
+            ClienteId = clienteId;
         }
 
+
+        // =====================================================
         // MÉTODO ABSTRACTO
+        // =====================================================
+
         public abstract void RealizarMantenimiento();
 
+
+        // =====================================================
         // MÉTODO IMPRIMIR
+        // =====================================================
+
         public virtual void Imprimir()
         {
             Console.WriteLine($"ID: {Id}");
             Console.WriteLine($"Código: {Codigo}");
             Console.WriteLine($"Marca: {Marca}");
             Console.WriteLine($"Modelo: {Modelo}");
-            Console.WriteLine($"Capacidad: {CapacidadBTU} BTU");
+            Console.WriteLine(
+                $"Capacidad: {CapacidadBTU} BTU");
+
             Console.WriteLine($"Estado: {Estado}");
+
+            Console.WriteLine(
+                $"ID Cliente: {ClienteId}");
+
+            if (Cliente != null)
+            {
+                Console.WriteLine(
+                    $"Cliente: {Cliente.Nombre}");
+            }
         }
     }
 }

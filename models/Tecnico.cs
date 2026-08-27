@@ -48,6 +48,12 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             set => experiencia = value;
         }
 
+        // RELACIÓN:
+        // Un técnico puede realizar varios mantenimientos
+        public List<Mantenimiento> Mantenimientos { get; set; }
+            = new List<Mantenimiento>();
+
+        // Constructor vacío para Entity Framework
         public Tecnico()
         {
         }

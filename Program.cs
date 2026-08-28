@@ -82,6 +82,10 @@ do
             break;
 
         case 7:
+            MenuComunicaciones();
+            break;
+
+        case 8:
             MostrarSalida();
             break;
 
@@ -91,7 +95,7 @@ do
             break;
     }
 
-} while (opcionPrincipal != 7);
+} while (opcionPrincipal != 8);
 
 
 // ================================================================
@@ -144,7 +148,12 @@ void MostrarMenuPrincipal()
         ConsoleColor.Magenta);
 
     EscribirFila(
-        "[7]  Salir del Sistema",
+        "[7]  Comunicaciones - Correo y WhatsApp",
+        ancho,
+        ConsoleColor.Yellow);
+
+    EscribirFila(
+        "[8]  Salir del Sistema",
         ancho,
         ConsoleColor.Red);
 
@@ -346,6 +355,191 @@ async Task MenuAsistenteIA()
     }
 
     Pausar();
+}
+
+
+// ================================================================
+// COMUNICACIONES - CORREO Y WHATSAPP
+// ================================================================
+
+void MenuComunicaciones()
+{
+    int opcion;
+
+    do
+    {
+        Console.Clear();
+
+        MostrarEncabezadoModulo(
+            "COMUNICACIONES SIGREC",
+            "Envío de notificaciones por correo y WhatsApp");
+
+        int ancho =
+            ObtenerAnchoCaja(80);
+
+        DibujarBordeSuperior(ancho);
+
+        EscribirFila(
+            "[1] Enviar correo electrónico",
+            ancho,
+            ConsoleColor.Cyan);
+
+        EscribirFila(
+            "[2] Enviar mensaje por WhatsApp",
+            ancho,
+            ConsoleColor.Green);
+
+        EscribirFila(
+            "[3] Volver al Menú Principal",
+            ancho,
+            ConsoleColor.Yellow);
+
+        DibujarBordeInferior(ancho);
+
+        opcion =
+            LeerOpcionCentrada(
+                "Seleccione una opción");
+
+        ComunicacionService comunicacion =
+            new ComunicacionService();
+
+        switch (opcion)
+        {
+            case 1:
+                Console.Clear();
+
+                MostrarEncabezadoModulo(
+                    "CORREO ELECTRÓNICO",
+                    "Preparar correo desde SIGREC");
+
+                Console.ForegroundColor =
+                    ConsoleColor.Cyan;
+
+                Console.Write(
+                    "Correo del destinatario: ");
+
+                Console.ResetColor();
+
+                string correo =
+                    Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(correo))
+                {
+                    MostrarAdvertencia(
+                        "Debe ingresar un correo electrónico.");
+
+                    Pausar();
+                    break;
+                }
+
+                Console.Write(
+                    "Asunto: ");
+
+                string asunto =
+                    Console.ReadLine() ?? "";
+
+                Console.Write(
+                    "Mensaje: ");
+
+                string mensajeCorreo =
+                    Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(mensajeCorreo))
+                {
+                    MostrarAdvertencia(
+                        "Debe ingresar un mensaje.");
+
+                    Pausar();
+                    break;
+                }
+
+                comunicacion.AbrirCorreo(
+                    correo,
+                    asunto,
+                    mensajeCorreo);
+
+                Console.WriteLine();
+
+                Console.ForegroundColor =
+                    ConsoleColor.Green;
+
+                Console.WriteLine(
+                    "Se abrió la aplicación de correo con el mensaje preparado.");
+
+                Console.ResetColor();
+
+                Pausar();
+                break;
+
+            case 2:
+                Console.Clear();
+
+                MostrarEncabezadoModulo(
+                    "WHATSAPP",
+                    "Preparar mensaje desde SIGREC");
+
+                Console.ForegroundColor =
+                    ConsoleColor.Cyan;
+
+                Console.Write(
+                    "Número de WhatsApp con código de país: ");
+
+                Console.ResetColor();
+
+                string telefono =
+                    Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(telefono))
+                {
+                    MostrarAdvertencia(
+                        "Debe ingresar un número de WhatsApp.");
+
+                    Pausar();
+                    break;
+                }
+
+                Console.Write(
+                    "Mensaje: ");
+
+                string mensajeWhatsApp =
+                    Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(mensajeWhatsApp))
+                {
+                    MostrarAdvertencia(
+                        "Debe ingresar un mensaje.");
+
+                    Pausar();
+                    break;
+                }
+
+                comunicacion.AbrirWhatsApp(
+                    telefono,
+                    mensajeWhatsApp);
+
+                Console.WriteLine();
+
+                Console.ForegroundColor =
+                    ConsoleColor.Green;
+
+                Console.WriteLine(
+                    "Se abrió WhatsApp con el mensaje preparado.");
+
+                Console.ResetColor();
+
+                Pausar();
+                break;
+
+            case 3:
+                break;
+
+            default:
+                MostrarError(
+                    "Opción inválida. Intente nuevamente.");
+                break;
+        }
+
+    } while (opcion != 3);
 }
 
 

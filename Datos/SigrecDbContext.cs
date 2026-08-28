@@ -28,6 +28,9 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
         public DbSet<Mantenimiento> Mantenimientos { get; set; }
 
+        // NUEVA TABLA PARA OPENAI
+        public DbSet<ConsultaIA> ConsultasIA { get; set; }
+
 
         // =====================================================
         // CONEXIÓN A SQL SERVER
@@ -38,7 +41,24 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-18VAGMV\\SQLEXPRESS;Database=PROYECTO_SIGREC;User Id=sa;Password=1234;TrustServerCertificate=True;");
+                string? password =
+                    Environment.GetEnvironmentVariable(
+                        "SIGREC_DB_PASSWORD");
+
+                if (string.IsNullOrWhiteSpace(password))
+                {
+                    throw new Exception(
+                        "No se encontró la variable de entorno SIGREC_DB_PASSWORD.");
+                }
+
+                string conexion =
+                    "Server=DESKTOP-18VAGMV\\SQLEXPRESS;" +
+                    "Database=PROYECTO_SIGREC;" +
+                    "User Id=sa;" +
+                    $"Password={password};" +
+                    "TrustServerCertificate=True;";
+
+                optionsBuilder.UseSqlServer(conexion);
             }
         }
 
@@ -196,7 +216,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
             // =================================================
             // HERENCIA DE EQUIPO
-            // TPH = Table Per Hierarchy
+            // TPH = TABLE PER HIERARCHY
             // =================================================
 
             modelBuilder.Entity<Equipo>()
@@ -236,7 +256,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
             // =================================================
             // RELACIÓN CLIENTE - EQUIPO
-            // UN CLIENTE PUEDE TENER MUCHOS EQUIPOS
+            // CLIENTE 1 -> MUCHOS EQUIPOS
             // =================================================
 
             modelBuilder.Entity<Cliente>()
@@ -281,7 +301,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
             // =================================================
             // RELACIÓN EQUIPO - MANTENIMIENTO
-            // UN EQUIPO PUEDE TENER MUCHOS MANTENIMIENTOS
+            // EQUIPO 1 -> MUCHOS MANTENIMIENTOS
             // =================================================
 
             modelBuilder.Entity<Equipo>()
@@ -293,7 +313,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
             // =================================================
             // RELACIÓN TÉCNICO - MANTENIMIENTO
-            // UN TÉCNICO PUEDE REALIZAR MUCHOS MANTENIMIENTOS
+            // TÉCNICO 1 -> MUCHOS MANTENIMIENTOS
             // =================================================
 
             modelBuilder.Entity<Tecnico>()
@@ -301,6 +321,44 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
                 .WithOne(m => m.Tecnico)
                 .HasForeignKey(m => m.TecnicoId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+            // =================================================
+            // CONSULTAS OPENAI
+            // =================================================
+
+            modelBuilder.Entity<ConsultaIA>()
+                .HasKey(c => c.Id);
+
+            modelBuilder.Entity<ConsultaIA>()
+                .Property(c => c.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ConsultaIA>()
+                .Property(c => c.Pregunta)
+                .IsRequired()
+                .HasMaxLength(1000);
+
+            modelBuilder.Entity<ConsultaIA>()
+                .Property(c => c.Respuesta)
+                .IsRequired();
+
+            modelBuilder.Entity<ConsultaIA>()
+                .Property(c => c.Modelo)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            modelBuilder.Entity<ConsultaIA>()
+                .Property(c => c.Fecha)
+                .IsRequired();
+
+
+            // =================================================
+            // ÍNDICE PARA BÚSQUEDA DE PREGUNTAS IA
+            // =================================================
+
+            modelBuilder.Entity<ConsultaIA>()
+                .HasIndex(c => c.Pregunta);
         }
     }
 }

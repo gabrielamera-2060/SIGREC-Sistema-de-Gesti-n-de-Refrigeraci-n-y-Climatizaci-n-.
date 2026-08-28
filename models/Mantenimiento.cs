@@ -6,45 +6,124 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 {
     public class Mantenimiento
     {
+        // =====================================================
         // ATRIBUTOS
+        // =====================================================
+
         private int id;
-        private string tipoMantenimiento;
-        private string descripcion;
+
+        private int equipoId;
+
+        private int tecnicoId;
+
+        private string tipoMantenimiento = string.Empty;
+
+        private string descripcion = string.Empty;
+
         private decimal costo;
-        private string estado;
+
+        private string estado = string.Empty;
+
         private int duracionHoras;
 
+
+        // =====================================================
         // PROPIEDADES
+        // =====================================================
+
         public int Id
         {
             get => id;
             set => id = value;
         }
 
+
+        // =====================================================
+        // CLAVE FORÁNEA EQUIPO
+        // =====================================================
+
+        public int EquipoId
+        {
+            get => equipoId;
+
+            set
+            {
+                if (value < 0)
+                {
+                    throw new Exception(
+                        "El ID del equipo no puede ser negativo.");
+                }
+
+                equipoId = value;
+            }
+        }
+
+
+        // =====================================================
+        // CLAVE FORÁNEA TÉCNICO
+        // =====================================================
+
+        public int TecnicoId
+        {
+            get => tecnicoId;
+
+            set
+            {
+                if (value < 0)
+                {
+                    throw new Exception(
+                        "El ID del técnico no puede ser negativo.");
+                }
+
+                tecnicoId = value;
+            }
+        }
+
+
+        // =====================================================
+        // TIPO DE MANTENIMIENTO
+        // IMPORTANTE:
+        // Program.cs utiliza TipoMantenimiento
+        // =====================================================
+
         public string TipoMantenimiento
         {
             get => tipoMantenimiento;
-            set => tipoMantenimiento = value;
-        }
 
-        public string Descripcion
-        {
-            get => descripcion;
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new Exception(
-                        "La descripción es obligatoria.");
+                        "El tipo de mantenimiento es obligatorio.");
                 }
 
-                descripcion = value;
+                tipoMantenimiento = value;
             }
         }
+
+
+        public string Descripcion
+        {
+            get => descripcion;
+
+            set
+            {
+                descripcion =
+                    value ?? string.Empty;
+            }
+        }
+
+
+        // =====================================================
+        // COSTO
+        // SQL Server: decimal(18,2)
+        // =====================================================
 
         public decimal Costo
         {
             get => costo;
+
             set
             {
                 if (value < 0)
@@ -57,38 +136,58 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             }
         }
 
+
         public string Estado
         {
             get => estado;
-            set => estado = value;
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new Exception(
+                        "El estado del mantenimiento es obligatorio.");
+                }
+
+                estado = value;
+            }
         }
+
 
         public int DuracionHoras
         {
             get => duracionHoras;
-            set => duracionHoras = value;
+
+            set
+            {
+                if (value < 0)
+                {
+                    throw new Exception(
+                        "La duración no puede ser negativa.");
+                }
+
+                duracionHoras = value;
+            }
         }
+
 
         // =====================================================
         // RELACIÓN CON EQUIPO
         // =====================================================
 
-        public int EquipoId { get; set; }
-
-        public Equipo Equipo { get; set; }
+        public Equipo? Equipo { get; set; }
 
 
         // =====================================================
         // RELACIÓN CON TÉCNICO
         // =====================================================
 
-        public int TecnicoId { get; set; }
-
-        public Tecnico Tecnico { get; set; }
+        public Tecnico? Tecnico { get; set; }
 
 
         // =====================================================
         // CONSTRUCTOR VACÍO
+        // NECESARIO PARA ENTITY FRAMEWORK
         // =====================================================
 
         public Mantenimiento()
@@ -98,6 +197,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         // =====================================================
         // CONSTRUCTOR CON PARÁMETROS
+        // Compatible con Program.cs
         // =====================================================
 
         public Mantenimiento(
@@ -111,13 +211,85 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             int duracionHoras)
         {
             Id = id;
+
             EquipoId = equipoId;
+
             TecnicoId = tecnicoId;
-            TipoMantenimiento = tipoMantenimiento;
-            Descripcion = descripcion;
-            Costo = costo;
-            Estado = estado;
-            DuracionHoras = duracionHoras;
+
+            TipoMantenimiento =
+                tipoMantenimiento;
+
+            Descripcion =
+                descripcion;
+
+            Costo =
+                costo;
+
+            Estado =
+                estado;
+
+            DuracionHoras =
+                duracionHoras;
+        }
+
+
+        // =====================================================
+        // MOSTRAR MANTENIMIENTO
+        // =====================================================
+
+        public void MostrarMantenimiento()
+        {
+            Console.WriteLine(
+                "ID: " + Id);
+
+            Console.WriteLine(
+                "Tipo de mantenimiento: " +
+                TipoMantenimiento);
+
+            Console.WriteLine(
+                "Descripción: " +
+                Descripcion);
+
+            Console.WriteLine(
+                "Costo: $" +
+                Costo.ToString("0.00"));
+
+            Console.WriteLine(
+                "Estado: " +
+                Estado);
+
+            Console.WriteLine(
+                "Duración: " +
+                DuracionHoras +
+                " horas");
+
+
+            if (Equipo != null)
+            {
+                Console.WriteLine(
+                    "Equipo: " +
+                    Equipo.Codigo);
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Equipo ID: " +
+                    EquipoId);
+            }
+
+
+            if (Tecnico != null)
+            {
+                Console.WriteLine(
+                    "Técnico: " +
+                    Tecnico.Nombre);
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Técnico ID: " +
+                    TecnicoId);
+            }
         }
 
 
@@ -127,34 +299,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
 
         public void Imprimir()
         {
-            Console.WriteLine($"Id: {Id}");
-
-            if (Equipo != null)
-            {
-                Console.WriteLine(
-                    $"Equipo: {Equipo.Codigo} - {Equipo.Marca} {Equipo.Modelo}");
-            }
-
-            if (Tecnico != null)
-            {
-                Console.WriteLine(
-                    $"Técnico: {Tecnico.Nombre}");
-            }
-
-            Console.WriteLine(
-                $"Tipo: {TipoMantenimiento}");
-
-            Console.WriteLine(
-                $"Descripción: {Descripcion}");
-
-            Console.WriteLine(
-                $"Costo: ${Costo}");
-
-            Console.WriteLine(
-                $"Duración: {DuracionHoras} horas");
-
-            Console.WriteLine(
-                $"Estado: {Estado}");
+            MostrarMantenimiento();
         }
     }
 }

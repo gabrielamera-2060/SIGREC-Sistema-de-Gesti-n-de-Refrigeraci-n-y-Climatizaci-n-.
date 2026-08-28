@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos;
 
@@ -11,9 +12,11 @@ using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos;
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migrations
 {
     [DbContext(typeof(SigrecDbContext))]
-    partial class SigrecDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260828175525_AgregarCorreoCliente")]
+    partial class AgregarCorreoCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,18 +39,18 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Correo")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
@@ -89,6 +92,8 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Pregunta");
+
                     b.ToTable("ConsultasIA");
                 });
 
@@ -113,8 +118,8 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Marca")
                         .IsRequired()
@@ -154,12 +159,13 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Costo")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("DuracionHoras")
                         .HasColumnType("int");
@@ -169,15 +175,16 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
 
                     b.Property<string>("Estado")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TecnicoId")
                         .HasColumnType("int");
 
                     b.Property<string>("TipoMantenimiento")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -206,15 +213,17 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Precio")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("TipoRepuesto")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -236,16 +245,16 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
 
                     b.Property<string>("Especialidad")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Experiencia")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
@@ -266,7 +275,8 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
 
                     b.Property<string>("TipoFiltro")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasDiscriminator().HasValue("AireAcondicionado");
                 });

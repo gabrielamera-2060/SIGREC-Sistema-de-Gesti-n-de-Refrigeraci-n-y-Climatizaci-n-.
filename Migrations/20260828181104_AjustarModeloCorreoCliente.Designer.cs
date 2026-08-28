@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos;
 
@@ -11,9 +12,11 @@ using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos;
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migrations
 {
     [DbContext(typeof(SigrecDbContext))]
-    partial class SigrecDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260828181104_AjustarModeloCorreoCliente")]
+    partial class AjustarModeloCorreoCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +39,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Migra
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Correo")
+                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 

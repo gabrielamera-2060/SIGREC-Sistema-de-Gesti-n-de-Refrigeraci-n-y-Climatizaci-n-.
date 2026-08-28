@@ -82,7 +82,7 @@ do
             break;
 
         case 7:
-            MenuComunicaciones();
+            await MenuComunicaciones();
             break;
 
         case 8:
@@ -359,10 +359,10 @@ async Task MenuAsistenteIA()
 
 
 // ================================================================
-// COMUNICACIONES - CORREO Y WHATSAPP
+// COMUNICACIONES - CORREO DIRECTO Y WHATSAPP
 // ================================================================
 
-void MenuComunicaciones()
+async Task MenuComunicaciones()
 {
     int opcion;
 
@@ -372,7 +372,7 @@ void MenuComunicaciones()
 
         MostrarEncabezadoModulo(
             "COMUNICACIONES SIGREC",
-            "Envío de notificaciones por correo y WhatsApp");
+            "Notificaciones conectadas con SQL Server");
 
         int ancho =
             ObtenerAnchoCaja(80);
@@ -380,12 +380,12 @@ void MenuComunicaciones()
         DibujarBordeSuperior(ancho);
 
         EscribirFila(
-            "[1] Enviar correo electrónico",
+            "[1] Enviar correo directo a cliente",
             ancho,
             ConsoleColor.Cyan);
 
         EscribirFila(
-            "[2] Enviar mensaje por WhatsApp",
+            "[2] Preparar mensaje de WhatsApp a cliente",
             ancho,
             ConsoleColor.Green);
 
@@ -400,134 +400,14 @@ void MenuComunicaciones()
             LeerOpcionCentrada(
                 "Seleccione una opción");
 
-        ComunicacionService comunicacion =
-            new ComunicacionService();
-
         switch (opcion)
         {
             case 1:
-                Console.Clear();
-
-                MostrarEncabezadoModulo(
-                    "CORREO ELECTRÓNICO",
-                    "Preparar correo desde SIGREC");
-
-                Console.ForegroundColor =
-                    ConsoleColor.Cyan;
-
-                Console.Write(
-                    "Correo del destinatario: ");
-
-                Console.ResetColor();
-
-                string correo =
-                    Console.ReadLine() ?? "";
-
-                if (string.IsNullOrWhiteSpace(correo))
-                {
-                    MostrarAdvertencia(
-                        "Debe ingresar un correo electrónico.");
-
-                    Pausar();
-                    break;
-                }
-
-                Console.Write(
-                    "Asunto: ");
-
-                string asunto =
-                    Console.ReadLine() ?? "";
-
-                Console.Write(
-                    "Mensaje: ");
-
-                string mensajeCorreo =
-                    Console.ReadLine() ?? "";
-
-                if (string.IsNullOrWhiteSpace(mensajeCorreo))
-                {
-                    MostrarAdvertencia(
-                        "Debe ingresar un mensaje.");
-
-                    Pausar();
-                    break;
-                }
-
-                comunicacion.AbrirCorreo(
-                    correo,
-                    asunto,
-                    mensajeCorreo);
-
-                Console.WriteLine();
-
-                Console.ForegroundColor =
-                    ConsoleColor.Green;
-
-                Console.WriteLine(
-                    "Se abrió la aplicación de correo con el mensaje preparado.");
-
-                Console.ResetColor();
-
-                Pausar();
+                await EnviarCorreoCliente();
                 break;
 
             case 2:
-                Console.Clear();
-
-                MostrarEncabezadoModulo(
-                    "WHATSAPP",
-                    "Preparar mensaje desde SIGREC");
-
-                Console.ForegroundColor =
-                    ConsoleColor.Cyan;
-
-                Console.Write(
-                    "Número de WhatsApp con código de país: ");
-
-                Console.ResetColor();
-
-                string telefono =
-                    Console.ReadLine() ?? "";
-
-                if (string.IsNullOrWhiteSpace(telefono))
-                {
-                    MostrarAdvertencia(
-                        "Debe ingresar un número de WhatsApp.");
-
-                    Pausar();
-                    break;
-                }
-
-                Console.Write(
-                    "Mensaje: ");
-
-                string mensajeWhatsApp =
-                    Console.ReadLine() ?? "";
-
-                if (string.IsNullOrWhiteSpace(mensajeWhatsApp))
-                {
-                    MostrarAdvertencia(
-                        "Debe ingresar un mensaje.");
-
-                    Pausar();
-                    break;
-                }
-
-                comunicacion.AbrirWhatsApp(
-                    telefono,
-                    mensajeWhatsApp);
-
-                Console.WriteLine();
-
-                Console.ForegroundColor =
-                    ConsoleColor.Green;
-
-                Console.WriteLine(
-                    "Se abrió WhatsApp con el mensaje preparado.");
-
-                Console.ResetColor();
-
-                Pausar();
+                EnviarWhatsAppCliente();
                 break;
 
             case 3:
@@ -540,6 +420,237 @@ void MenuComunicaciones()
         }
 
     } while (opcion != 3);
+}
+
+
+async Task EnviarCorreoCliente()
+{
+    Console.Clear();
+
+    MostrarEncabezadoModulo(
+        "CORREO ELECTRÓNICO",
+        "Envío directo desde SIGREC");
+
+    Console.Write(
+        "Ingrese la cédula del cliente: ");
+
+    string cedula =
+        Console.ReadLine() ?? "";
+
+    try
+    {
+        using var context =
+            new SigrecDbContext();
+
+        Cliente? cliente =
+            await context.Clientes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    c => c.Cedula == cedula);
+
+        if (cliente == null)
+        {
+            MostrarAdvertencia(
+                "Cliente no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(
+            cliente.Correo))
+        {
+            MostrarAdvertencia(
+                "El cliente no tiene correo registrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+        Console.ForegroundColor =
+            ConsoleColor.Green;
+
+        Console.WriteLine(
+            $"Cliente: {cliente.Nombre}");
+
+        Console.WriteLine(
+            $"Correo: {cliente.Correo}");
+
+        Console.ResetColor();
+
+        Console.WriteLine();
+
+        Console.Write(
+            "Asunto: ");
+
+        string asunto =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
+            "Mensaje: ");
+
+        string mensaje =
+            Console.ReadLine() ?? "";
+
+        if (string.IsNullOrWhiteSpace(asunto) ||
+            string.IsNullOrWhiteSpace(mensaje))
+        {
+            MostrarAdvertencia(
+                "El asunto y el mensaje son obligatorios.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.WriteLine(
+            "Enviando correo...");
+
+        Console.ResetColor();
+
+        CorreoService correoService =
+            new CorreoService();
+
+        await correoService.EnviarAsync(
+            cliente.Correo,
+            asunto,
+            mensaje);
+
+        MostrarExito(
+            "Correo enviado correctamente desde SIGREC.");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            "No fue posible enviar el correo: " +
+            ObtenerMensajeError(ex));
+
+        return;
+    }
+
+    Pausar();
+}
+
+
+void EnviarWhatsAppCliente()
+{
+    Console.Clear();
+
+    MostrarEncabezadoModulo(
+        "WHATSAPP",
+        "Mensaje para cliente registrado en SIGREC");
+
+    Console.Write(
+        "Ingrese la cédula del cliente: ");
+
+    string cedula =
+        Console.ReadLine() ?? "";
+
+    try
+    {
+        using var context =
+            new SigrecDbContext();
+
+        Cliente? cliente =
+            context.Clientes
+                .AsNoTracking()
+                .FirstOrDefault(
+                    c => c.Cedula == cedula);
+
+        if (cliente == null)
+        {
+            MostrarAdvertencia(
+                "Cliente no encontrado.");
+
+            Pausar();
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(
+            cliente.Telefono))
+        {
+            MostrarAdvertencia(
+                "El cliente no tiene teléfono registrado.");
+
+            Pausar();
+            return;
+        }
+
+        Console.WriteLine();
+
+        Console.WriteLine(
+            $"Cliente: {cliente.Nombre}");
+
+        Console.WriteLine(
+            $"Teléfono: {cliente.Telefono}");
+
+        Console.WriteLine();
+
+        Console.Write(
+            "Mensaje: ");
+
+        string mensaje =
+            Console.ReadLine() ?? "";
+
+        if (string.IsNullOrWhiteSpace(mensaje))
+        {
+            MostrarAdvertencia(
+                "Debe ingresar un mensaje.");
+
+            Pausar();
+            return;
+        }
+
+        string telefono =
+            PrepararTelefonoEcuador(
+                cliente.Telefono);
+
+        ComunicacionService comunicacion =
+            new ComunicacionService();
+
+        comunicacion.AbrirWhatsApp(
+            telefono,
+            mensaje);
+
+        MostrarExito(
+            "WhatsApp abierto con el mensaje preparado.");
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            ObtenerMensajeError(ex));
+
+        return;
+    }
+
+    Pausar();
+}
+
+
+string PrepararTelefonoEcuador(
+    string telefono)
+{
+    string numero =
+        telefono
+            .Replace("+", "")
+            .Replace(" ", "")
+            .Replace("-", "")
+            .Replace("(", "")
+            .Replace(")", "");
+
+    if (numero.StartsWith("0") &&
+        numero.Length == 10)
+    {
+        numero =
+            "593" +
+            numero.Substring(1);
+    }
+
+    return numero;
 }
 
 
@@ -1206,6 +1317,17 @@ void CrearCliente()
         Console.ReadLine() ?? "";
 
     Console.Write(
+        "Ingrese correo electrónico: ");
+
+    string? correo =
+        Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(correo))
+    {
+        correo = null;
+    }
+
+    Console.Write(
         "Ingrese dirección: ");
 
     string direccion =
@@ -1238,6 +1360,8 @@ void CrearCliente()
                 telefono,
                 direccion,
                 0);
+
+        cliente.Correo = correo;
 
         context.Clientes.Add(
             cliente);
@@ -1413,6 +1537,12 @@ void ActualizarCliente()
             Console.ReadLine() ?? "";
 
         Console.Write(
+            "Nuevo correo (Enter para mantener): ");
+
+        string nuevoCorreo =
+            Console.ReadLine() ?? "";
+
+        Console.Write(
             "Nueva dirección (Enter para mantener): ");
 
         string nuevaDireccion =
@@ -1430,6 +1560,13 @@ void ActualizarCliente()
         {
             cliente.Telefono =
                 nuevoTelefono;
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+            nuevoCorreo))
+        {
+            cliente.Correo =
+                nuevoCorreo;
         }
 
         if (!string.IsNullOrWhiteSpace(

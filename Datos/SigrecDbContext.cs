@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 {
@@ -28,12 +26,26 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
         public DbSet<Mantenimiento> Mantenimientos { get; set; }
 
-        // NUEVA TABLA PARA OPENAI
         public DbSet<ConsultaIA> ConsultasIA { get; set; }
 
 
         // =====================================================
-        // CONEXIÓN A SQL SERVER
+        // CONSTRUCTORES
+        // =====================================================
+
+        public SigrecDbContext()
+        {
+        }
+
+        public SigrecDbContext(
+            DbContextOptions<SigrecDbContext> options)
+            : base(options)
+        {
+        }
+
+
+        // =====================================================
+        // CONEXIÓN SQL SERVER
         // =====================================================
 
         protected override void OnConfiguring(
@@ -47,20 +59,33 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
                 if (string.IsNullOrWhiteSpace(password))
                 {
+                    password =
+                        Environment.GetEnvironmentVariable(
+                            "SIGREC_DB_PASSWORD",
+                            EnvironmentVariableTarget.User);
+                }
+
+                if (string.IsNullOrWhiteSpace(password))
+                {
                     throw new Exception(
                         "No se encontró la variable de entorno SIGREC_DB_PASSWORD.");
                 }
 
                 string conexion =
-                    "Server=DESKTOP-18VAGMV\\SQLEXPRESS;Database=PROYECTO_SIGREC;User Id=sa;Password=1234;TrustServerCertificate=True;";
+                    "Server=DESKTOP-18VAGMV\\SQLEXPRESS;" +
+                    "Database=PROYECTO_SIGREC;" +
+                    "User Id=sa;" +
+                    $"Password={password};" +
+                    "TrustServerCertificate=True;";
 
-                optionsBuilder.UseSqlServer(conexion);
+                optionsBuilder.UseSqlServer(
+                    conexion);
             }
         }
 
 
         // =====================================================
-        // CONFIGURACIÓN DEL MODELO
+        // CONFIGURACIÓN DE ENTIDADES
         // =====================================================
 
         protected override void OnModelCreating(
@@ -88,16 +113,21 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
             modelBuilder.Entity<Cliente>()
                 .Property(c => c.Nombre)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(150);
 
             modelBuilder.Entity<Cliente>()
                 .Property(c => c.Telefono)
                 .IsRequired()
                 .HasMaxLength(20);
 
+            // NUEVO CAMPO CORREO
+            modelBuilder.Entity<Cliente>()
+                .Property(c => c.Correo)
+                .HasMaxLength(150);
+
             modelBuilder.Entity<Cliente>()
                 .Property(c => c.Direccion)
-                .HasMaxLength(200);
+                .HasMaxLength(250);
 
             modelBuilder.Entity<Cliente>()
                 .HasIndex(c => c.Cedula)
@@ -118,7 +148,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
             modelBuilder.Entity<Tecnico>()
                 .Property(t => t.Nombre)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(150);
 
             modelBuilder.Entity<Tecnico>()
                 .Property(t => t.Cedula)
@@ -127,14 +157,12 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
             modelBuilder.Entity<Tecnico>()
                 .Property(t => t.Telefono)
+                .IsRequired()
                 .HasMaxLength(20);
 
             modelBuilder.Entity<Tecnico>()
                 .Property(t => t.Especialidad)
-                .HasMaxLength(100);
-
-            modelBuilder.Entity<Tecnico>()
-                .Property(t => t.Experiencia);
+                .HasMaxLength(150);
 
             modelBuilder.Entity<Tecnico>()
                 .HasIndex(t => t.Cedula)
@@ -155,22 +183,17 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
             modelBuilder.Entity<Repuesto>()
                 .Property(r => r.Nombre)
                 .IsRequired()
-                .HasMaxLength(100);
+                .HasMaxLength(150);
 
             modelBuilder.Entity<Repuesto>()
                 .Property(r => r.Marca)
                 .HasMaxLength(100);
 
-            modelBuilder.Entity<Repuesto>()
-                .Property(r => r.TipoRepuesto)
-                .HasMaxLength(100);
-
-            modelBuilder.Entity<Repuesto>()
-                .Property(r => r.Cantidad);
-
-            modelBuilder.Entity<Repuesto>()
-                .Property(r => r.Precio)
-                .HasPrecision(10, 2);
+            // SE ELIMINÓ:
+            // .Property(r => r.Tipo)
+            //
+            // porque tu clase Repuesto actualmente
+            // no contiene una propiedad llamada Tipo.
 
 
             // =================================================
@@ -199,11 +222,8 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
                 .HasMaxLength(100);
 
             modelBuilder.Entity<Equipo>()
-                .Property(e => e.CapacidadBTU);
-
-            modelBuilder.Entity<Equipo>()
                 .Property(e => e.Estado)
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             modelBuilder.Entity<Equipo>()
                 .HasIndex(e => e.Codigo)
@@ -211,8 +231,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
 
             // =================================================
-            // HERENCIA DE EQUIPO
-            // TPH = TABLE PER HIERARCHY
+            // HERENCIA DE EQUIPOS - TPH
             // =================================================
 
             modelBuilder.Entity<Equipo>()
@@ -226,38 +245,12 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
 
 
             // =================================================
-            // AIRE ACONDICIONADO
-            // =================================================
-
-            modelBuilder.Entity<AireAcondicionado>()
-                .Property(a => a.TipoFiltro)
-                .HasMaxLength(100);
-
-
-            // =================================================
-            // CÁMARA FRIGORÍFICA
-            // =================================================
-
-            modelBuilder.Entity<CamaraFrigorifica>()
-                .Property(c => c.TemperaturaMinima);
-
-
-            // =================================================
-            // REFRIGERADOR
-            // =================================================
-
-            modelBuilder.Entity<Refrigerador>()
-                .Property(r => r.NumeroPuertas);
-
-
-            // =================================================
             // RELACIÓN CLIENTE - EQUIPO
-            // CLIENTE 1 -> MUCHOS EQUIPOS
             // =================================================
 
-            modelBuilder.Entity<Cliente>()
-                .HasMany(c => c.Equipos)
-                .WithOne(e => e.Cliente)
+            modelBuilder.Entity<Equipo>()
+                .HasOne(e => e.Cliente)
+                .WithMany(c => c.Equipos)
                 .HasForeignKey(e => e.ClienteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -274,53 +267,44 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Mantenimiento>()
-                .Property(m => m.TipoMantenimiento)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            modelBuilder.Entity<Mantenimiento>()
                 .Property(m => m.Descripcion)
-                .IsRequired()
-                .HasMaxLength(500);
-
-            modelBuilder.Entity<Mantenimiento>()
-                .Property(m => m.Costo)
-                .HasPrecision(10, 2);
+                .HasMaxLength(1000);
 
             modelBuilder.Entity<Mantenimiento>()
                 .Property(m => m.Estado)
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
-            modelBuilder.Entity<Mantenimiento>()
-                .Property(m => m.DuracionHoras);
+            // SE ELIMINÓ:
+            // .Property(m => m.Tipo)
+            //
+            // porque tu clase Mantenimiento actualmente
+            // no contiene una propiedad llamada Tipo.
 
 
             // =================================================
             // RELACIÓN EQUIPO - MANTENIMIENTO
-            // EQUIPO 1 -> MUCHOS MANTENIMIENTOS
             // =================================================
 
-            modelBuilder.Entity<Equipo>()
-                .HasMany(e => e.Mantenimientos)
-                .WithOne(m => m.Equipo)
+            modelBuilder.Entity<Mantenimiento>()
+                .HasOne(m => m.Equipo)
+                .WithMany(e => e.Mantenimientos)
                 .HasForeignKey(m => m.EquipoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
 
             // =================================================
             // RELACIÓN TÉCNICO - MANTENIMIENTO
-            // TÉCNICO 1 -> MUCHOS MANTENIMIENTOS
             // =================================================
 
-            modelBuilder.Entity<Tecnico>()
-                .HasMany(t => t.Mantenimientos)
-                .WithOne(m => m.Tecnico)
+            modelBuilder.Entity<Mantenimiento>()
+                .HasOne(m => m.Tecnico)
+                .WithMany(t => t.Mantenimientos)
                 .HasForeignKey(m => m.TecnicoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
 
             // =================================================
-            // CONSULTAS OPENAI
+            // CONSULTA IA
             // =================================================
 
             modelBuilder.Entity<ConsultaIA>()
@@ -347,14 +331,6 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
             modelBuilder.Entity<ConsultaIA>()
                 .Property(c => c.Fecha)
                 .IsRequired();
-
-
-            // =================================================
-            // ÍNDICE PARA BÚSQUEDA DE PREGUNTAS IA
-            // =================================================
-
-            modelBuilder.Entity<ConsultaIA>()
-                .HasIndex(c => c.Pregunta);
         }
     }
 }

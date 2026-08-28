@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos;
 using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.models;
+using SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Services;
 
 
 // ================================================================
@@ -77,6 +78,10 @@ do
             break;
 
         case 6:
+            await MenuAsistenteIA();
+            break;
+
+        case 7:
             MostrarSalida();
             break;
 
@@ -86,7 +91,7 @@ do
             break;
     }
 
-} while (opcionPrincipal != 6);
+} while (opcionPrincipal != 7);
 
 
 // ================================================================
@@ -134,7 +139,12 @@ void MostrarMenuPrincipal()
         ConsoleColor.Cyan);
 
     EscribirFila(
-        "[6]  Salir del Sistema",
+        "[6]  Asistente Inteligente SIGREC",
+        ancho,
+        ConsoleColor.Magenta);
+
+    EscribirFila(
+        "[7]  Salir del Sistema",
         ancho,
         ConsoleColor.Red);
 
@@ -231,6 +241,111 @@ void MenuMantenimientos()
         ActualizarMantenimiento,
         EliminarMantenimiento
     );
+}
+
+
+// ================================================================
+// ASISTENTE INTELIGENTE SIGREC
+// ================================================================
+
+async Task MenuAsistenteIA()
+{
+    Console.Clear();
+
+    MostrarEncabezadoModulo(
+        "ASISTENTE INTELIGENTE SIGREC",
+        "Asistente técnico con Inteligencia Artificial");
+
+    int ancho =
+        ObtenerAnchoCaja(80);
+
+    DibujarBordeSuperior(ancho);
+
+    EscribirFilaCentrada(
+        "ASISTENTE IA",
+        ancho,
+        ConsoleColor.Magenta);
+
+    DibujarSeparador(ancho);
+
+    EscribirFilaCentrada(
+        "Realice una consulta técnica",
+        ancho,
+        ConsoleColor.White);
+
+    DibujarBordeInferior(ancho);
+
+    Console.WriteLine();
+
+    Console.ForegroundColor =
+        ConsoleColor.Cyan;
+
+    Console.Write("Ingrese su pregunta: ");
+
+    Console.ResetColor();
+
+    string pregunta =
+        Console.ReadLine() ?? "";
+
+    if (string.IsNullOrWhiteSpace(
+        pregunta))
+    {
+        MostrarAdvertencia(
+            "Debe ingresar una pregunta.");
+
+        Pausar();
+        return;
+    }
+
+    try
+    {
+        Console.WriteLine();
+
+        Console.ForegroundColor =
+            ConsoleColor.Yellow;
+
+        Console.WriteLine(
+            "Consultando al Asistente SIGREC...");
+
+        Console.ResetColor();
+
+        OpenAIService asistente =
+            new OpenAIService();
+
+        string respuesta =
+            await asistente.PreguntarAsync(
+                pregunta);
+
+        Console.WriteLine();
+
+        DibujarBordeSuperior(ancho);
+
+        EscribirFilaCentrada(
+            "RESPUESTA DEL ASISTENTE",
+            ancho,
+            ConsoleColor.Green);
+
+        DibujarBordeInferior(ancho);
+
+        Console.WriteLine();
+
+        Console.ForegroundColor =
+            ConsoleColor.White;
+
+        Console.WriteLine(respuesta);
+
+        Console.ResetColor();
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            "Error con el Asistente IA: " +
+            ObtenerMensajeError(ex));
+
+        return;
+    }
+
+    Pausar();
 }
 
 

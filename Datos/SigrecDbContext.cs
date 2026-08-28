@@ -52,11 +52,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
                 }
 
                 string conexion =
-                    "Server=DESKTOP-18VAGMV\\SQLEXPRESS;" +
-                    "Database=PROYECTO_SIGREC;" +
-                    "User Id=sa;" +
-                    $"Password={password};" +
-                    "TrustServerCertificate=True;";
+                    "Server=DESKTOP-18VAGMV\\SQLEXPRESS;Database=PROYECTO_SIGREC;User Id=sa;Password=1234;TrustServerCertificate=True;";
 
                 optionsBuilder.UseSqlServer(conexion);
             }

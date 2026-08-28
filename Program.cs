@@ -372,169 +372,190 @@ async Task MenuComunicaciones()
 
         MostrarEncabezadoModulo(
             "COMUNICACIONES SIGREC",
-            "Notificaciones conectadas con SQL Server");
+            "Registro de correos y WhatsApp conectado con SQL Server");
 
-        int ancho =
-            ObtenerAnchoCaja(80);
+        int ancho = ObtenerAnchoCaja(80);
 
         DibujarBordeSuperior(ancho);
 
         EscribirFila(
-            "[1] Enviar correo directo a cliente",
+            "[1] Registrar correo de cliente (modo simulado)",
             ancho,
             ConsoleColor.Cyan);
 
         EscribirFila(
-            "[2] Preparar mensaje de WhatsApp a cliente",
+            "[2] Consultar historial de correos",
+            ancho,
+            ConsoleColor.Magenta);
+
+        EscribirFila(
+            "[3] Preparar mensaje de WhatsApp a cliente",
             ancho,
             ConsoleColor.Green);
 
         EscribirFila(
-            "[3] Volver al Menú Principal",
+            "[4] Volver al Menú Principal",
             ancho,
             ConsoleColor.Yellow);
 
         DibujarBordeInferior(ancho);
 
-        opcion =
-            LeerOpcionCentrada(
-                "Seleccione una opción");
+        opcion = LeerOpcionCentrada("Seleccione una opción");
 
         switch (opcion)
         {
             case 1:
-                await EnviarCorreoCliente();
+                await RegistrarCorreoCliente();
                 break;
 
             case 2:
-                EnviarWhatsAppCliente();
+                await ListarHistorialCorreos();
                 break;
 
             case 3:
+                EnviarWhatsAppCliente();
+                break;
+
+            case 4:
                 break;
 
             default:
-                MostrarError(
-                    "Opción inválida. Intente nuevamente.");
+                MostrarError("Opción inválida. Intente nuevamente.");
                 break;
         }
 
-    } while (opcion != 3);
+    } while (opcion != 4);
 }
 
 
-async Task EnviarCorreoCliente()
+async Task RegistrarCorreoCliente()
 {
     Console.Clear();
 
     MostrarEncabezadoModulo(
         "CORREO ELECTRÓNICO",
-        "Envío directo desde SIGREC");
+        "Registro de comunicación en modo simulado");
 
-    Console.Write(
-        "Ingrese la cédula del cliente: ");
-
-    string cedula =
-        Console.ReadLine() ?? "";
+    Console.Write("Ingrese la cédula del cliente: ");
+    string cedula = Console.ReadLine() ?? "";
 
     try
     {
-        using var context =
-            new SigrecDbContext();
+        using var context = new SigrecDbContext();
 
-        Cliente? cliente =
-            await context.Clientes
-                .AsNoTracking()
-                .FirstOrDefaultAsync(
-                    c => c.Cedula == cedula);
+        Cliente? cliente = await context.Clientes
+            .FirstOrDefaultAsync(c => c.Cedula == cedula);
 
         if (cliente == null)
         {
-            MostrarAdvertencia(
-                "Cliente no encontrado.");
-
+            MostrarAdvertencia("Cliente no encontrado.");
             Pausar();
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(
-            cliente.Correo))
+        if (string.IsNullOrWhiteSpace(cliente.Correo))
         {
-            MostrarAdvertencia(
-                "El cliente no tiene correo registrado.");
-
+            MostrarAdvertencia("El cliente no tiene correo registrado.");
             Pausar();
             return;
         }
 
         Console.WriteLine();
-        Console.ForegroundColor =
-            ConsoleColor.Green;
-
-        Console.WriteLine(
-            $"Cliente: {cliente.Nombre}");
-
-        Console.WriteLine(
-            $"Correo: {cliente.Correo}");
-
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Cliente: {cliente.Nombre}");
+        Console.WriteLine($"Correo: {cliente.Correo}");
         Console.ResetColor();
-
         Console.WriteLine();
 
-        Console.Write(
-            "Asunto: ");
+        Console.Write("Asunto: ");
+        string asunto = Console.ReadLine() ?? "";
 
-        string asunto =
-            Console.ReadLine() ?? "";
-
-        Console.Write(
-            "Mensaje: ");
-
-        string mensaje =
-            Console.ReadLine() ?? "";
+        Console.Write("Mensaje: ");
+        string mensaje = Console.ReadLine() ?? "";
 
         if (string.IsNullOrWhiteSpace(asunto) ||
             string.IsNullOrWhiteSpace(mensaje))
         {
-            MostrarAdvertencia(
-                "El asunto y el mensaje son obligatorios.");
-
+            MostrarAdvertencia("El asunto y el mensaje son obligatorios.");
             Pausar();
             return;
         }
 
-        Console.WriteLine();
-        Console.ForegroundColor =
-            ConsoleColor.Yellow;
+        HistorialCorreo registro = new HistorialCorreo
+        {
+            ClienteId = cliente.Id,
+            CorreoDestino = cliente.Correo,
+            Asunto = asunto,
+            Mensaje = mensaje,
+            Fecha = DateTime.Now,
+            Estado = "Simulado"
+        };
 
-        Console.WriteLine(
-            "Enviando correo...");
-
-        Console.ResetColor();
-
-        CorreoService correoService =
-            new CorreoService();
-
-        await correoService.EnviarAsync(
-            cliente.Correo,
-            asunto,
-            mensaje);
+        context.HistorialCorreos.Add(registro);
+        await context.SaveChangesAsync();
 
         MostrarExito(
-            "Correo enviado correctamente desde SIGREC.");
+            "Correo registrado correctamente en SQL Server. Estado: SIMULADO.");
     }
     catch (Exception ex)
     {
         MostrarError(
-            "No fue posible enviar el correo: " +
+            "No fue posible registrar el correo: " +
             ObtenerMensajeError(ex));
-
-        return;
     }
 
     Pausar();
 }
 
+
+async Task ListarHistorialCorreos()
+{
+    Console.Clear();
+
+    MostrarEncabezadoModulo(
+        "HISTORIAL DE CORREOS",
+        "Comunicaciones registradas en SQL Server");
+
+    try
+    {
+        using var context = new SigrecDbContext();
+
+        List<HistorialCorreo> correos = await context.HistorialCorreos
+            .AsNoTracking()
+            .Include(h => h.Cliente)
+            .OrderByDescending(h => h.Fecha)
+            .ToListAsync();
+
+        if (correos.Count == 0)
+        {
+            MostrarAdvertencia("No existen correos registrados.");
+            Pausar();
+            return;
+        }
+
+        foreach (HistorialCorreo correo in correos)
+        {
+            Console.WriteLine(new string('-', 70));
+            Console.WriteLine($"ID: {correo.Id}");
+            Console.WriteLine($"Cliente: {correo.Cliente?.Nombre ?? "No disponible"}");
+            Console.WriteLine($"Correo: {correo.CorreoDestino}");
+            Console.WriteLine($"Asunto: {correo.Asunto}");
+            Console.WriteLine($"Mensaje: {correo.Mensaje}");
+            Console.WriteLine($"Fecha: {correo.Fecha:dd/MM/yyyy HH:mm:ss}");
+            Console.WriteLine($"Estado: {correo.Estado}");
+        }
+
+        Console.WriteLine(new string('-', 70));
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            "No fue posible consultar el historial: " +
+            ObtenerMensajeError(ex));
+    }
+
+    Pausar();
+}
 
 void EnviarWhatsAppCliente()
 {

@@ -37,3 +37,6 @@ se modifico todo
 prueba
 se termino de editar el programs
 se edito en programs again.
+
+29-08-2027
+Proyecto SIGREC todo ok...

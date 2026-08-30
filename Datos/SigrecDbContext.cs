@@ -21,6 +21,7 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
         public DbSet<Mantenimiento> Mantenimientos { get; set; }
         public DbSet<ConsultaIA> ConsultasIA { get; set; }
         public DbSet<HistorialCorreo> HistorialCorreos { get; set; }
+        public DbSet<HistorialWhatsApp> HistorialWhatsApp { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -152,6 +153,24 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
                 entity.Property(e => e.Mensaje).HasMaxLength(2000).IsRequired();
                 entity.Property(e => e.Fecha).IsRequired();
                 entity.Property(e => e.Estado).HasMaxLength(50).IsRequired();
+
+                entity.HasOne(e => e.Cliente)
+                    .WithMany()
+                    .HasForeignKey(e => e.ClienteId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<HistorialWhatsApp>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TelefonoDestino).HasMaxLength(30).IsRequired();
+                entity.Property(e => e.Mensaje).HasMaxLength(2000).IsRequired();
+                entity.Property(e => e.Fecha).IsRequired();
+                entity.Property(e => e.Estado).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.TipoMensaje).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.MensajeId).HasMaxLength(300).IsRequired(false);
+                entity.Property(e => e.Detalle).IsRequired(false);
 
                 entity.HasOne(e => e.Cliente)
                     .WithMany()

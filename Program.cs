@@ -359,7 +359,7 @@ async Task MenuAsistenteIA()
 
 
 // ================================================================
-// COMUNICACIONES - CORREO DIRECTO Y WHATSAPP
+// COMUNICACIONES - CORREO Y WHATSAPP SIMULADOS
 // ================================================================
 
 async Task MenuComunicaciones()
@@ -372,7 +372,7 @@ async Task MenuComunicaciones()
 
         MostrarEncabezadoModulo(
             "COMUNICACIONES SIGREC",
-            "Registro de correos y WhatsApp conectado con SQL Server");
+            "Registro académico de correo y WhatsApp en SQL Server");
 
         int ancho = ObtenerAnchoCaja(80);
 
@@ -389,12 +389,17 @@ async Task MenuComunicaciones()
             ConsoleColor.Magenta);
 
         EscribirFila(
-            "[3] Preparar mensaje de WhatsApp a cliente",
+            "[3] Registrar WhatsApp de cliente (modo simulado)",
             ancho,
             ConsoleColor.Green);
 
         EscribirFila(
-            "[4] Volver al Menú Principal",
+            "[4] Consultar historial de WhatsApp",
+            ancho,
+            ConsoleColor.Blue);
+
+        EscribirFila(
+            "[5] Volver al Menú Principal",
             ancho,
             ConsoleColor.Yellow);
 
@@ -413,10 +418,14 @@ async Task MenuComunicaciones()
                 break;
 
             case 3:
-                EnviarWhatsAppCliente();
+                await RegistrarWhatsAppCliente();
                 break;
 
             case 4:
+                await ListarHistorialWhatsApp();
+                break;
+
+            case 5:
                 break;
 
             default:
@@ -424,7 +433,7 @@ async Task MenuComunicaciones()
                 break;
         }
 
-    } while (opcion != 4);
+    } while (opcion != 5);
 }
 
 
@@ -557,95 +566,154 @@ async Task ListarHistorialCorreos()
     Pausar();
 }
 
-void EnviarWhatsAppCliente()
+
+async Task RegistrarWhatsAppCliente()
 {
     Console.Clear();
 
     MostrarEncabezadoModulo(
         "WHATSAPP",
-        "Mensaje para cliente registrado en SIGREC");
+        "Registro académico de mensaje en modo simulado");
 
-    Console.Write(
-        "Ingrese la cédula del cliente: ");
-
-    string cedula =
-        Console.ReadLine() ?? "";
+    Console.Write("Ingrese la cédula del cliente: ");
+    string cedula = Console.ReadLine() ?? "";
 
     try
     {
-        using var context =
-            new SigrecDbContext();
+        using var context = new SigrecDbContext();
 
-        Cliente? cliente =
-            context.Clientes
-                .AsNoTracking()
-                .FirstOrDefault(
-                    c => c.Cedula == cedula);
+        Cliente? cliente = await context.Clientes
+            .FirstOrDefaultAsync(c => c.Cedula == cedula);
 
         if (cliente == null)
         {
-            MostrarAdvertencia(
-                "Cliente no encontrado.");
-
+            MostrarAdvertencia("Cliente no encontrado.");
             Pausar();
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(
-            cliente.Telefono))
+        if (string.IsNullOrWhiteSpace(cliente.Telefono))
         {
             MostrarAdvertencia(
                 "El cliente no tiene teléfono registrado.");
-
             Pausar();
             return;
         }
 
         Console.WriteLine();
-
-        Console.WriteLine(
-            $"Cliente: {cliente.Nombre}");
-
-        Console.WriteLine(
-            $"Teléfono: {cliente.Telefono}");
-
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"Cliente: {cliente.Nombre}");
+        Console.WriteLine($"Teléfono: {cliente.Telefono}");
+        Console.ResetColor();
         Console.WriteLine();
 
-        Console.Write(
-            "Mensaje: ");
-
-        string mensaje =
-            Console.ReadLine() ?? "";
+        Console.Write("Mensaje: ");
+        string mensaje = Console.ReadLine() ?? "";
 
         if (string.IsNullOrWhiteSpace(mensaje))
         {
-            MostrarAdvertencia(
-                "Debe ingresar un mensaje.");
-
+            MostrarAdvertencia("Debe ingresar un mensaje.");
             Pausar();
             return;
         }
 
         string telefono =
-            PrepararTelefonoEcuador(
-                cliente.Telefono);
+            PrepararTelefonoEcuador(cliente.Telefono);
 
-        ComunicacionService comunicacion =
-            new ComunicacionService();
+        HistorialWhatsApp registro =
+            new HistorialWhatsApp
+            {
+                ClienteId = cliente.Id,
+                TelefonoDestino = telefono,
+                Mensaje = mensaje,
+                Fecha = DateTime.Now,
+                Estado = "Simulado",
+                TipoMensaje = "WhatsApp",
+                MensajeId = null,
+                Detalle = "Registro académico POO"
+            };
 
-        comunicacion.AbrirWhatsApp(
-            telefono,
-            mensaje);
+        context.HistorialWhatsApp.Add(registro);
+        await context.SaveChangesAsync();
 
         MostrarExito(
-            "WhatsApp abierto con el mensaje preparado.");
+            "Mensaje WhatsApp registrado correctamente en SQL Server. Estado: SIMULADO.");
+
+        Console.WriteLine();
+        Console.WriteLine($"Cliente: {cliente.Nombre}");
+        Console.WriteLine($"Destino: {telefono}");
+        Console.WriteLine($"Mensaje: {mensaje}");
     }
     catch (Exception ex)
     {
         MostrarError(
+            "No fue posible registrar el WhatsApp: " +
             ObtenerMensajeError(ex));
+    }
 
-        return;
+    Pausar();
+}
+
+
+async Task ListarHistorialWhatsApp()
+{
+    Console.Clear();
+
+    MostrarEncabezadoModulo(
+        "HISTORIAL DE WHATSAPP",
+        "Mensajes simulados registrados en SQL Server");
+
+    try
+    {
+        using var context = new SigrecDbContext();
+
+        List<HistorialWhatsApp> mensajes =
+            await context.HistorialWhatsApp
+                .AsNoTracking()
+                .Include(h => h.Cliente)
+                .OrderByDescending(h => h.Fecha)
+                .ToListAsync();
+
+        if (mensajes.Count == 0)
+        {
+            MostrarAdvertencia(
+                "No existen registros de WhatsApp.");
+
+            Pausar();
+            return;
+        }
+
+        foreach (HistorialWhatsApp registro in mensajes)
+        {
+            Console.WriteLine(new string('-', 70));
+            Console.WriteLine($"ID: {registro.Id}");
+            Console.WriteLine(
+                $"Cliente: {registro.Cliente?.Nombre ?? "No disponible"}");
+            Console.WriteLine(
+                $"Teléfono: {registro.TelefonoDestino}");
+            Console.WriteLine(
+                $"Tipo: {registro.TipoMensaje}");
+            Console.WriteLine(
+                $"Mensaje: {registro.Mensaje}");
+            Console.WriteLine(
+                $"Fecha: {registro.Fecha:dd/MM/yyyy HH:mm:ss}");
+            Console.WriteLine(
+                $"Estado: {registro.Estado}");
+
+            if (!string.IsNullOrWhiteSpace(registro.Detalle))
+            {
+                Console.WriteLine(
+                    $"Detalle: {registro.Detalle}");
+            }
+        }
+
+        Console.WriteLine(new string('-', 70));
+    }
+    catch (Exception ex)
+    {
+        MostrarError(
+            "No fue posible consultar el historial de WhatsApp: " +
+            ObtenerMensajeError(ex));
     }
 
     Pausar();

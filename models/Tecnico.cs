@@ -6,10 +6,10 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
     public class Tecnico
     {
         private int id;
-        private string nombre;
-        private string cedula;
-        private string telefono;
-        private string especialidad;
+        private string nombre = string.Empty;
+        private string cedula = string.Empty;
+        private string telefono = string.Empty;
+        private string especialidad = string.Empty;
         private int experiencia;
 
         public int Id
@@ -21,25 +21,25 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
         public string Nombre
         {
             get => nombre;
-            set => nombre = value;
+            set => nombre = value ?? string.Empty;
         }
 
         public string Cedula
         {
             get => cedula;
-            set => cedula = value;
+            set => cedula = value ?? string.Empty;
         }
 
         public string Telefono
         {
             get => telefono;
-            set => telefono = value;
+            set => telefono = value ?? string.Empty;
         }
 
         public string Especialidad
         {
             get => especialidad;
-            set => especialidad = value;
+            set => especialidad = value ?? string.Empty;
         }
 
         public int Experiencia
@@ -48,15 +48,10 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.model
             set => experiencia = value;
         }
 
-        // RELACIÓN:
-        // Un técnico puede realizar varios mantenimientos
         public List<Mantenimiento> Mantenimientos { get; set; }
             = new List<Mantenimiento>();
 
-        // Constructor vacío para Entity Framework
-        public Tecnico()
-        {
-        }
+        public Tecnico() { }
 
         public Tecnico(
             int id,

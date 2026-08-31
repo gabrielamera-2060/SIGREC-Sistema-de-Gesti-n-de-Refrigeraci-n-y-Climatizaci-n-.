@@ -2789,13 +2789,6 @@ void ListarEquipos()
             {
                 equipo.Imprimir();
 
-                if (equipo is
-                    AireAcondicionado aire)
-                {
-                    Console.WriteLine(
-                        $"Tipo de filtro: {aire.TipoFiltro}");
-                }
-
                 Console.ForegroundColor =
                     ConsoleColor.DarkGray;
 

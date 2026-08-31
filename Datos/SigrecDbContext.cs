@@ -123,14 +123,14 @@ namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Datos
                 entity.Property(e => e.Estado).HasMaxLength(100).IsRequired();
                 entity.Property(e => e.DuracionHoras).IsRequired();
 
-                entity.HasOne(e => e.Equipo)
-                    .WithMany()
-                    .HasForeignKey(e => e.EquipoId)
+                entity.HasOne(m => m.Equipo)
+                    .WithMany(e => e.Mantenimientos)
+                    .HasForeignKey(m => m.EquipoId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.Tecnico)
-                    .WithMany()
-                    .HasForeignKey(e => e.TecnicoId)
+                entity.HasOne(m => m.Tecnico)
+                    .WithMany(t => t.Mantenimientos)
+                    .HasForeignKey(m => m.TecnicoId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 

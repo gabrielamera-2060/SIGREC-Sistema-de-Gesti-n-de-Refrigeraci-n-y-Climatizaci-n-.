@@ -443,7 +443,7 @@ async Task RegistrarCorreoCliente()
 
     MostrarEncabezadoModulo(
         "CORREO ELECTRÓNICO",
-        "Registro de comunicación en modo simulado");
+        "Envío real de correo y registro en SQL Server");
 
     Console.Write("Ingrese la cédula del cliente: ");
     string cedula = Console.ReadLine() ?? "";
@@ -490,6 +490,11 @@ async Task RegistrarCorreoCliente()
             return;
         }
 
+        await CorreoService.EnviarAsync(
+            cliente.Correo,
+            asunto,
+            mensaje);
+
         HistorialCorreo registro = new HistorialCorreo
         {
             ClienteId = cliente.Id,
@@ -497,19 +502,19 @@ async Task RegistrarCorreoCliente()
             Asunto = asunto,
             Mensaje = mensaje,
             Fecha = DateTime.Now,
-            Estado = "Simulado"
+            Estado = "Enviado"
         };
 
         context.HistorialCorreos.Add(registro);
         await context.SaveChangesAsync();
 
         MostrarExito(
-            "Correo registrado correctamente en SQL Server. Estado: SIMULADO.");
+            "Correo enviado correctamente y registrado en SQL Server.");
     }
     catch (Exception ex)
     {
         MostrarError(
-            "No fue posible registrar el correo: " +
+            "No fue posible enviar el correo: " +
             ObtenerMensajeError(ex));
     }
 

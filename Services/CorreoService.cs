@@ -1,109 +1,111 @@
-﻿using System;
-using System.Threading.Tasks;
-using MailKit.Net.Smtp;
+﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using System;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace SIGREC__Sistema_de_Gestión_de_Refrigeración_y_Climatización__.Services
 {
-    public class CorreoService
+    public static class CorreoService
     {
-        public async Task EnviarAsync(
-            string destinatario,
+        public static async Task EnviarAsync(
+            string correoDestino,
             string asunto,
             string mensaje)
         {
-            if (string.IsNullOrWhiteSpace(destinatario))
-                throw new ArgumentException("El correo del destinatario es obligatorio.");
-
             string? correoRemitente =
-                Environment.GetEnvironmentVariable("SIGREC_EMAIL") ??
-                Environment.GetEnvironmentVariable(
-                    "SIGREC_EMAIL",
-                    EnvironmentVariableTarget.User);
-
-            string? claveCorreo =
-                Environment.GetEnvironmentVariable("SIGREC_EMAIL_PASSWORD") ??
-                Environment.GetEnvironmentVariable(
-                    "SIGREC_EMAIL_PASSWORD",
-                    EnvironmentVariableTarget.User);
-
-            string smtpHost =
-                Environment.GetEnvironmentVariable("SIGREC_SMTP_HOST") ??
-                Environment.GetEnvironmentVariable(
-                    "SIGREC_SMTP_HOST",
-                    EnvironmentVariableTarget.User) ??
-                "smtp.gmail.com";
-
-            string puertoTexto =
-                Environment.GetEnvironmentVariable("SIGREC_SMTP_PORT") ??
-                Environment.GetEnvironmentVariable(
-                    "SIGREC_SMTP_PORT",
-                    EnvironmentVariableTarget.User) ??
-                "465";
-
-            string nombreRemitente =
-                Environment.GetEnvironmentVariable("SIGREC_EMAIL_NOMBRE") ??
-                Environment.GetEnvironmentVariable(
-                    "SIGREC_EMAIL_NOMBRE",
-                    EnvironmentVariableTarget.User) ??
-                "SIGREC";
+                Environment.GetEnvironmentVariable("SIGREC_SMTP_EMAIL");
 
             if (string.IsNullOrWhiteSpace(correoRemitente))
             {
-                throw new Exception(
-                    "No se encontró la variable de entorno SIGREC_EMAIL.");
+                correoRemitente =
+                    Environment.GetEnvironmentVariable(
+                        "SIGREC_SMTP_EMAIL",
+                        EnvironmentVariableTarget.User);
             }
 
-            if (string.IsNullOrWhiteSpace(claveCorreo))
+            string? clave =
+                Environment.GetEnvironmentVariable("SIGREC_SMTP_PASSWORD");
+
+            if (string.IsNullOrWhiteSpace(clave))
             {
-                throw new Exception(
-                    "No se encontró la variable de entorno SIGREC_EMAIL_PASSWORD.");
+                clave =
+                    Environment.GetEnvironmentVariable(
+                        "SIGREC_SMTP_PASSWORD",
+                        EnvironmentVariableTarget.User);
             }
 
-            if (!int.TryParse(puertoTexto, out int puerto))
+            string? host =
+                Environment.GetEnvironmentVariable("SIGREC_SMTP_HOST");
+
+            if (string.IsNullOrWhiteSpace(host))
             {
-                throw new Exception(
-                    "SIGREC_SMTP_PORT no contiene un puerto válido.");
+                host =
+                    Environment.GetEnvironmentVariable(
+                        "SIGREC_SMTP_HOST",
+                        EnvironmentVariableTarget.User);
             }
 
-            MimeMessage correo = new MimeMessage();
+            string? puertoTexto =
+                Environment.GetEnvironmentVariable("SIGREC_SMTP_PORT");
 
-            correo.From.Add(
-                new MailboxAddress(
-                    nombreRemitente,
-                    correoRemitente));
+            if (string.IsNullOrWhiteSpace(puertoTexto))
+            {
+                puertoTexto =
+                    Environment.GetEnvironmentVariable(
+                        "SIGREC_SMTP_PORT",
+                        EnvironmentVariableTarget.User);
+            }
 
-            correo.To.Add(
-                MailboxAddress.Parse(destinatario));
+            if (string.IsNullOrWhiteSpace(correoRemitente))
+                throw new Exception(
+                    "No se encontró la variable SIGREC_SMTP_EMAIL.");
 
-            correo.Subject = asunto;
+            if (string.IsNullOrWhiteSpace(clave))
+                throw new Exception(
+                    "No se encontró la variable SIGREC_SMTP_PASSWORD.");
 
-            correo.Body =
-                new TextPart("plain")
-                {
-                    Text = mensaje
-                };
+            host = string.IsNullOrWhiteSpace(host)
+                ? "smtp.gmail.com"
+                : host;
 
-            using SmtpClient clienteSmtp = new SmtpClient();
+            int puerto = 587;
 
-            SecureSocketOptions seguridad =
-                puerto == 465
-                    ? SecureSocketOptions.SslOnConnect
-                    : SecureSocketOptions.StartTls;
+            if (!string.IsNullOrWhiteSpace(puertoTexto) &&
+                int.TryParse(puertoTexto, out int puertoConfigurado))
+            {
+                puerto = puertoConfigurado;
+            }
 
-            await clienteSmtp.ConnectAsync(
-                smtpHost,
-                puerto,
-                seguridad);
+            using MailMessage correo = new MailMessage();
 
-            await clienteSmtp.AuthenticateAsync(
+            correo.From = new MailAddress(
                 correoRemitente,
-                claveCorreo);
+                "SIGREC");
 
-            await clienteSmtp.SendAsync(correo);
+            correo.To.Add(correoDestino);
+            correo.Subject = asunto;
+            correo.Body = mensaje;
+            correo.IsBodyHtml = false;
 
-            await clienteSmtp.DisconnectAsync(true);
+            // Se especifica el namespace completo para evitar
+            // conflicto con MailKit.Net.Smtp.SmtpClient.
+            using System.Net.Mail.SmtpClient smtp =
+                new System.Net.Mail.SmtpClient(
+                    host,
+                    puerto);
+
+            smtp.EnableSsl = true;
+            smtp.UseDefaultCredentials = false;
+            smtp.Credentials =
+                new NetworkCredential(
+                    correoRemitente,
+                    clave);
+
+            await smtp.SendMailAsync(correo);
         }
     }
 }
+

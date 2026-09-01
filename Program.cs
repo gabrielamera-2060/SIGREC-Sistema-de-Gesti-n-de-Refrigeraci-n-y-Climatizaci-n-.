@@ -372,14 +372,14 @@ async Task MenuComunicaciones()
 
         MostrarEncabezadoModulo(
             "COMUNICACIONES SIGREC",
-            "Registro académico de correo y WhatsApp en SQL Server");
+            "Gestión de correo electrónico y WhatsApp");
 
         int ancho = ObtenerAnchoCaja(80);
 
         DibujarBordeSuperior(ancho);
 
         EscribirFila(
-            "[1] Registrar correo de cliente (modo simulado)",
+            "[1] Enviar correo electrónico",
             ancho,
             ConsoleColor.Cyan);
 
@@ -389,7 +389,7 @@ async Task MenuComunicaciones()
             ConsoleColor.Magenta);
 
         EscribirFila(
-            "[3] Registrar WhatsApp de cliente (modo simulado)",
+            "[3] Registrar WhatsApp de cliente",
             ancho,
             ConsoleColor.Green);
 
@@ -3615,4 +3615,4 @@ string ObtenerMensajeError(
     }
 
     return error.Message;
-}
+}   

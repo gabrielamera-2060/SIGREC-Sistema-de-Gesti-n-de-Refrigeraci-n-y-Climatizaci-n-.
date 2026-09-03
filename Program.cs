@@ -391,7 +391,7 @@ async Task MenuComunicaciones()
         EscribirFila(
             "[3] Registrar WhatsApp de cliente",
             ancho,
-            ConsoleColor.Green);
+            ConsoleColor.Blue);
 
         EscribirFila(
             "[4] Consultar historial de WhatsApp",
@@ -470,7 +470,7 @@ async Task RegistrarCorreoCliente()
         }
 
         Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.Green;
+        Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine($"Cliente: {cliente.Nombre}");
         Console.WriteLine($"Correo: {cliente.Correo}");
         Console.ResetColor();
